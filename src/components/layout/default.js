@@ -1,16 +1,14 @@
 import Sidebar from "./sidebar";
 
-function LayoutDefault ({ children }){
-    return (
-        <>
-            <div className="flex">
-                <Sidebar />
-                <div>
-                    {children}
-                </div>
-            </div>
-        </>
-    )
-}
+const LayoutDefault = ({ children }) => {
+  return (
+    <>
+      <div className="flex overflow-auto">
+        <Sidebar />
+        <div className="w-full pl-22 md:pl-75">{children}</div>
+      </div>
+    </>
+  );
+};
 
 export default LayoutDefault;
