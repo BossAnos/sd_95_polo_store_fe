@@ -1,11 +1,8 @@
 import { NavLink } from "react-router-dom";
 import "./layout.scss";
-import iconModel from "../../assets/icon/award.svg";
-import iconTraining from "../../assets/icon/briefcase.svg";
 import iconDataset from "../../assets/icon/gallery.svg";
 import iconHome from "../../assets/icon/home.svg";
 import iconLogout from "../../assets/icon/logout.svg";
-import iconLabeling from "../../assets/icon/tag.svg";
 import iconAccount from "../../assets/icon/user.svg";
 import avatar from "../../assets/image/avatar.svg";
 
@@ -24,7 +21,7 @@ const Sidebar = () => {
     {
       to: "/products",
       icon: iconDataset,
-      title: "Quản Lý Sản Phẩm",
+      title: "Product Management",
     },
   ];
 
