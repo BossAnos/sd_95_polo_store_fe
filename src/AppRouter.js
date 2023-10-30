@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import LayoutDefault from "./components/layout/default";
 import Account from "./pages/account";
 import Dashboard from "./pages/dashboard";
+import Products from "./pages/products";
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,14 @@ const AppRouter = () => {
           element={
             <LayoutDefault>
               <Dashboard />
+            </LayoutDefault>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <LayoutDefault>
+              <Products />
             </LayoutDefault>
           }
         />

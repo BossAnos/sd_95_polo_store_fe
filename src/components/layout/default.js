@@ -5,7 +5,7 @@ const LayoutDefault = ({ children }) => {
     <>
       <div className="flex overflow-auto">
         <Sidebar />
-        <div className="w-full pl-22 md:pl-75">{children}</div>
+        <div className="w-full pl-22 md:pl-64">{children}</div>
       </div>
     </>
   );

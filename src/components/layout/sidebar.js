@@ -22,7 +22,7 @@ const Sidebar = () => {
       title: "Account Management",
     },
     {
-      to: "/file-storage",
+      to: "/products",
       icon: iconDataset,
       title: "Quản Lý Sản Phẩm",
     },
