@@ -26,21 +26,6 @@ const Sidebar = () => {
       icon: iconDataset,
       title: "Quản Lý Sản Phẩm",
     },
-    {
-      to: "/labeling",
-      icon: iconLabeling,
-      title: "Labeling Management",
-    },
-    {
-      to: "/training",
-      icon: iconTraining,
-      title: "Training Management",
-    },
-    {
-      to: "/model",
-      icon: iconModel,
-      title: "Model Management",
-    },
   ];
 
   const CLASS_NAME = {
