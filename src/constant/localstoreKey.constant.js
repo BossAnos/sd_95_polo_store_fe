@@ -1,0 +1,2 @@
+export const ADMIN_AUTH_INFO_KEY = "ADMIN_AUTH_INFO";
+export const USER_AUTH_INFO_KEY = "USER_AUTH_INFO";
