@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
 import "./layout.scss";
-import iconDataset from "../../assets/icon/gallery.svg";
-import iconHome from "../../assets/icon/home.svg";
-import iconLogout from "../../assets/icon/logout.svg";
-import iconAccount from "../../assets/icon/user.svg";
-import avatar from "../../assets/image/avatar.svg";
+import iconDataset from "../../../assets/icon/gallery.svg";
+import iconHome from "../../../assets/icon/home.svg";
+import iconLogout from "../../../assets/icon/logout.svg";
+import iconAccount from "../../../assets/icon/user.svg";
+import avatar from "../../../assets/image/avatar.svg";
 
 const Sidebar = () => {
   const NavList = [
@@ -57,7 +57,7 @@ const Sidebar = () => {
           {/* <LogOutModal /> */}
           <div className="p-5">
             <button
-            //   onClick={handleToggleLogOutModal}
+              //   onClick={handleToggleLogOutModal}
               className="flex justify-center text-white border w-full border-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full py-2.5 text-center px-2"
             >
               <img src={iconLogout} alt="logout icon" />
@@ -76,4 +76,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export { Sidebar };

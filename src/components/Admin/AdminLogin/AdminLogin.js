@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input, Space } from "antd";
 import "./AdminLogin.css";
-import { adminAuthService } from "../../../../service/admin";
-import { toastService } from "../../../../service/common";
+import { adminAuthService } from "../../../service/admin";
+import { toastService } from "../../../service/common";
 import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
