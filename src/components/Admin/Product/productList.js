@@ -3,10 +3,10 @@ import DataTable from "react-data-table-component";
 import { useTitle } from "ahooks";
 import { useTranslation } from "react-i18next";
 import Tooltip from "rc-tooltip";
-import { formatDate, textOverflow } from "../../../../utils/helpers";
-import iconEdit from "../../../../assets/icon/edit.svg";
-import iconDelete from "../../../../assets/icon/delete.svg";
-import iconSearch from "../../../../assets/icon/search.svg";
+import { formatDate, textOverflow } from "../../../utils/helpers";
+import iconEdit from "../../../assets/icon/edit.svg";
+import iconDelete from "../../../assets/icon/delete.svg";
+import iconSearch from "../../../assets/icon/search.svg";
 import { NoData } from "./NoData";
 
 const tableStyles = {
@@ -52,10 +52,9 @@ const tableStyles = {
   },
 };
 
-
 const PAGE_NO_DEFAULT = 1;
 
-export const ProductList = () => {
+const ProductList = () => {
   const { t } = useTranslation();
   useTitle("Products");
 
@@ -156,12 +155,13 @@ export const ProductList = () => {
       width: "108px",
     },
   ];
-  
+
   return (
     <>
+      <h1>noDataComponent</h1>
       <div className="px-10 py-4">
         <h1 className="flex justify-start text-3xl font-bold py-6">
-          {t("Product")}
+          {t("Product")} \
         </h1>
         <div className="flex justify-between">
           <div className="w-width-360 flex justify-start relative border border-1 pl-2 pr-8 rounded-full">
@@ -223,3 +223,5 @@ export const ProductList = () => {
     </>
   );
 };
+
+export { ProductList };

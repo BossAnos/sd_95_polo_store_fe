@@ -1,8 +1,10 @@
 import { AdminLogin } from "../components/Admin/AdminLogin";
 import { AdminGuard, UserAuthGuard } from "./guards";
 import { NotFoundPage } from "../components/common";
-import { Sidebar } from "../components/Admin/layout";
+import { LayoutDefault } from "../components/Admin/layout/LayoutDefault";
 import { AdminDashBoard } from "../components/Admin/Dashboard";
+
+import { ProductList } from "../components/Admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
 };
@@ -11,7 +13,7 @@ const getAdminRoute = ({ path, component }) => {
   return {
     path,
     component,
-    layout: Sidebar,
+    layout: LayoutDefault,
     guard: AdminGuard,
   };
 };
@@ -34,7 +36,7 @@ const adminRoutes = [
     path: "/admin",
     component: AdminDashBoard,
   }),
-  //   getAdminRoute({ path: "admin/chatlieu", component: ChatLieuList }),
+  getAdminRoute({ path: "admin/product", component: ProductList }),
   //   getAdminRoute({ path: "/admin/chatlieu/add", component: AddChatLieu }),
   //   getAdminRoute({
   //     path: "/admin/chatlieu/update/:machatlieu",

@@ -1,2 +1,2 @@
-import { Sidebar } from "./sidebar";
-export { Sidebar };
+import { LayoutDefault } from "./LayoutDefault";
+export { LayoutDefault };
