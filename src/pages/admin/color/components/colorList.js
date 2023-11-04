@@ -58,7 +58,7 @@ const tableStyles = {
 
 const PAGE_NO_DEFAULT = 1;
 
-export const FileList = () => {
+export const ColorList = () => {
   const { t } = useTranslation();
   const [clearSelectedRows, { toggle: toggledClearSelectedRows }] =
     useToggle(false);

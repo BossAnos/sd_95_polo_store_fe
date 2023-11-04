@@ -1,2 +1,2 @@
-import { FileList } from "./components/brandsList";
-export { FileList };
+import { BrandsList } from "./components/brandsList";
+export { BrandsList };

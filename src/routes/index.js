@@ -4,7 +4,7 @@ import { NotFoundPage } from "../components/common";
 import { LayoutDefault } from "../components/Admin/layout/LayoutDefault";
 import { AdminDashBoard } from "../components/Admin/Dashboard";
 
-import { ProductList } from "../components/Admin";
+import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
 };
@@ -37,6 +37,8 @@ const adminRoutes = [
     component: AdminDashBoard,
   }),
   getAdminRoute({ path: "admin/product", component: ProductList }),
+  getAdminRoute({ path: "admin/color", component: ColorList }),
+  getAdminRoute({ path: "admin/brand", component: BrandsList }),
   //   getAdminRoute({ path: "/admin/chatlieu/add", component: AddChatLieu }),
   //   getAdminRoute({
   //     path: "/admin/chatlieu/update/:machatlieu",
