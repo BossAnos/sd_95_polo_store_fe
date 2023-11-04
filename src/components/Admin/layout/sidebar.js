@@ -24,7 +24,7 @@ const Sidebar = () => {
       title: "Account Management",
     },
     {
-      to: "/admin/product",
+      to: "/admin/color",
       icon: iconDataset,
       title: "Product Management",
       children: [
