@@ -1,10 +1,10 @@
 import { Breadcrumb } from "antd";
 import { Link, useLocation } from "react-router-dom";
 
-const breadcrumbNameMap = {
-  "/admin": "Dashboard",
-  "/admin/product": "ProductList",
-};
+// const breadcrumbNameMap = {
+//   "/admin": "Dashboard",
+//   "/admin/product": "ProductList",
+// };
 
 const AdminBreadCrumb = () => {
   const location = useLocation();
@@ -14,7 +14,7 @@ const AdminBreadCrumb = () => {
     const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
     return {
       key: url,
-      title: <Link to={url}>{breadcrumbNameMap[url]}</Link>,
+      // title: <Link to={url}>{breadcrumbNameMap[url]}</Link>,
     };
   });
 

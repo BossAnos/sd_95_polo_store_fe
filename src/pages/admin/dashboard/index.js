@@ -1,10 +1,5 @@
+const AdminDashBoard = () => {
+  return <div>Admin dashboard</div>;
+};
 
-function DashBoard() {
-    return (
-        <>
-            DashBoard
-        </>
-    )
-}
-
-export default DashBoard;
+export default AdminDashBoard;

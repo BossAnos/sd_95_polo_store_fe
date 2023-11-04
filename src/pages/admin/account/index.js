@@ -1,9 +1,2 @@
-const Account = () => {
-    return(
-        <>
-            Account
-        </>
-    )
-}
-
-export default Account;
+import { AccountList } from "./components/accountList";
+export { AccountList };

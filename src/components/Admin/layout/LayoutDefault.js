@@ -30,25 +30,19 @@ const LayoutDefault = ({ children }) => {
   return (
     <div className="flex overflow-auto">
       <Sidebar />
-      <div className={`w-full pl-20 "md:pl-64" : ""}`}>
+      <div className="w-full pl-20 md:pl-60">
         <div style={{ height: "calc(100vh - 56px)" }}>
-          {" "}
-          <Content style={{ background: "#fff", minHeight: "100vh" }}>
+          {/* <Content style={{ background: "#fff" }}>
             <div
               style={{
                 padding: "2rem",
               }}
             >
-              <div className="mb-3">
-                <AdminBreadCrumb />
-              </div>
               {children}
             </div>
-          </Content>
+          </Content> */}
+          {children}
         </div>
-        <footer className="fixed h-14 shadow-md bottom-0 w-full flex items-center px-4 text-gray-600">
-          GEM © 2023 All Rights Reserved
-        </footer>
       </div>
     </div>
   );
