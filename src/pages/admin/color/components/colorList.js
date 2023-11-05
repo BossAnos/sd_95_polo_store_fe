@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Button, TYPE_BUTTON } from "../../../../components/button";
 import { Loading } from "../../../../components/loading/loading";
 import Modal from "../../../../components/modal";
-// import { DeleteFileApi, ReadAllFileApi } from "../../../services/file";
+import { getAllColors } from "../../../../service/admin/color/color.service";
 import { formatDate, textOverflow } from "../../../../utils/helpers";
 import { toastError, toastSuccess } from "../../../../utils/toast";
 import { ActionColumn } from "./actionColumn";
@@ -126,41 +126,15 @@ export const ColorList = () => {
   const { folderId } = useParams();
   const [folderName, setFolderName] = useState("...");
   const [filter, setFilter] = useState({
-    searchFiled: "",
     pageSize: 10,
     pageNo: PAGE_NO_DEFAULT,
     total: 0,
   });
-  const [fileList, setFileList] = useState([]);
+  const [colorList, setColorList] = useState([]);
   const [fileSelected, setFileSelected] = useState(null);
   const [filesSelected, setFilesSelected] = useState([]);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-  // const GetFileList = useRequest(
-  //   ({ searchFiled, pageSize, pageNo }) =>
-  //     ReadAllFileApi({
-  //       folderId,
-  //       searchFiled: searchFiled.trim(),
-  //       pageSize,
-  //       pageNo,
-  //     }),
-  //   {
-  //     manual: true,
-  //     onSuccess: ({ data, ...reply }) => {
-  //       const { items, pageSize, pageNo, total, folderName } = data.data;
-  //       setFolderName(folderName);
-  //       setFileList(items);
-  //       setFilter(({ searchFiled }) => ({
-  //         searchFiled,
-  //         pageSize,
-  //         pageNo,
-  //         total,
-  //       }));
-  //     },
-  //     onError: (error) => {
-  //       toastError(error.data.message);
-  //     },
-  //   }
-  // );
+
   // const handlePageChange = (pageNo, total) => {
   //   GetFileList.run({ folderId, ...filter, pageNo });
   // };
@@ -168,9 +142,12 @@ export const ColorList = () => {
   //   GetFileList.run({ folderId, ...filter, pageSize, pageNo });
   // };
 
-  // useEffect(() => {
-  //   GetFileList.run({ folderId, ...filter });
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const body = await getAllColors();
+      setColorList(body.data);
+    }) ();
+  }, []);
 
   // const DeleteFileRequest = useRequest(
   //   ({ folderId, selectedIds }) => DeleteFileApi({ folderId, selectedIds }),
@@ -222,7 +199,7 @@ export const ColorList = () => {
     // });
   };
 
-  const handleOpenEditModal = () => {}
+  const handleOpenEditModal = () => {};
 
   return (
     <>
@@ -245,7 +222,7 @@ export const ColorList = () => {
             className="border border-none shadow-xl rounded-xl overflow-auto"
             keyField={"id"}
             columns={columns}
-            data={fileList}
+            data={colorList}
             selectableRows
             onSelectedRowsChange={handleSelectedRowsChange}
             clearSelectedRows={clearSelectedRows}

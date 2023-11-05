@@ -4,6 +4,7 @@ import LayoutDefault from "./components/layout/default";
 import Account from "./pages/admin/account";
 import Dashboard from "./pages/admin/dashboard";
 import Products from "./pages/admin/products";
+import Color from "./pages/admin/color";
 
 const AppRouter = () => {
   return (
@@ -31,6 +32,14 @@ const AppRouter = () => {
           element={
             <LayoutDefault>
               <Account />
+            </LayoutDefault>
+          }
+        />
+        <Route
+          path="/color"
+          element={
+            <LayoutDefault>
+              <Color />
             </LayoutDefault>
           }
         />
