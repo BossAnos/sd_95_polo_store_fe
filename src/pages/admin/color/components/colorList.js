@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Button, TYPE_BUTTON } from "../../../../components/button";
 import { Loading } from "../../../../components/loading/loading";
 import Modal from "../../../../components/modal";
-import { getAllColors } from "../../../../service/admin/color/color.service";
+import { colorService } from "../../../../service/admin";
 import { formatDate, textOverflow } from "../../../../utils/helpers";
 import { toastError, toastSuccess } from "../../../../utils/toast";
 import { ActionColumn } from "./actionColumn";
@@ -57,6 +57,15 @@ const tableStyles = {
 const PAGE_NO_DEFAULT = 1;
 
 export const ColorList = () => {
+  const [colorList, setColorList] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const body = await colorService.getAllColors();
+      console.log(body.data);
+      setColorList(body.data);
+    })();
+  }, []);
+  console.log(colorList);
   const { t } = useTranslation();
   const [clearSelectedRows, { toggle: toggledClearSelectedRows }] =
     useToggle(false);
@@ -130,7 +139,7 @@ export const ColorList = () => {
     pageNo: PAGE_NO_DEFAULT,
     total: 0,
   });
-  const [colorList, setColorList] = useState([]);
+
   const [fileSelected, setFileSelected] = useState(null);
   const [filesSelected, setFilesSelected] = useState([]);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
@@ -141,13 +150,6 @@ export const ColorList = () => {
   // const handleRowsPerPageChange = (pageSize, pageNo) => {
   //   GetFileList.run({ folderId, ...filter, pageSize, pageNo });
   // };
-
-  useEffect(() => {
-    (async () => {
-      const body = await getAllColors();
-      setColorList(body.data);
-    }) ();
-  }, []);
 
   // const DeleteFileRequest = useRequest(
   //   ({ folderId, selectedIds }) => DeleteFileApi({ folderId, selectedIds }),

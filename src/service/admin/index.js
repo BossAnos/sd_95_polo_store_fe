@@ -1,3 +1,3 @@
 import adminAuthService from "./auth/adminAuth.service";
-
-export { adminAuthService };
+import * as colorService from "./color/color.service";
+export { adminAuthService, colorService };
