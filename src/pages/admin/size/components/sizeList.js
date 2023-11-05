@@ -4,11 +4,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import iconSearch from "../../../../assets/icon/search.svg";
 import { Button, TYPE_BUTTON } from "../../../../components/button";
 import { Loading } from "../../../../components/loading/loading";
 import Modal from "../../../../components/modal";
-// import { DeleteFileApi, ReadAllFileApi } from "../../../../services/file";
+// import { DeleteFileApi, ReadAllFileApi } from "../../../services/file";
 import { formatDate, textOverflow } from "../../../../utils/helpers";
 import { toastError, toastSuccess } from "../../../../utils/toast";
 import { ActionColumn } from "./actionColumn";
@@ -57,7 +56,7 @@ const tableStyles = {
 
 const PAGE_NO_DEFAULT = 1;
 
-export const BrandsList = () => {
+export const SizeList = () => {
   const { t } = useTranslation();
   const [clearSelectedRows, { toggle: toggledClearSelectedRows }] =
     useToggle(false);
@@ -216,12 +215,12 @@ export const BrandsList = () => {
     setFilesSelected([...selectedRows.map(({ id }) => id)]);
   };
 
-  // const handleDeleteFile = () => {
-  //   DeleteFileRequest.run({
-  //     folderId,
-  //     selectedIds: fileSelected ? [fileSelected] : [...filesSelected],
-  //   });
-  // };
+  const handleDeleteFile = () => {
+    // DeleteFileRequest.run({
+    //   folderId,
+    //   selectedIds: fileSelected ? [fileSelected] : [...filesSelected],
+    // });
+  };
 
   const handleOpenEditModal = () => {}
 
@@ -270,7 +269,7 @@ export const BrandsList = () => {
 
       <Modal
         onCancel={handleCloseDeleteModal}
-        // onSave={handleDeleteFile}
+        onSave={handleDeleteFile}
         show={deleteModalIsOpen}
         title="Delete File"
         titleSave="Delete"

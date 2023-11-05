@@ -4,15 +4,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import iconSearch from "../../../../assets/icon/search.svg";
 import { Button, TYPE_BUTTON } from "../../../../components/button";
 import { Loading } from "../../../../components/loading/loading";
 import Modal from "../../../../components/modal";
-import { DeleteFileApi, ReadAllFileApi } from "../../../services/file";
+// import { DeleteFileApi, ReadAllFileApi } from "../../../services/file";
 import { formatDate, textOverflow } from "../../../../utils/helpers";
 import { toastError, toastSuccess } from "../../../../utils/toast";
 import { ActionColumn } from "./actionColumn";
-import { Breadcrumb } from "./breadcrumb";
 import { NoData } from "./noData";
 
 const tableStyles = {
@@ -137,57 +135,57 @@ export const ColorList = () => {
   const [fileSelected, setFileSelected] = useState(null);
   const [filesSelected, setFilesSelected] = useState([]);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-  const GetFileList = useRequest(
-    ({ searchFiled, pageSize, pageNo }) =>
-      ReadAllFileApi({
-        folderId,
-        searchFiled: searchFiled.trim(),
-        pageSize,
-        pageNo,
-      }),
-    {
-      manual: true,
-      onSuccess: ({ data, ...reply }) => {
-        const { items, pageSize, pageNo, total, folderName } = data.data;
-        setFolderName(folderName);
-        setFileList(items);
-        setFilter(({ searchFiled }) => ({
-          searchFiled,
-          pageSize,
-          pageNo,
-          total,
-        }));
-      },
-      onError: (error) => {
-        toastError(error.data.message);
-      },
-    }
-  );
-  const handlePageChange = (pageNo, total) => {
-    GetFileList.run({ folderId, ...filter, pageNo });
-  };
-  const handleRowsPerPageChange = (pageSize, pageNo) => {
-    GetFileList.run({ folderId, ...filter, pageSize, pageNo });
-  };
+  // const GetFileList = useRequest(
+  //   ({ searchFiled, pageSize, pageNo }) =>
+  //     ReadAllFileApi({
+  //       folderId,
+  //       searchFiled: searchFiled.trim(),
+  //       pageSize,
+  //       pageNo,
+  //     }),
+  //   {
+  //     manual: true,
+  //     onSuccess: ({ data, ...reply }) => {
+  //       const { items, pageSize, pageNo, total, folderName } = data.data;
+  //       setFolderName(folderName);
+  //       setFileList(items);
+  //       setFilter(({ searchFiled }) => ({
+  //         searchFiled,
+  //         pageSize,
+  //         pageNo,
+  //         total,
+  //       }));
+  //     },
+  //     onError: (error) => {
+  //       toastError(error.data.message);
+  //     },
+  //   }
+  // );
+  // const handlePageChange = (pageNo, total) => {
+  //   GetFileList.run({ folderId, ...filter, pageNo });
+  // };
+  // const handleRowsPerPageChange = (pageSize, pageNo) => {
+  //   GetFileList.run({ folderId, ...filter, pageSize, pageNo });
+  // };
 
-  useEffect(() => {
-    GetFileList.run({ folderId, ...filter });
-  }, []);
+  // useEffect(() => {
+  //   GetFileList.run({ folderId, ...filter });
+  // }, []);
 
-  const DeleteFileRequest = useRequest(
-    ({ folderId, selectedIds }) => DeleteFileApi({ folderId, selectedIds }),
-    {
-      manual: true,
-      onSuccess: ({ data, ...reply }) => {
-        handleCloseDeleteModal();
-        toggledClearSelectedRows();
-        setFilesSelected([]);
-        setFileSelected(null);
-        toastSuccess("Delete File successfully");
-        GetFileList.run({ folderId, ...filter, pageNo: PAGE_NO_DEFAULT });
-      },
-    }
-  );
+  // const DeleteFileRequest = useRequest(
+  //   ({ folderId, selectedIds }) => DeleteFileApi({ folderId, selectedIds }),
+  //   {
+  //     manual: true,
+  //     onSuccess: ({ data, ...reply }) => {
+  //       handleCloseDeleteModal();
+  //       toggledClearSelectedRows();
+  //       setFilesSelected([]);
+  //       setFileSelected(null);
+  //       toastSuccess("Delete File successfully");
+  //       GetFileList.run({ folderId, ...filter, pageNo: PAGE_NO_DEFAULT });
+  //     },
+  //   }
+  // );
 
   const handleOpenDeleteModal = (row) => {
     setDeleteModalIsOpen(true);
@@ -218,10 +216,10 @@ export const ColorList = () => {
   };
 
   const handleDeleteFile = () => {
-    DeleteFileRequest.run({
-      folderId,
-      selectedIds: fileSelected ? [fileSelected] : [...filesSelected],
-    });
+    // DeleteFileRequest.run({
+    //   folderId,
+    //   selectedIds: fileSelected ? [fileSelected] : [...filesSelected],
+    // });
   };
 
   const handleOpenEditModal = () => {}
@@ -230,9 +228,8 @@ export const ColorList = () => {
     <>
       <div className="px-10 py-6">
         <div className="flex justify-start text-2xl font-semibold py-2">
-          <span>{t("File list")}</span>
+          <span>{t("Color")}</span>
         </div>
-        <Breadcrumb {...{ folderName }} />
         <div className="flex justify-between py-4">
           <div className="flex">
             {DeleteAllBar}
@@ -257,15 +254,15 @@ export const ColorList = () => {
             pagination
             paginationServer
             noDataComponent={<NoData />}
-            progressPending={GetFileList.loading}
+            // progressPending={GetFileList.loading}
             progressComponent={<Loading />}
             // paginationComponent={<></>}
             paginationRowsPerPageOptions={[10, 20, 50, 100]}
             paginationPerPage={filter.pageSize}
             paginationDefaultPage={filter.pageNo}
             paginationTotalRows={filter.total}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleRowsPerPageChange}
+            // onChangePage={handlePageChange}
+            // onChangeRowsPerPage={handleRowsPerPageChange}
           />
         </div>
       </div>

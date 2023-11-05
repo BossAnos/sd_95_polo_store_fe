@@ -30,7 +30,7 @@ const LayoutDefault = ({ children }) => {
   return (
     <div className="flex overflow-auto">
       <Sidebar />
-      <div className="w-full pl-20 md:pl-60">
+      <div className="w-full pl-20 md:pl-64">
         <div style={{ height: "calc(100vh - 56px)" }}>
           {/* <Content style={{ background: "#fff" }}>
             <div

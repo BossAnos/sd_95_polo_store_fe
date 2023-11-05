@@ -1,7 +1,7 @@
 import Tooltip from "rc-tooltip";
 import { useTranslation } from "react-i18next";
 import iconDelete from "../../../../assets/icon/delete.svg";
-import iconView from "../../../../assets/icon/eye.svg";
+import iconEdit from "../../../../assets/icon/edit.svg";
 
 export const ActionColumn = ({
     row, 
@@ -18,7 +18,7 @@ export const ActionColumn = ({
             handleOpenEditModal(row);
           }}
         >
-          <img src={iconView} alt="View" />
+          <img src={iconEdit} alt="View" />
         </button>
       </Tooltip>
       <Tooltip placement="bottom" overlay={<span>{t("Delete")}</span>}>
