@@ -100,7 +100,7 @@ export const ColorList = () => {
     },
     {
       id: "update_date",
-      name: t("Creation date"),
+      name: t("Update date"),
       selector: (row) => row.update_date,
       cell: (row) => {
         return formatDate(row.update_date);
