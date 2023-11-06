@@ -58,11 +58,42 @@ const PAGE_NO_DEFAULT = 1;
 
 export const ColorList = () => {
   const [colorList, setColorList] = useState([]);
+  const { folderId } = useParams();
+  const [folderName, setFolderName] = useState("...");
+  const [filter, setFilter] = useState({
+    pageSize: 10,
+    pageNo: PAGE_NO_DEFAULT,
+    total: 0,
+  });
+
+  const [fileSelected, setFileSelected] = useState(null);
+  const [filesSelected, setFilesSelected] = useState([]);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const handlePageChange = (page) => {
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      pageNo: page,
+    }));
+  };
+
+  const handleRowsPerPageChange = (currentRowsPerPage, currentPage) => {
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      pageSize: currentRowsPerPage,
+      pageNo: 1,
+    }));
+  };
+
   useEffect(() => {
     (async () => {
       const body = await colorService.getAllColors();
       console.log(body.data);
       setColorList(body.data);
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        total: body.data.length,
+        pageSize: prevFilter.pageSize,
+      }));
     })();
   }, []);
   console.log(colorList);
@@ -132,17 +163,6 @@ export const ColorList = () => {
       width: "140px",
     },
   ];
-  const { folderId } = useParams();
-  const [folderName, setFolderName] = useState("...");
-  const [filter, setFilter] = useState({
-    pageSize: 10,
-    pageNo: PAGE_NO_DEFAULT,
-    total: 0,
-  });
-
-  const [fileSelected, setFileSelected] = useState(null);
-  const [filesSelected, setFilesSelected] = useState([]);
-  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
 
   // const handlePageChange = (pageNo, total) => {
   //   GetFileList.run({ folderId, ...filter, pageNo });
@@ -222,7 +242,7 @@ export const ColorList = () => {
         <div className="w-full rounded-xl">
           <DataTable
             className="border border-none shadow-xl rounded-xl overflow-auto"
-            keyField={"id"}
+            keyField="id"
             columns={columns}
             data={colorList}
             selectableRows
@@ -231,17 +251,15 @@ export const ColorList = () => {
             persistTableHead={true}
             customStyles={tableStyles}
             pagination
-            paginationServer
+            paginationServer={false} // Thay đổi giá trị này thành false
             noDataComponent={<NoData />}
-            // progressPending={GetFileList.loading}
             progressComponent={<Loading />}
-            // paginationComponent={<></>}
-            paginationRowsPerPageOptions={[10, 20, 50, 100]}
+            paginationRowsPerPageOptions={[5, 10, 20, 50, 100]}
             paginationPerPage={filter.pageSize}
             paginationDefaultPage={filter.pageNo}
             paginationTotalRows={filter.total}
-            // onChangePage={handlePageChange}
-            // onChangeRowsPerPage={handleRowsPerPageChange}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
           />
         </div>
       </div>
