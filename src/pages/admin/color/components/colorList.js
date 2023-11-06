@@ -61,7 +61,7 @@ export const ColorList = () => {
   const { folderId } = useParams();
   const [folderName, setFolderName] = useState("...");
   const [filter, setFilter] = useState({
-    pageSize: 10,
+    pageSize: 5,
     pageNo: PAGE_NO_DEFAULT,
     total: 0,
   });
