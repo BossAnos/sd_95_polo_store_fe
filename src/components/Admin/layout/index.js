@@ -1,2 +1,7 @@
-import { LayoutDefault } from "./LayoutDefault";
-export { LayoutDefault };
+import { UserLayout } from "./user/UserLayout";
+import {AdminLayout} from './admin';
+
+export {
+    UserLayout,
+    AdminLayout
+}

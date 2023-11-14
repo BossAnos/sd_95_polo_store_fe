@@ -1,0 +1,145 @@
+footer {
+    position: relative;
+}
+
+.small-section {
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
+
+.footer-light .subscribe {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    height: 100%;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-right: 1px solid #ddd;
+    text-align: left;
+}
+
+.subscribe h4 {
+    margin-bottom: 10px;
+    color: #222;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: block;
+}
+
+.subscribe p {
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: #777;
+}
+
+.subscribe-form {
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 100%;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.subscribe-form .form-group {
+    margin-bottom: 0;
+}
+
+.subscribe-form .form-control {
+    padding: 24px 10px;
+    width: 345px;
+    border-radius: 0;
+    border: 1px solid #eee;
+}
+
+.main-footer{
+    padding: 70px 0;
+}
+
+.footer-theme .footer-logo {
+    margin-bottom: 18px;
+}
+
+footer p {
+    line-height: 32px;
+    letter-spacing: 0.03em;
+    margin-bottom: 0;
+}
+
+.footer-social, .social-white{
+    margin-top: 40px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.footer-social li, .social-white li {
+    display: inline-block !important;
+    padding-right: 45px;
+}
+
+.footer-social i, .social-white i {
+    font-size: 20px;
+    color: #000;
+    -webkit-transition: 0.5s ease;
+    transition: 0.5s ease;
+}
+
+.footer-theme .sub-title h4 {
+    color: #222;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.footer-theme .sub-title li {
+    position: relative;
+    display: inherit;
+    padding-top: 13px;
+    text-transform: capitalize;
+    font-size: 14px;
+    color: #777;
+}
+
+.footer-theme .sub-title li a {
+    position: relative;
+    color: #777;
+}
+
+.contact-list li i{
+  margin-right: 16px;
+}
+
+.sub-footer p {
+    color: #777;
+    margin-bottom: 0;
+    padding: 20px 0;
+}
+
+.sub-footer .payment-card-bottom {
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.sub-footer .payment-card-bottom li {
+    padding-left: 7px;
+    padding-right: 7px;
+    display: inline-block;
+}

@@ -1,8 +1,9 @@
-import { AdminLogin } from "../components/Admin/AdminLogin";
+import { AdminLogin,AdminLayout } from "../components/Admin";
 import { AdminGuard, UserAuthGuard } from "./guards";
 import { NotFoundPage } from "../components/common";
 import { LayoutDefault } from "../components/Admin/layout/LayoutDefault";
 import { AdminDashBoard } from "../components/Admin/Dashboard";
+
 
 import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
@@ -13,7 +14,7 @@ const getAdminRoute = ({ path, component }) => {
   return {
     path,
     component,
-    layout: LayoutDefault,
+    layout: AdminLayout,
     guard: AdminGuard,
   };
 };
