@@ -22,7 +22,7 @@ const getAdminRoute = ({ path, component }) => {
 // const getUserRoute = ({ path, component, guard }) => {
 //   return {
 //     path,
-//     component,
+//     component, npm install react-app-rewired --save-dev
 //     layout: UserLayout,
 //     guard: guard || NoGuard,
 //   };

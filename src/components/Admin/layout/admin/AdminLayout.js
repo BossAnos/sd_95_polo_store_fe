@@ -23,8 +23,8 @@ import {
 import { AdminBreadCrumb } from "./AdminBreadCrumb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./AdminLayout.css";
-import { adminAuthService } from "../../services/admin";
-import { toastService } from "../../services/common";
+import { adminAuthService } from "../../../../service/admin";
+import { toastService } from "../../../../service/common";
 
 const { Header, Content, Footer, Sider } = Layout;
 const items = [
