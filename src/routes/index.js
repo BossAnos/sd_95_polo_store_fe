@@ -1,11 +1,10 @@
-import { AdminLogin,AdminLayout } from "../components/Admin";
+import { AdminLogin, AdminLayout } from "../layout/admin";
 import { AdminGuard, UserAuthGuard } from "./guards";
 import { NotFoundPage } from "../components/common";
-import { LayoutDefault } from "../components/Admin/layout/LayoutDefault";
+// import { LayoutDefault } from "../components/Admin/layout/LayoutDefault";
 import { AdminDashBoard } from "../components/Admin/Dashboard";
-
-
-import { ProductList, ColorList, BrandsList } from "../pages/admin";
+import { CustomerList } from "../components/Admin";
+// import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
 };
@@ -37,9 +36,13 @@ const adminRoutes = [
     path: "/admin",
     component: AdminDashBoard,
   }),
-  getAdminRoute({ path: "admin/product", component: ProductList }),
-  getAdminRoute({ path: "admin/color", component: ColorList }),
-  getAdminRoute({ path: "admin/brand", component: BrandsList }),
+  getAdminRoute({
+    path: "/admin/customer",
+    component: CustomerList,
+  }),
+  // getAdminRoute({ path: "admin/product", component: ProductList }),
+  // getAdminRoute({ path: "admin/color", component: ColorList }),
+  // getAdminRoute({ path: "admin/brand", component: BrandsList }),
   //   getAdminRoute({ path: "/admin/chatlieu/add", component: AddChatLieu }),
   //   getAdminRoute({
   //     path: "/admin/chatlieu/update/:machatlieu",

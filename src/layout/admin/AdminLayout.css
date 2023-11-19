@@ -1,0 +1,15 @@
+.main_header {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+}
+.submenu-item {
+  display: flex;
+  align-items: center;
+  margin-left: 20px; /* điều chỉnh khoảng cách với phần không có submenu */
+}
+.submenu-item > .menu-item {
+  padding-left: -50px; /* điều chỉnh khoảng cách viền trái */
+  border-left: 1px solid rgba(0, 0, 0, 0.1); /* viền trái */
+}
