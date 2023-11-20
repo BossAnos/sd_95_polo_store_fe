@@ -1,102 +1,98 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Layout, Menu, Typography } from "antd";
-import { CaretDownOutlined } from "@ant-design/icons";
-import * as Icons from "@heroicons/react/24/solid";
+import React, { useState, useEffect, createContext, useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Layout, Menu, theme } from "antd";
+import * as Icons from "@heroicons/react/24/outline";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-4 w-4`;
 const { Sider } = Layout;
-const { Text } = Typography;
+const { SubMenu } = Menu;
 
 const menus = [
   {
     childrens: [
       {
-        path: "admin",
+        path: "/admin",
         icon: <Icons.HomeIcon className={iconClasses} />,
         name: "Tổng quát",
       },
       {
-        path: "categories",
+        path: "/admin/Order",
         icon: <Icons.TruckIcon className={iconClasses} />,
         name: "Đơn hàng",
       },
       {
-        path: "colors",
+        path: "/admin/addOrder",
         icon: <Icons.ShoppingCartIcon className={iconClasses} />,
         name: "Tạo Hóa Đơn",
       },
       {
-        path: "admin/customer",
+        path: "/admin/customer",
         icon: <Icons.UserGroupIcon className={iconClasses} />,
         name: "Khách Hàng",
       },
       {
-        path: "",
         icon: <Icons.AdjustmentsHorizontalIcon className={iconClasses} />,
         name: "Phần Quyền",
         submenu: [
           {
-            path: "/login",
+            path: "/admin/Employment",
             icon: <Icons.UserIcon className={submenuIconClasses} />,
             name: "Nhân Viên",
           },
           {
-            path: "/login",
+            path: "/admin/role",
             icon: <Icons.FlagIcon className={submenuIconClasses} />,
             name: "Vai Trò",
           },
         ],
       },
       {
-        path: "",
         icon: <Icons.FolderIcon className={iconClasses} />,
         name: "Sản Phẩm",
         submenu: [
           {
-            path: "/login",
+            path: "/admin/product",
             icon: <Icons.UserIcon className={submenuIconClasses} />,
             name: "Sản Phẩm",
           },
           {
-            path: "/login",
+            path: "/admin/size",
             icon: <Icons.FlagIcon className={submenuIconClasses} />,
             name: "Size",
           },
           {
-            path: "/login",
+            path: "/admin/color",
             icon: <Icons.FlagIcon className={submenuIconClasses} />,
             name: "Màu sắc",
           },
           {
-            path: "/login",
+            path: "/admin/material",
             icon: <Icons.FlagIcon className={submenuIconClasses} />,
             name: "Chất Liệu",
           },
           {
-            path: "/login",
+            path: "/admin/brand",
             icon: <Icons.FlagIcon className={submenuIconClasses} />,
             name: "Thương Hiệu",
           },
           {
-            path: "/login",
+            path: "/admin/category",
             icon: <Icons.FlagIcon className={submenuIconClasses} />,
             name: "Loại Áo",
           },
         ],
       },
       {
-        path: "discounts",
         icon: <Icons.TagIcon className={submenuIconClasses} />,
         name: "Khuyến Mại",
         submenu: [
           {
-            path: "/login",
+            path: "/admin/addDiscount",
             icon: <Icons.UserIcon className={submenuIconClasses} />,
             name: "Tạo khuyến mại",
           },
           {
-            path: "/login",
+            path: "/admin/Discount",
             icon: <Icons.TagIcon className={submenuIconClasses} />,
             name: "Danh sách khuyến mại",
           },
@@ -106,152 +102,98 @@ const menus = [
   },
 ];
 
-const SiderBar = ({}) => {
-  const [openKeys, setOpenKeys] = useState([]);
+const MenuContext = createContext();
 
-  const handleMenuClick = (key) => {
-    if (openKeys.includes(key)) {
-      setOpenKeys(openKeys.filter((k) => k !== key));
-    } else {
-      setOpenKeys([...openKeys, key]);
-    }
+const SiderBar = () => {
+  const location = useLocation();
+  const [selectedSubMenu, setSelectedSubMenu] = useState([]);
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const parentPaths = getParentPaths(currentPath);
+    setSelectedSubMenu(parentPaths);
+  }, [location]);
+
+  const getParentPaths = (path) => {
+    const parentPaths = [];
+    menus[0].childrens.forEach((menu) => {
+      if (menu.submenu) {
+        menu.submenu.forEach((submenu) => {
+          if (path.startsWith(submenu.path)) {
+            parentPaths.push(submenu.path);
+          }
+        });
+      }
+    });
+    return parentPaths;
   };
+
+  const toggleSubMenu = (path) => {
+    setSelectedSubMenu((prev) => {
+      if (prev.includes(path)) {
+        return prev.filter((p) => p !== path);
+      } else {
+        return [...prev, path];
+      }
+    });
+  };
+
+  const isSubMenuOpen = (path) => {
+    return selectedSubMenu.includes(path);
+  };
+
   return (
-    <Sider theme="light" style={{ width: "350px" }}>
-      <div style={{ padding: "0rem", boxSizing: "border-box" }}>
-        {menus.map((menu, index) => {
-          return (
-            <div key={index}>
-              <Text type="secondary">{menu.name}</Text>
-
-              {menu.childrens.map((child, index) => {
-                const path = (menu.path || "/") + child.path;
-
-                // Kiểm tra xem có submenu hay không
-                if (child.submenu && child.submenu.length > 0) {
-                  const isOpen = openKeys.includes(child.name);
-                  const menuItems = child.submenu.map((subItem, subIndex) => (
-                    <Menu.Item
-                      key={subIndex}
-                      style={{
-                        paddingLeft: "40px",
-                        borderLeft: "3px solid rgba(0, 0, 0, 0.1)",
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "0px",
-                      }}
-                    >
-                      <Link to={subItem.path}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginLeft: "2px",
-                          }}
-                        >
-                          {subItem.icon}
-                          <span>{subItem.name}</span>
-                        </div>
-                      </Link>
+    <MenuContext.Provider
+      value={{
+        toggleSubMenu,
+        isSubMenuOpen,
+      }}
+    >
+      <Sider theme="light">
+        <Menu theme="light" mode="inline">
+          {menus[0].childrens.map((menu) => {
+            if (menu.submenu) {
+              return (
+                <SubMenu
+                  key={menu.name}
+                  icon={menu.icon}
+                  title={menu.name}
+                  onTitleClick={() => toggleSubMenu(menu.name)}
+                  open={isSubMenuOpen(menu.name)}
+                >
+                  {menu.submenu.map((submenu) => (
+                    <Menu.Item key={submenu.path}>
+                      <Link to={submenu.path}>{submenu.name}</Link>
                     </Menu.Item>
-                  ));
+                  ))}
+                </SubMenu>
+              );
+            } else {
+              return (
+                <Menu.Item key={menu.path} icon={menu.icon}>
+                  <Link to={menu.path}>{menu.name}</Link>
+                </Menu.Item>
+              );
+            }
+          })}
+        </Menu>
+      </Sider>
+    </MenuContext.Provider>
+  );
+};
 
-                  const menuDropdown = <Menu>{menuItems}</Menu>;
+const MenuItem = ({ path, icon, name }) => {
+  const { toggleSubMenu, isSubMenuOpen } = useContext(MenuContext);
 
-                  return (
-                    <div key={index}>
-                      <div
-                        className={`menu_item ${
-                          child.submenu && child.submenu.length > 0
-                            ? "submenu-item"
-                            : ""
-                        }`}
-                        onClick={() => handleMenuClick(child.name)}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          height: "45px",
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          {child.icon}
-                          <span
-                            className="menu_item_name"
-                            style={{
-                              marginLeft: "8px",
-                              marginRight: "30px",
-                            }}
-                          >
-                            {child.name}
-                          </span>
-                          <div
-                            style={{
-                              display: "flex",
-                              width: "16px",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <CaretDownOutlined
-                              rotate={isOpen ? 0 : 180}
-                              style={{
-                                fontSize: "10px",
-                                marginLeft: "30px",
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      {isOpen && menuDropdown}
-                    </div>
-                  );
-                } else {
-                  return (
-                    <Menu
-                      key={index}
-                      selectedKeys={[]}
-                      items={[
-                        {
-                          label: (
-                            <Link
-                              className={({ isActive }) =>
-                                `${
-                                  isActive
-                                    ? "font-semibold  bg-base-200 "
-                                    : "font-normal"
-                                }`
-                              }
-                              to={path}
-                            >
-                              <div
-                                className="menu_item"
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {child.icon}
-                                <span
-                                  className="menu_item_name"
-                                  style={{
-                                    marginLeft: "8px",
-                                  }} /* adjust the spacing between the icon and name */
-                                >
-                                  {child.name}
-                                </span>
-                              </div>
-                            </Link>
-                          ),
-                        },
-                      ]}
-                    ></Menu>
-                  );
-                }
-              })}
-            </div>
-          );
-        })}
-      </div>
-    </Sider>
+  return (
+    <Menu.Item
+      key={path}
+      icon={icon}
+      onClick={() => toggleSubMenu(name)}
+      theme="light"
+    >
+      <Link to={path}>{name}</Link>
+    </Menu.Item>
   );
 };
 

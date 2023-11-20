@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { customerService } from "../../../service/admin";
+import { brandService } from "../../../service/admin";
 import { Button, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 
-const CustomerList = () => {
-  const [customer, setCustomer] = useState([]);
+const BrandList = () => {
+  const [brand, setBrand] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const body = await customerService.getAllCustomer();
-      setCustomer(body.data);
+      const body = await brandService.getAllBrands();
+      setBrand(body.data);
     })();
   }, []);
 
@@ -31,47 +31,25 @@ const CustomerList = () => {
         <thead>
           <tr>
             <th>STT</th>
-            <th>Họ Và Tên</th>
-            <th>Email</th>
-            <th>Số điện thoại</th>
+            <th>Tên thương hiệu</th>
+            <th>Mô tả</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {customer.map((customer, index) => {
+          {brand.map((banrd, index) => {
             return (
-              <tr key={customer.id}>
-                <td>{index + 1} </td>
-                <td>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img
-                          src={customer.avatar}
-                          alt="Avatar"
-                          className="rounded-full"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            objectFit: "cover",
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-bold">{customer.name}</div>
-                    </div>
-                  </div>
-                </td>
-                <td>{customer.email}</td>
-                <td>{customer.phone}</td>
+              <tr key={banrd.id}>
+                <td>{index + 1}</td>
+                <td>{banrd.name}</td>
+                <td>{banrd.description}</td>
                 <td>
                   <div
                     className="actions"
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <div className="action">
-                      <Link to={`/admin/customer/update/${customer.id}`}>
+                      <Link to={`/admin/brand/update/${banrd.id}`}>
                         <Button type="primary" className="btn">
                           <i className="fa-regular fa-pen-to-square"></i>
                         </Button>
@@ -100,4 +78,4 @@ const CustomerList = () => {
   );
 };
 
-export { CustomerList };
+export { BrandList };

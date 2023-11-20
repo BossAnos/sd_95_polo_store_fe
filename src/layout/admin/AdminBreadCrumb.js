@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const breadcrumbNameMap = {
   "/admin": "Dashboard",
-  "/admin/brands": "Brand List",
+  "/admin/brand": "Brand List",
   "/admin/brands/add": "Add Brand",
   "/admin/categories": "Category List",
   "/admin/sizes": "Size List",
