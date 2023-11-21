@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
-import * as Icons from "@heroicons/react/24/outline";
+import * as Icons from "@heroicons/react/24/solid";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-4 w-4`;
 const { Sider } = Layout;
@@ -163,7 +163,10 @@ const SiderBar = () => {
                 >
                   {menu.submenu.map((submenu) => (
                     <Menu.Item key={submenu.path}>
-                      <Link to={submenu.path}>{submenu.name}</Link>
+                      <Link to={submenu.path} className="flex items-center">
+                        {submenu.icon}
+                        <span className="ml-2">{submenu.name}</span>
+                      </Link>
                     </Menu.Item>
                   ))}
                 </SubMenu>
