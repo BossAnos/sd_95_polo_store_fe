@@ -3,7 +3,12 @@ import { AdminGuard, UserAuthGuard } from "./guards";
 import { NotFoundPage } from "../components/common";
 // import { LayoutDefault } from "../components/Admin/layout/LayoutDefault";
 import { AdminDashBoard } from "../components/Admin/Dashboard";
-import { CustomerList, BrandList } from "../components/Admin";
+import {
+  CustomerList,
+  BrandList,
+  ProductList,
+  AddProduct,
+} from "../components/Admin";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -43,6 +48,14 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/brand",
     component: BrandList,
+  }),
+  getAdminRoute({
+    path: "/admin/product",
+    component: ProductList,
+  }),
+  getAdminRoute({
+    path: "/admin/product/update/:productId",
+    component: AddProduct,
   }),
   // getAdminRoute({ path: "admin/product", component: ProductList }),
   // getAdminRoute({ path: "admin/color", component: ColorList }),

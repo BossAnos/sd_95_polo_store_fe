@@ -5,3 +5,9 @@ export const getAllProducts = async (params) => {
     params,
   });
 };
+
+export const getProductById = async (productId) => {
+  return await adminClient.get(
+    `http://localhost:8080/admin/product/${productId}`
+  );
+};

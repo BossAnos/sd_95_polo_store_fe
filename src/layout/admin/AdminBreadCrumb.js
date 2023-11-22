@@ -9,7 +9,7 @@ const breadcrumbNameMap = {
   "/admin/sizes": "Size List",
   "/admin/colors": "Color List",
   "/admin/materials": "Material List",
-  "/admin/products": "Product List",
+  "/admin/product": "Danh sách sản phẩm",
   "/admin/orders": "Order List",
   "/admin/discounts": "Discount List",
   "/admin/customer": "Customer List",
@@ -23,7 +23,11 @@ const AdminBreadCrumb = () => {
     const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
     return {
       key: url,
-      title: <Link to={url}>{breadcrumbNameMap[url]}</Link>,
+      title: (
+        <Link to={url} style={{ fontSize: "15px", fontWeight: "bolder" }}>
+          {breadcrumbNameMap[url]}
+        </Link>
+      ),
     };
   });
 

@@ -5,6 +5,7 @@ import * as brandService from "./brand/banrd.service";
 import * as productService from "./product/product.service";
 import * as materialService from "./material/material.service";
 import * as categoryService from "./category/category.service";
+import * as sizeService from "./size/size";
 export {
   adminAuthService,
   colorService,
@@ -13,4 +14,5 @@ export {
   materialService,
   categoryService,
   productService,
+  sizeService,
 };

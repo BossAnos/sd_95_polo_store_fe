@@ -61,7 +61,7 @@ const AdminLayout = ({ children }) => {
         <Content
           style={{
             background: "#EEEEEE",
-            minHeight: "100vh",
+            minHeight: "200vh",
           }}
         >
           <div
