@@ -1,17 +1,42 @@
 import { useEffect, useState } from "react";
 import { brandService } from "../../../service/admin";
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
+
+const { TabPane } = Tabs;
+
+const tabs = [
+  {
+    key: "1",
+    label: "Đang hoạt động",
+    status: 1,
+  },
+  {
+    key: "0",
+    label: "Ngừng hoạt động",
+    status: 0,
+  },
+];
 
 const BrandList = () => {
   const [brand, setBrand] = useState([]);
+  const [activeTab, setActiveTab] = useState("1");
 
   useEffect(() => {
     (async () => {
       const body = await brandService.getAllBrands();
+      console.log("All Brands:", body.data); // Add this line to check the data received
       setBrand(body.data);
     })();
   }, []);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
+
+  const filteredBrands = brand.filter(
+    (item) => item.status === parseInt(activeTab, 10)
+  );
 
   return (
     <div
@@ -21,12 +46,17 @@ const BrandList = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
-      <br></br>
+      <Tabs activeKey={activeTab} onChange={handleTabChange}>
+        {tabs.map((tab) => (
+          <TabPane tab={tab.label} key={tab.key} />
+        ))}
+      </Tabs>
+      <br />
       <Link to={"/admin/chatlieu/add"}>
         <Button type="primary">Thêm chất liệu sản phẩm</Button>
       </Link>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
       <table className="table">
         <thead>
           <tr>
@@ -37,41 +67,47 @@ const BrandList = () => {
           </tr>
         </thead>
         <tbody>
-          {brand.map((banrd, index) => {
-            return (
-              <tr key={banrd.id}>
-                <td>{index + 1}</td>
-                <td>{banrd.name}</td>
-                <td>{banrd.description}</td>
-                <td>
-                  <div
-                    className="actions"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <div className="action">
-                      <Link to={`/admin/brand/update/${banrd.id}`}>
-                        <Button type="primary" className="btn">
-                          <i className="fa-regular fa-pen-to-square"></i>
-                        </Button>
-                      </Link>
+          {filteredBrands.length === 0 ? (
+            <tr>
+              <td colSpan="4">Không có giá trị.</td>
+            </tr>
+          ) : (
+            filteredBrands.map((brand, index) => {
+              return (
+                <tr key={brand.id}>
+                  <td>{index + 1}</td>
+                  <td>{brand.name}</td>
+                  <td>{brand.description}</td>
+                  <td>
+                    <div
+                      className="actions"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <div className="action">
+                        <Link to={`/admin/brand/update/${brand.id}`}>
+                          <Button type="primary" className="btn">
+                            <i className="fa-regular fa-pen-to-square"></i>
+                          </Button>
+                        </Link>
+                      </div>
+                      <div className="action">
+                        <Popconfirm
+                          title="Xoá khách hàng"
+                          description="Bạn có chắc chắn muốn xoá khách hàng này?"
+                          okText="Xoá"
+                          cancelText="Huỷ"
+                        >
+                          <button className="btn">
+                            <i className="fa-sharp fa-solid fa-trash"></i>
+                          </button>
+                        </Popconfirm>
+                      </div>
                     </div>
-                    <div className="action">
-                      <Popconfirm
-                        title="Xoá khách hàng"
-                        description="Bạn có chắc chắn muốn xoá khách hàng này?"
-                        okText="Xoá"
-                        cancelText="Huỷ"
-                      >
-                        <button className="btn">
-                          <i className="fa-sharp fa-solid fa-trash"></i>
-                        </button>
-                      </Popconfirm>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </div>

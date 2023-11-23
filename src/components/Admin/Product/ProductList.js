@@ -13,6 +13,7 @@ import {
   Input,
   Pagination,
   Popconfirm,
+  Tabs,
   Select,
   Space,
 } from "antd";
@@ -22,6 +23,20 @@ import { log } from "util";
 import { selectSearchDataUtil } from "../../../utils";
 import { SelectSearch } from "../../common/SelectSearch";
 import { LoadingBox, LoadingPage } from "../../common";
+const { TabPane } = Tabs;
+
+const tabs = [
+  {
+    key: "1",
+    label: "Đang hoạt động",
+    status: 1,
+  },
+  {
+    key: "0",
+    label: "Ngừng hoạt động",
+    status: 0,
+  },
+];
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -34,11 +49,15 @@ const ProductList = () => {
   const [brandOptions, setBrandOptions] = useState([]);
   const [materialOptions, setMaterialOptions] = useState([]);
   const LIMIT = 10;
+  const [activeTab, setActiveTab] = useState("1");
 
   const [loading, setLoading] = useState(true);
+  const [startIndex, setStartIndex] = useState(0); // Biến để tính toán số thứ tự
 
-  const onPageChange = async (e) => {
-    setPage(e);
+  const onPageChange = async (page) => {
+    setPage(page);
+    const newStartIndex = (page - 1) * LIMIT;
+    setStartIndex(newStartIndex);
   };
 
   useEffect(() => {
@@ -110,6 +129,14 @@ const ProductList = () => {
     return data;
   }
 
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
+
+  const filteredBrands = products.filter(
+    (item) => item.status === parseInt(activeTab, 10)
+  );
+
   const handleDelete = async (productId) => {
     try {
       setLoading(true);
@@ -128,7 +155,7 @@ const ProductList = () => {
   async function onSearchHandle(form) {
     const products = await getProducts(form);
     setProducts(products);
-    setPage(1);
+    setPage(Math.floor(startIndex / LIMIT) + 1);
   }
 
   return (
@@ -139,6 +166,11 @@ const ProductList = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <Tabs activeKey={activeTab} onChange={handleTabChange}>
+        {tabs.map((tab) => (
+          <TabPane tab={tab.label} key={tab.key} />
+        ))}
+      </Tabs>
       <h4
         style={{
           textAlign: "center",
@@ -207,7 +239,6 @@ const ProductList = () => {
           <thead>
             <tr>
               <th>STT</th>
-
               <th>Tên</th>
               <th style={{ width: "70px" }}>Ảnh</th>
               <th>Danh mục</th>
@@ -217,12 +248,12 @@ const ProductList = () => {
             </tr>
           </thead>
           <tbody>
-            {products
-              .slice((page - 1) * LIMIT, (page - 1) * LIMIT + LIMIT)
+            {filteredBrands
+              .slice((page - 1) * LIMIT, page * LIMIT)
               .map((p, index) => {
                 return (
                   <tr key={p.id}>
-                    <td>{index + 1}</td>
+                    <td>{startIndex + index + 1}</td>
 
                     <td>{p.name}</td>
                     <td
@@ -272,7 +303,7 @@ const ProductList = () => {
       )}
       <Pagination
         defaultCurrent={1}
-        total={products.length}
+        total={filteredBrands.length}
         pageSize={LIMIT}
         onChange={onPageChange}
         style={{ textAlign: "center" }}
