@@ -18,3 +18,10 @@ export const createProduct = async (createProductForm) => {
     createProductForm
   );
 };
+
+export const updateProductById = async (productId, updateProductForm) => {
+  return await adminClient.put(
+    `http://localhost:8080/admin/product/update/${productId}`,
+    updateProductForm
+  );
+};

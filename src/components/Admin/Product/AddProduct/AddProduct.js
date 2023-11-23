@@ -16,6 +16,7 @@ import {
   colorService,
   discountService,
   materialService,
+  imageService,
   //   productDetailService,
   productService,
   sizeService,
@@ -125,7 +126,7 @@ const AddProduct = () => {
             description,
             brandId,
             materialId,
-            // discount_id,
+
             productDetails,
           } = data;
 
@@ -159,7 +160,7 @@ const AddProduct = () => {
             description,
             brandId,
             materialId,
-            // discount_id,
+
             productDetailRepuests,
           };
 
@@ -173,44 +174,40 @@ const AddProduct = () => {
   }, []);
 
   const addProductHandle = async (e) => {
+    const request = {
+      ...e,
+    };
+    console.log(e);
     if (productId) {
-      try {
-        const formValue = form.getFieldsValue();
-
-        const productDetails = formValue.productDetailRepuests.map(
-          (productDetail) => {
-            const { form_id } = productDetail;
-            const image = images[form_id];
-            console.log("Image:", image);
-            if (image) {
-              return {
-                ...productDetail,
-                images: [image], // Use the Firebase Storage image URL (name)
-              };
-            }
+      request.productDetailRepuests = request.productDetailRepuests
+        .filter((data) => data)
+        .map((productDetail) => {
+          const form_id = productDetail.form_id;
+          const image = images[form_id];
+          const names = image
+            ? image.map((item) => ({ name: item.previewUrl }))
+            : [];
+          console.log(image);
+          console.log(names);
+          if (!image) {
             return {
               ...productDetail,
             };
           }
-        );
-        formValue.productDetailRepuests = productDetails;
 
-        // await productService.updateProductById(productId, formValue);
+          return {
+            ...productDetail,
+            images: names, // Use the Firebase Storage image URL (name)
+          };
+        });
 
-        navigate("/admin/products");
-        toastService.success("Cập nhật sản phẩm thành công");
-      } catch (error) {
-        console.log(error);
-        toastService.error(error.apiMessage || "Server error");
-      }
+      await productService.updateProductById(productId, request);
+
+      navigate("/admin/product");
+      toastService.success("Cập nhật sản phẩm thành công");
+
       return;
     }
-
-    const request = {
-      ...e,
-    };
-    const nameByFormId = {}; // Đối tượng lưu trữ giá trị name theo form_id
-
     request.productDetailRepuests = request.productDetailRepuests
       .filter((data) => data)
       .map((productDetail) => {
@@ -294,14 +291,26 @@ const AddProduct = () => {
     form.setFieldValue("discount_id", newDiscount.id);
   }
 
-  const removeImage = (formId, imageIndex) => {
+  const removeImage = async (form_id, imageIndex) => {
     const updatedImages = { ...images };
-    const formImages = updatedImages[formId];
+    const formImages = updatedImages[form_id];
 
     if (formImages && formImages.length > imageIndex) {
-      formImages.splice(imageIndex, 1); // Xóa ảnh khỏi mảng formImages theo index
+      const removedImage = formImages[imageIndex];
+      const id = removedImage.id; // Lấy ID của ảnh
+      console.log(id);
 
-      setImages(updatedImages); // Cập nhật lại state images
+      // Kiểm tra xem ảnh đã có ID hay chưa
+      if (id) {
+        // Gọi hàm để thay đổi trạng thái ảnh trước
+        await imageService.changeStatusImage(id);
+
+        formImages.splice(imageIndex, 1);
+        setImages(updatedImages);
+      } else {
+        formImages.splice(imageIndex, 1);
+        setImages(updatedImages);
+      }
     }
   };
 
@@ -654,24 +663,34 @@ const AddProduct = () => {
                         </Button>
                       </div>
                       <Row gutter={[16, 16]} style={{ marginLeft: "10px" }}>
-                        {images[key]?.map((image, imageIndex) => (
-                          <div
-                            key={`${key}.${imageIndex}`}
-                            style={{ position: "relative" }}
-                          >
-                            <Image width={100} src={image.previewUrl} />
-                            <Button
-                              type="text"
-                              icon={<DeleteOutlined />}
-                              style={{
-                                position: "absolute",
-                                top: 0,
-                                right: 0,
-                              }}
-                              onClick={() => removeImage(key, imageIndex)} // Sử dụng hàm removeImage đã sửa đổi
-                            />
-                          </div>
-                        ))}
+                        {images[key] &&
+                          images[key].map((image, imageIndex) => (
+                            <div
+                              key={`${key}.${imageIndex}`}
+                              style={{ position: "relative" }}
+                            >
+                              <Image width={100} src={image.previewUrl} />
+                              <Button
+                                type="text"
+                                icon={<DeleteOutlined />}
+                                style={{
+                                  position: "absolute",
+                                  top: 0,
+                                  right: 0,
+                                }}
+                                onClick={() => {
+                                  const confirmDelete = window.confirm(
+                                    "Bạn có muốn xóa ảnh này không?"
+                                  );
+                                  if (confirmDelete) {
+                                    removeImage(key, imageIndex);
+                                  }
+                                }}
+                              />
+
+                              {/* Thêm dòng này để in ra ID của ảnh */}
+                            </div>
+                          ))}
                       </Row>
                       <Divider style={{ margin: "20px", color: "black" }} />
                     </div>
