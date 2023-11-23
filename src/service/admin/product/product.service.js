@@ -11,3 +11,10 @@ export const getProductById = async (productId) => {
     `http://localhost:8080/admin/product/${productId}`
   );
 };
+
+export const createProduct = async (createProductForm) => {
+  return await adminClient.post(
+    "http://localhost:8080/admin/product/add",
+    createProductForm
+  );
+};

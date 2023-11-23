@@ -187,7 +187,7 @@ const ProductList = () => {
         <Form.Item>
           <Button htmlType={"submit"}>Search</Button>
         </Form.Item>
-        <Link to={"/admin/products/add"}>
+        <Link to={"/admin/product/add"}>
           <Button className="">Thêm sản phẩm</Button>
         </Link>
       </Form>

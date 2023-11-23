@@ -10,6 +10,8 @@ const breadcrumbNameMap = {
   "/admin/colors": "Color List",
   "/admin/materials": "Material List",
   "/admin/product": "Danh sách sản phẩm",
+  "/admin/product/add": "Thêm sản phẩm",
+  "/admin/product/update": "Chi tiết sản phẩm",
   "/admin/orders": "Order List",
   "/admin/discounts": "Discount List",
   "/admin/customer": "Customer List",

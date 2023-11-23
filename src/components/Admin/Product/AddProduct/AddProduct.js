@@ -14,13 +14,14 @@ import {
   brandService,
   categoryService,
   colorService,
-  //   discountService,
+  discountService,
   materialService,
   //   productDetailService,
   productService,
   sizeService,
 } from "../../../../service/admin";
 import { selectSearchDataUtil } from "../../../../utils";
+import { storage } from "../../../../firebaseConfig";
 import { SelectSearch } from "../../../common/SelectSearch";
 // import { AddBrandModal, AddCategoryModal } from "../../../common";
 import ReactQuill from "react-quill";
@@ -47,13 +48,15 @@ const AddProduct = () => {
   const [sizeOptions, setSizeOptions] = useState([]);
   const [colorOptions, setColorOptions] = useState([]);
   const [discountOptions, setDiscountOptions] = useState([]);
-  const [description, setDescription] = useState("");
 
+  const [detailImages, setDetailImages] = useState({});
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showAddBrandModal, setShowAddBrandModal] = useState(false);
   const [showMaterialModal, setShowAddMaterialModal] = useState(false);
   const [showAddDiscountModal, setShowAddDiscountModal] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [fields, setFields] = useState([]);
+  const [file, setFile] = useState(null);
 
   const { productId } = useParams();
 
@@ -71,9 +74,9 @@ const AddProduct = () => {
         const materialRes = await materialService.getAllMaterial();
         const sizeRes = await sizeService.getAllSizes();
         const colorRes = await colorService.getAllColors();
-        // const discountRes = await discountService.getDiscounts({
-        //   statuses: "ACTIVE",
-        // });
+        const discountRes = await discountService.getAllDiscount({
+          statuses: "1",
+        });
 
         const materialOptions = selectSearchDataUtil.transformSearchSelectData(
           materialRes.data,
@@ -100,11 +103,11 @@ const AddProduct = () => {
           "id",
           "name"
         );
-        // const discountOptions = selectSearchDataUtil.transformSearchSelectData(
-        //   discountRes.data,
-        //   "id",
-        //   "name"
-        // );
+        const discountOptions = selectSearchDataUtil.transformSearchSelectData(
+          discountRes.data,
+          "id",
+          "name"
+        );
 
         setMaterialOptions(materialOptions);
         setCategoryOptions(categoryOptions);
@@ -125,7 +128,7 @@ const AddProduct = () => {
             // discount_id,
             productDetails,
           } = data;
-          setDescription(description);
+
           console.log(productDetails);
           const images = productDetails.reduce((acc, curr, index) => {
             const imageList = curr.images;
@@ -145,13 +148,11 @@ const AddProduct = () => {
           console.log(images);
           setImages(images);
 
-          const product_detail_requests = productDetails.map(
-            (product_detail) => {
-              return {
-                ...product_detail,
-              };
-            }
-          );
+          const productDetailRepuests = productDetails.map((product_detail) => {
+            return {
+              ...product_detail,
+            };
+          });
           const formValue = {
             name,
             categoryId,
@@ -159,7 +160,7 @@ const AddProduct = () => {
             brandId,
             materialId,
             // discount_id,
-            product_detail_requests,
+            productDetailRepuests,
           };
 
           form.setFieldsValue(formValue);
@@ -173,61 +174,68 @@ const AddProduct = () => {
 
   const addProductHandle = async (e) => {
     if (productId) {
-      const formValue = form.getFieldsValue();
+      try {
+        const formValue = form.getFieldsValue();
 
-      const productDetails = formValue.product_detail_requests.map(
-        (productDetail) => {
-          const { form_id } = productDetail;
-          const image = images[form_id];
-          if (image) {
+        const productDetails = formValue.productDetailRepuests.map(
+          (productDetail) => {
+            const { form_id } = productDetail;
+            const image = images[form_id];
+            console.log("Image:", image);
+            if (image) {
+              return {
+                ...productDetail,
+                images: [image], // Use the Firebase Storage image URL (name)
+              };
+            }
             return {
               ...productDetail,
-              images: [image],
             };
           }
-          return {
-            ...productDetail,
-          };
-        }
-      );
-      formValue.product_detail_requests = productDetails;
-      formValue.description = description;
-      //   await productService.updateProductById(productId, formValue);
-      navigate("/admin/products");
-      toastService.success("Cập nhật sản phẩm thành công");
+        );
+        formValue.productDetailRepuests = productDetails;
+
+        // await productService.updateProductById(productId, formValue);
+
+        navigate("/admin/products");
+        toastService.success("Cập nhật sản phẩm thành công");
+      } catch (error) {
+        console.log(error);
+        toastService.error(error.apiMessage || "Server error");
+      }
       return;
     }
+
     const request = {
       ...e,
     };
+    const nameByFormId = {}; // Đối tượng lưu trữ giá trị name theo form_id
 
-    // for (let image of Object.values(images)) {
-    //     const {secure_url} = await fileService.uploadFile({
-    //         publicId: uuid(),
-    //         file: image.file
-    //     })
-    //     image.secure_url = secure_url;
-    // }
-
-    request.product_detail_requests = request.product_detail_requests
+    request.productDetailRepuests = request.productDetailRepuests
       .filter((data) => data)
       .map((productDetail) => {
         const form_id = productDetail.form_id;
         const image = images[form_id];
+        const names = image.map((item) => ({ name: item.previewUrl }));
+        console.log(image);
+        console.log(names);
         if (!image) {
           return {
             ...productDetail,
           };
         }
+
         return {
           ...productDetail,
-          images: [image],
+          images: names, // Use the Firebase Storage image URL (name)
         };
       });
-    request.description = description;
-    // await productService.createProduct(request);
+
+    // Save the product data to the database
+    await productService.createProduct(request);
+
+    navigate("/admin/product");
     toastService.success("Tạo sản phẩm thành công");
-    navigate("/admin/products");
   };
 
   async function createCategoryFinishHandle(newCategory) {
@@ -286,34 +294,70 @@ const AddProduct = () => {
     form.setFieldValue("discount_id", newDiscount.id);
   }
 
-  function descriptionChangeHandle(e) {
-    setDescription(e);
-  }
+  const removeImage = (formId, imageIndex) => {
+    const updatedImages = { ...images };
+    const formImages = updatedImages[formId];
 
-  const fileChangeHandle = async (key, e) => {
-    try {
-      const file = e.target.files[0];
-      const { secure_url } = await fileService.uploadFile({
-        publicId: uuid(),
-        file,
-      });
-      setImages((pre) => {
-        const newImages = {
-          ...pre,
-          [key]: {
-            name: secure_url,
-          },
-        };
-        return newImages;
-      });
-    } catch (error) {
-      toastService.error(error.apiMessage);
+    if (formImages && formImages.length > imageIndex) {
+      formImages.splice(imageIndex, 1); // Xóa ảnh khỏi mảng formImages theo index
+
+      setImages(updatedImages); // Cập nhật lại state images
     }
   };
 
+  const fileChangeHandle = async (key, e) => {
+    const fileList = Array.from(e.target.files);
+    const newImages = fileList.map(async (file) => {
+      const storageRef = storage.ref();
+      const imageRef = storageRef.child(file.name);
+      await imageRef.put(file);
+      const downloadUrl = await imageRef.getDownloadURL();
+      return {
+        name: file.name,
+        previewUrl: downloadUrl,
+      };
+    });
+
+    setFile(fileList);
+    console.log(fileList);
+
+    const updatedDetailImages = await Promise.all(newImages);
+
+    setDetailImages((prevImages) => {
+      return {
+        ...prevImages,
+        [key]: [...(prevImages[key] || []), ...updatedDetailImages],
+      };
+    });
+
+    setImages((prevImages) => {
+      return {
+        ...prevImages,
+        [key]: [...(prevImages[key] || []), ...updatedDetailImages],
+      };
+    });
+
+    console.log(images); // Make sure the images object is properly updated
+
+    // Check Firebase Storage for uploaded images
+    updatedDetailImages.forEach((image) => {
+      const storageRef = storage.ref();
+      const imageRef = storageRef.child(image.name);
+      imageRef
+        .getDownloadURL()
+        .then((downloadUrl) => {
+          console.log("Image uploaded to Firebase:", downloadUrl);
+        })
+        .catch((error) => {
+          console.log("Error retrieving download URL:", error);
+        });
+    });
+
+    // ... rest of your code
+  };
   async function deleteProductDetailHandle(form_id, remove, name) {
     const formValue = form.getFieldsValue();
-    const productDetail = formValue.product_detail_requests[form_id];
+    const productDetail = formValue.productDetailRepuests[form_id];
     if (!productDetail?.product_detail_id) {
       remove(name);
       return;
@@ -330,14 +374,6 @@ const AddProduct = () => {
     toastService.success("Xóa phân loại sản phẩm thành công");
   }
 
-  const removeUploaded = (index) => {
-    setUploadedImages((prevImages) => {
-      const updatedImages = [...prevImages];
-      updatedImages.splice(index, 1);
-      return updatedImages;
-    });
-  };
-
   return (
     <div
       style={{
@@ -350,27 +386,6 @@ const AddProduct = () => {
         {" "}
         {productId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
       </Title>
-      {/* <AddCategoryModal
-        open={showAddCategoryModal}
-        onCreateCategoryFinish={createCategoryFinishHandle}
-        onCancel={() => setShowAddCategoryModal(false)}
-      />
-      <AddBrandModal
-        open={showAddBrandModal}
-        onAddBrandFinish={createBrandFinishHandle}
-        onCancel={() => setShowAddBrandModal(false)}
-      />
-      <AddMaterialModal
-        onAddMaterialFinish={createMaterialFinishHandle}
-        open={showMaterialModal}
-        onCancel={() => setShowAddMaterialModal(false)}
-      /> */}
-
-      {/* <AddDiscountModal
-        onAddDiscountFinish={createDiscountFinishHandle}
-        open={showAddDiscountModal}
-        onCancel={() => setShowAddDiscountModal(false)}
-      /> */}
       <Form
         onFinish={addProductHandle}
         form={form}
@@ -459,35 +474,23 @@ const AddProduct = () => {
               <i className="fa-solid fa-plus"></i>
             </Button>
           </div>
-
-          <div
-            style={{
-              display: "flex",
-            }}
+          <Form.Item
+            name={"description"}
+            label="Mô tả"
+            rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
           >
-            <Form.Item
-              style={{
-                width: "95%",
-              }}
-              name="discount_id"
-              label="Giảm giá"
-            >
-              <SelectSearch allowClear options={discountOptions} />
-            </Form.Item>
-            <Button onClick={() => setShowAddDiscountModal(true)}>
-              <i className="fa-solid fa-plus"></i>
-            </Button>
-          </div>
+            <Input />
+          </Form.Item>
         </div>
 
         <div className="product-details-form">
           <Title level={3}>Chi tiết sản phẩm</Title>
 
           <div className="product-details" style={{ maxWidth: "800px" }}>
-            <Form.List name="product_detail_requests">
+            <Form.List name="productDetailRepuests">
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields.map(({ key, name, ...restField }, index) => (
                     <div key={key}>
                       <div>
                         <Row gutter={[16, 16]}>
@@ -513,6 +516,9 @@ const AddProduct = () => {
                             <strong style={{ marginLeft: "-44px" }}>
                               Gía bán
                             </strong>
+                          </Col>
+                          <Col span={4}>
+                            <strong style={{ marginLeft: "-44px" }}></strong>
                           </Col>
                         </Row>
                       </div>
@@ -599,41 +605,70 @@ const AddProduct = () => {
                         >
                           <Input placeholder="Giá bán" />
                         </Form.Item>
-
                         <Form.Item
                           onChange={(e) => {
                             fileChangeHandle(key, e);
+                            console.log(e);
                           }}
                           trigger="false"
                         >
                           <Upload
                             beforeUpload={() => false}
                             showUploadList={false}
+                            multiple
                           >
                             <Button icon={<UploadOutlined />}>
                               Upload image
                             </Button>
                           </Upload>
                         </Form.Item>
-
                         <MinusCircleOutlined
                           onClick={() =>
                             deleteProductDetailHandle(key, remove, name)
                           }
                         />
                       </Space>
-                      <Row gutter={[16, 16]}>
+                      <div
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        <Form.Item
+                          style={{
+                            width: "95%",
+                            marginLeft: "10px ",
+                          }}
+                          {...restField}
+                          name={[name, "discountId"]}
+                          label="Giảm giá"
+                        >
+                          <SelectSearch
+                            allowClear
+                            options={discountOptions}
+                            placeholder={1}
+                            style={{ width: "500px" }}
+                          />
+                        </Form.Item>
+                        <Button onClick={() => setShowAddDiscountModal(true)}>
+                          <i className="fa-solid fa-plus"></i>
+                        </Button>
+                      </div>
+                      <Row gutter={[16, 16]} style={{ marginLeft: "10px" }}>
                         {images[key]?.map((image, imageIndex) => (
                           <div
-                            key={imageIndex}
+                            key={`${key}.${imageIndex}`}
                             style={{ position: "relative" }}
                           >
-                            <Image width={200} src={image.name || ""} />
+                            <Image width={100} src={image.previewUrl} />
                             <Button
                               type="text"
                               icon={<DeleteOutlined />}
-                              style={{ position: "absolute", top: 0, right: 0 }}
-                              onClick={() => remove(`${name}.${imageIndex}`)}
+                              style={{
+                                position: "absolute",
+                                top: 0,
+                                right: 0,
+                              }}
+                              onClick={() => removeImage(key, imageIndex)} // Sử dụng hàm removeImage đã sửa đổi
                             />
                           </div>
                         ))}

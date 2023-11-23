@@ -6,6 +6,7 @@ import * as productService from "./product/product.service";
 import * as materialService from "./material/material.service";
 import * as categoryService from "./category/category.service";
 import * as sizeService from "./size/size";
+import * as discountService from "./discount/discount.service";
 export {
   adminAuthService,
   colorService,
@@ -15,4 +16,5 @@ export {
   categoryService,
   productService,
   sizeService,
+  discountService,
 };

@@ -1,6 +1,5 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
-import { get } from "jquery";
 const firebaseConfig = {
   apiKey: "AIzaSyApn0mM1_GADY0jZNq0nWbjfybuYwbjVFc",
   authDomain: "sd-95-polostore.firebaseapp.com",

@@ -57,6 +57,10 @@ const adminRoutes = [
     path: "/admin/product/update/:productId",
     component: AddProduct,
   }),
+  getAdminRoute({
+    path: "/admin/product/add",
+    component: AddProduct,
+  }),
   // getAdminRoute({ path: "admin/product", component: ProductList }),
   // getAdminRoute({ path: "admin/color", component: ColorList }),
   // getAdminRoute({ path: "admin/brand", component: BrandsList }),
