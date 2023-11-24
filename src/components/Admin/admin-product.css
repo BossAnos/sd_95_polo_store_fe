@@ -1,0 +1,45 @@
+.btn-customer__add {
+  background-color: black;
+  margin: 0px 50px;
+}
+.btn-customer__add:hover {
+    background-color: #e5e7eb;
+}
+.table__main {
+  margin-top: 1.1rem;
+  overflow: auto;
+  max-height: 58vh;
+}
+.table__main--customer{
+    margin-top: 1.1rem;
+    overflow: auto;
+    max-height: 800vh;
+   
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 1.1rem;
+}
+table,
+tr {
+  border: 1px solid #f2f2f2;
+}
+
+tr:hover {
+  background-color: #e5e7eb;
+}
+
+thead {
+  background-color: #f4f4f4;
+}
+
+th,
+td {
+  padding: 10px 60px 10px 50px;
+  height: 1rem;
+}
+
+thead {
+  padding: 0;
+}
