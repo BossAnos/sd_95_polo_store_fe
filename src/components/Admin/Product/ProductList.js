@@ -27,6 +27,11 @@ const { TabPane } = Tabs;
 
 const tabs = [
   {
+    key: "all",
+    label: "Tất cả",
+    status: null,
+  },
+  {
     key: "1",
     label: "Đang hoạt động",
     status: 1,
@@ -133,9 +138,10 @@ const ProductList = () => {
     setActiveTab(key);
   };
 
-  const filteredBrands = products.filter(
-    (item) => item.status === parseInt(activeTab, 10)
-  );
+  const filteredProducts =
+    activeTab === "all"
+      ? products
+      : products.filter((item) => item.status === parseInt(activeTab, 10));
 
   const handleDelete = async (productId) => {
     try {
@@ -223,6 +229,7 @@ const ProductList = () => {
           <Button className="">Thêm sản phẩm</Button>
         </Link>
       </Form>
+      <span>Tổng số sản phẩm: {filteredProducts.length}</span>
       {loading && (
         <div
           style={{
@@ -248,7 +255,7 @@ const ProductList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredBrands
+            {filteredProducts
               .slice((page - 1) * LIMIT, page * LIMIT)
               .map((p, index) => {
                 return (
@@ -302,8 +309,8 @@ const ProductList = () => {
         </table>
       )}
       <Pagination
-        defaultCurrent={1}
-        total={filteredBrands.length}
+        current={page}
+        total={filteredProducts.length}
         pageSize={LIMIT}
         onChange={onPageChange}
         style={{ textAlign: "center" }}
