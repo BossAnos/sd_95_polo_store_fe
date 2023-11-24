@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import { brandService } from "../../../service/admin";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
+import "../admin-product.css"
 
 const { TabPane } = Tabs;
 
 const tabs = [
+
   {
     key: "1",
     label: "Đang hoạt động",
     status: 1,
   },
+
   {
     key: "0",
     label: "Ngừng hoạt động",
@@ -53,11 +56,12 @@ const BrandList = () => {
       </Tabs>
       <br />
       <Link to={"/admin/chatlieu/add"}>
-        <Button type="primary">Thêm chất liệu sản phẩm</Button>
+        <Button type="primary" className="btn-customer__add ">Thêm chất liệu sản phẩm</Button>
       </Link>
       <br />
       <br />
-      <table className="table">
+      <div className="table__main">
+      <table>
         <thead>
           <tr>
             <th>STT</th>
@@ -75,7 +79,7 @@ const BrandList = () => {
             filteredBrands.map((brand, index) => {
               return (
                 <tr key={brand.id}>
-                  <td>{index + 1}</td>
+                  <td style={{paddingLeft:"60px"}}>{index + 1}</td>
                   <td>{brand.name}</td>
                   <td>{brand.description}</td>
                   <td>
@@ -110,6 +114,7 @@ const BrandList = () => {
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
