@@ -1,3 +1,4 @@
 import { AdminGuard } from "./AdminGuards";
+import { UserAuthGuard } from "./UserAuthGuards";
 
-export { AdminGuard };
+export { AdminGuard, UserAuthGuard };

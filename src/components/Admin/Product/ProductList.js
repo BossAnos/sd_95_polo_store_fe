@@ -23,7 +23,8 @@ import { log } from "util";
 import { selectSearchDataUtil } from "../../../utils";
 import { SelectSearch } from "../../common/SelectSearch";
 import { LoadingBox, LoadingPage } from "../../common";
-// import { SearchBar } from "../../../utils/Input/SearchBar";
+import SearchBar from "../../../utils/Input/SearchBar";
+import TitleCard from "../../../utils/Cards/TitleCard";
 const { TabPane } = Tabs;
 
 const tabs = [
@@ -44,41 +45,6 @@ const tabs = [
   },
 ];
 
-const TopSideButtons = ({ removeFilter, applyFilter, applySearch }) => {
-  const [filterParam, setFilterParam] = useState("");
-  const [searchText, setSearchText] = useState("");
-  const locationFilters = ["Paris", "London", "Canada", "Peru", "Tokyo"];
-
-  const showFiltersAndApply = (params) => {
-    applyFilter(params);
-    setFilterParam(params);
-  };
-
-  const removeAppliedFilter = () => {
-    removeFilter();
-    setFilterParam("");
-    setSearchText("");
-  };
-
-  useEffect(() => {
-    if (searchText == "") {
-      removeAppliedFilter();
-    } else {
-      applySearch(searchText);
-    }
-  }, [searchText]);
-
-  return (
-    <div className="inline-block float-right">
-      {/* <SearchBar
-        searchText={searchText}
-        styleClass="mr-4"
-        setSearchText={setSearchText}
-      /> */}
-    </div>
-  );
-};
-
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [categoryMap, setCategoryMap] = useState({});
@@ -90,7 +56,7 @@ const ProductList = () => {
   const [brandOptions, setBrandOptions] = useState([]);
   const [materialOptions, setMaterialOptions] = useState([]);
   const LIMIT = 10;
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("all");
   const [keyword, setKeyword] = useState("");
 
   const [loading, setLoading] = useState(true);
@@ -197,17 +163,6 @@ const ProductList = () => {
       console.log(error);
     }
   };
-
-  async function onSearchHandle(form) {
-    const { name, ...otherFields } = form;
-    const newForm = {
-      ...otherFields,
-      name: keyword, // Use the keyword entered by the user
-    };
-    const products = await getProducts(newForm);
-    setProducts(products);
-    setPage(Math.floor(startIndex / LIMIT) + 1);
-  }
 
   return (
     <div
@@ -364,7 +319,6 @@ const ProductList = () => {
         onChange={onPageChange}
         style={{ textAlign: "center" }}
       />
-      ;
     </div>
   );
 };

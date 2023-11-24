@@ -318,7 +318,7 @@ const AddProduct = () => {
     const fileList = Array.from(e.target.files);
     const newImages = fileList.map(async (file) => {
       const storageRef = storage.ref();
-      const imageRef = storageRef.child(file.name);
+      const imageRef = storageRef.child(`product/${file.name}`);
       await imageRef.put(file);
       const downloadUrl = await imageRef.getDownloadURL();
       return {
@@ -351,7 +351,7 @@ const AddProduct = () => {
     // Check Firebase Storage for uploaded images
     updatedDetailImages.forEach((image) => {
       const storageRef = storage.ref();
-      const imageRef = storageRef.child(image.name);
+      const imageRef = storageRef.child(`product/${file.name}`);
       imageRef
         .getDownloadURL()
         .then((downloadUrl) => {

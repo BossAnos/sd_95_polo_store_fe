@@ -9,6 +9,8 @@ import {
   ProductList,
   AddProduct,
 } from "../components/Admin";
+import { UserLayout } from "../layout/user/UserLayout";
+import { UserLoginPage } from "../components/User/LoginPage";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -23,14 +25,14 @@ const getAdminRoute = ({ path, component }) => {
   };
 };
 
-// const getUserRoute = ({ path, component, guard }) => {
-//   return {
-//     path,
-//     component, npm install react-app-rewired --save-dev
-//     layout: UserLayout,
-//     guard: guard || NoGuard,
-//   };
-// };
+const getUserRoute = ({ path, component, guard }) => {
+  return {
+    path,
+    component,
+    layout: UserLayout,
+    guard: guard || NoGuard,
+  };
+};
 
 const adminRoutes = [
   {
@@ -73,6 +75,7 @@ const adminRoutes = [
   //   getUserRoute({ path: "/", component: HomePage }),
   //   getUserRoute({ path: "/sanpham/:masanpham", component: UserProductDetail }),
   //   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
+  getUserRoute({ path: "/login", component: UserLoginPage }),
   {
     path: "*",
     component: NotFoundPage,

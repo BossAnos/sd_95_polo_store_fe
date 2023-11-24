@@ -1,21 +1,15 @@
 // import React from 'react';
-import './Footer.css';
-
+import "./Footer.css";
+import { Link, useNavigate } from "react-router-dom";
 const Footer = () => {
-    return <footer className="footer-light">
-        <div className="light-layout">
-            <div className="container">
-                <section className="small-section border-section border-top-0">
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="subscribe">
-                                <div>
-                                    <h4>KNOW IT ALL FIRST!</h4>
-                                    <p>Never Miss Anything From Men Wardrobe By Signing Up To Our Newsletter.</p>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <div className="col-lg-6">
+  return (
+    <footer className="footer-light">
+      <div className="light-layout">
+        <div className="container">
+          <section className="small-section border-section border-top-0">
+            <div className="row">
+              <div className="col-lg-6"></div>
+              {/* <div className="col-lg-6">
                             <form className="form-inline subscribe-form auth-form needs-validation" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank">
                                 <div className="form-group mx-sm-3">
                                     <input type="text" className="form-control" name="EMAIL" id="mce-EMAIL" placeholder="Enter your email" required="required" />
@@ -23,91 +17,131 @@ const Footer = () => {
                                 <button type="submit" className="btn btn-solid" id="mc-submit">subscribe</button>
                             </form>
                         </div> */}
-                    </div>
-                </section>
             </div>
+          </section>
         </div>
+      </div>
 
-        <section className="section-b-space light-layout main-footer">
-            <div className="container">
-                <div className="row footer-theme partition-f">
-                    <div className="col-lg-4 col-md-6">
-
-                        <div className="footer-contant">
-                            <div className="footer-logo">
-
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>
-                            <div className="footer-social">
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                        <i className="fa-brands fa-facebook"></i>
-                                        </a>
-                                    </li>
-                                    <li><a href="#"><i className="fa-brands fa-google-plus"></i></a></li>
-                                    <li><a href="#"><i className="fa-brands fa-twitter"></i></a></li>
-                                    <li><a href="#"><i className="fa-brands fa-instagram"></i></a></li>
-                                    <li><a href="#"><i className="fa-solid fa-wifi" aria-hidden="true"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col offset-xl-1">
-                        <div className="sub-title">
-                            <div className="footer-title">
-                                <h4>my account</h4>
-                            </div>
-                            <div className="footer-contant">
-                                <ul>
-                                    <li><a href="#">mens</a></li>
-                                    <li><a href="#">womens</a></li>
-                                    <li><a href="#">clothing</a></li>
-                                    <li><a href="#">accessories</a></li>
-                                    <li><a href="#">featured</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="sub-title">
-                            <div className="footer-title">
-                                <h4>why we choose</h4>
-                            </div>
-                            <div className="footer-contant">
-                                <ul>
-                                    <li><a href="#">shipping &amp; return</a></li>
-                                    <li><a href="#">secure shopping</a></li>
-                                    <li><a href="#">gallary</a></li>
-                                    <li><a href="#">affiliates</a></li>
-                                    <li><a href="#">contacts</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="sub-title">
-                            <div className="footer-title">
-                                <h4>store information</h4>
-                            </div>
-                            <div className="footer-contant">
-                                <ul className="contact-list">
-                                    <li><i className="fa fa-map-marker"></i>
-                                    Men Wardrobe Store, VietNam
-                                        </li>
-                                    <li><i className="fa fa-phone"></i>Call Us: 0968.86.83.86</li>
-                                    <li><i className="fa fa-envelope"></i>Email Us: menwardrobe</li>
-                                    <li><i className="fa fa-fax"></i>Fax: 10000</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+      <section className="section-b-space light-layout main-footer">
+        <div className="container">
+          <div className="row footer-theme partition-f">
+            <div className="col-lg-4 col-md-6">
+              <div className="footer-contant">
+                <div className="footer-logo">
+                  <Link to={"/"}>
+                    <img
+                      src="https://firebasestorage.googleapis.com/v0/b/sd-95-polostore.appspot.com/o/PoloStore.png?alt=media&token=030f29fd-d1b6-4146-a922-be92e0ec5573"
+                      className="img-fluid blur-up lazyloaded"
+                      alt=""
+                      width={"260px"}
+                    />
+                  </Link>
                 </div>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam,
+                </p>
+                <div className="footer-social">
+                  <ul>
+                    <li>
+                      <a href="#">
+                        <i className="fa-brands fa-facebook"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="fa-brands fa-google-plus"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="fa-brands fa-twitter"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="fa-brands fa-instagram"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="fa-solid fa-wifi" aria-hidden="true"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-        </section>
+            <div className="col offset-xl-1">
+              <div className="sub-title">
+                <div className="footer-title">
+                  <h4>LIÊN HỆ</h4>
+                </div>
+                <div className="footer-contant">
+                  <ul>
+                    <li>
+                      <a href="#">Giới thiệu</a>
+                    </li>
+                    <li>
+                      <a href="#">Tin tức</a>
+                    </li>
+                    <li>
+                      <a href="#">Trợ giúp</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="sub-title">
+                <div className="footer-title">
+                  <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+                </div>
+                <div className="footer-contant">
+                  <ul>
+                    <li>
+                      <a href="#">Đăng ký tài khoản</a>
+                    </li>
+                    <li>
+                      <a href="#">Chính sách giao hàng</a>
+                    </li>
+                    <li>
+                      <a href="#">Chính sách đổi trả</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="sub-title">
+                <div className="footer-title">
+                  <h4>Thông tin cửa hàng</h4>
+                </div>
+                <div className="footer-contant">
+                  <ul className="contact-list">
+                    <li>
+                      <i className="fa fa-map-marker"></i>
+                      PoloStore, VietNam
+                    </li>
+                    <li>
+                      <i className="fa fa-phone"></i>Liên hệ: 085.657.2786
+                    </li>
+                    <li>
+                      <i className="fa fa-envelope"></i>Email Us: PoloStore
+                    </li>
+                    <li>
+                      <i className="fa fa-fax"></i>Fax: 99999
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* <div className="sub-footer">
+      {/* <div className="sub-footer">
             <div className="container">
                 <div className="row">
                     <div className="col-xl-6 col-md-6 col-sm-12">
@@ -140,10 +174,8 @@ const Footer = () => {
                 </div>
             </div>
         </div> */}
-
     </footer>
-}
+  );
+};
 
-export {
-    Footer
-}
+export { Footer };
