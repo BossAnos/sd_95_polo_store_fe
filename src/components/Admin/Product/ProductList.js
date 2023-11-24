@@ -23,6 +23,7 @@ import { log } from "util";
 import { selectSearchDataUtil } from "../../../utils";
 import { SelectSearch } from "../../common/SelectSearch";
 import { LoadingBox, LoadingPage } from "../../common";
+// import { SearchBar } from "../../../utils/Input/SearchBar";
 const { TabPane } = Tabs;
 
 const tabs = [
@@ -43,6 +44,41 @@ const tabs = [
   },
 ];
 
+const TopSideButtons = ({ removeFilter, applyFilter, applySearch }) => {
+  const [filterParam, setFilterParam] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const locationFilters = ["Paris", "London", "Canada", "Peru", "Tokyo"];
+
+  const showFiltersAndApply = (params) => {
+    applyFilter(params);
+    setFilterParam(params);
+  };
+
+  const removeAppliedFilter = () => {
+    removeFilter();
+    setFilterParam("");
+    setSearchText("");
+  };
+
+  useEffect(() => {
+    if (searchText == "") {
+      removeAppliedFilter();
+    } else {
+      applySearch(searchText);
+    }
+  }, [searchText]);
+
+  return (
+    <div className="inline-block float-right">
+      {/* <SearchBar
+        searchText={searchText}
+        styleClass="mr-4"
+        setSearchText={setSearchText}
+      /> */}
+    </div>
+  );
+};
+
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [categoryMap, setCategoryMap] = useState({});
@@ -55,6 +91,7 @@ const ProductList = () => {
   const [materialOptions, setMaterialOptions] = useState([]);
   const LIMIT = 10;
   const [activeTab, setActiveTab] = useState("1");
+  const [keyword, setKeyword] = useState("");
 
   const [loading, setLoading] = useState(true);
   const [startIndex, setStartIndex] = useState(0); // Biến để tính toán số thứ tự
@@ -129,7 +166,10 @@ const ProductList = () => {
 
   async function getProducts(form) {
     setLoading(true);
-    const { data } = await productService.getAllProducts(form);
+    const { data } = await productService.getAllProducts({
+      ...form,
+      name: keyword, // Bao gồm tham số từ khóa
+    });
     setLoading(false);
     return data;
   }
@@ -159,7 +199,12 @@ const ProductList = () => {
   };
 
   async function onSearchHandle(form) {
-    const products = await getProducts(form);
+    const { name, ...otherFields } = form;
+    const newForm = {
+      ...otherFields,
+      name: keyword, // Use the keyword entered by the user
+    };
+    const products = await getProducts(newForm);
     setProducts(products);
     setPage(Math.floor(startIndex / LIMIT) + 1);
   }
@@ -191,14 +236,18 @@ const ProductList = () => {
       <Form
         layout={"inline"}
         className="my-3"
-        onFinish={onSearchHandle}
+        // onFinish={onSearchHandle}
         style={{
           marginTop: "30px",
           marginLeft: "50px",
         }}
       >
         <Form.Item name={"name"}>
-          <Input placeholder={"Tên sản phẩm"} />
+          <Input
+            placeholder={"Tên sản phẩm"}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
         </Form.Item>
         <Form.Item name={"categoryId"} style={{ width: "166px" }}>
           <SelectSearch
