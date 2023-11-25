@@ -65,7 +65,7 @@ const Header = () => {
                     </Link>
                   </div>
                 </div>
-                <p>TÌM KIẾM</p>
+                <p className="text-timkiem">TÌM KIẾM</p>
                 <Form
                   className="form_search border-radius-0"
                   onFinish={searchProductHandle}
