@@ -7,19 +7,32 @@ const ProductBox = ({ product }) => {
       <Link to={`/products/${product.id}`}>
         <div className="img-wrapper">
           <img className="img-fluid product-image" src={product.image} />
+          {product.promotionPercent !== 0 && (
+            <span className="promotion-percent">
+              {product.promotionPercent}%
+            </span>
+          )}
         </div>
         <div className="product-detail">
-          <h6>{product.name}</h6>
+          <h6 className="product-name">{product.name}</h6>
           <div className="prices">
-            <h4>
-              <span className="price-cost">{product.price}VNĐ</span>
-              <span className="ml-1 discount">
-                ({product.promotionPercent || 0}%)
+            {product.promotionPercent ? (
+              <>
+                <span className="original-price">
+                  {product.price.toLocaleString()} VNĐ
+                </span>
+                {product.pricecost !== 0 && (
+                  <span className="discounted-price">
+                    {product.pricecost.toLocaleString()} VNĐ
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="original-price">
+                {product.price.toLocaleString()} VNĐ
               </span>
-            </h4>
-            <h4 className="sale-price">{product.pricecost}</h4>
+            )}
           </div>
-
           <ul className="color-variant">
             <li className="bg-light0"></li>
             <li className="bg-light1"></li>

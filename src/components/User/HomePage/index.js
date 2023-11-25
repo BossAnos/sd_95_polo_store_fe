@@ -53,14 +53,9 @@ const HomePage = () => {
         >
           <div className="carousel-inner">
             <div className="carousel-item active">
-              <div className="carousel-item_title">
-                <h4>for man</h4>
-                <h1>Spring collection</h1>
-                <button className="btn btn-solid">Shop now</button>
-              </div>
               <img
                 className="d-block w-100"
-                src="http://themes.pixelstrap.com/multikart/assets/images/home-banner/1.jpg"
+                src="https://file.hstatic.net/1000369857/collection/1919_730_polo_3da01ded33614497a1884a3b99489661.jpg"
                 alt="First slide"
               />
             </div>

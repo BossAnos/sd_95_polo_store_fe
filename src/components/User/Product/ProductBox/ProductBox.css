@@ -1,50 +1,68 @@
 .product-box {
-    position: relative;
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    vertical-align: middle;
+  position: relative;
 }
 
-.product-box {
-    width: 100%;
-    min-width: 250px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: calc(25% - 30px);
-    margin: 0 15px 30px;
-    padding: 0;
+.promotion-percent {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: red;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
-.product-box .products {
-    padding: 3rem;
+.product-box .img-wrapper {
+  height: 400px;
+  position: relative;
 }
 
-.product-box .price-cost {
-    margin-bottom: 1rem;
-    text-decoration: line-through;
-}
-
-.product-box .sale-price{
-    font-weight: 700;
-}
-
-.product-box .discount {
-    font-weight: 700;
-    color: orange;
-}
-
-.img-wrapper{
-    height: 400px;
-}
-
-.product-image{
-    width: 100%;
-    object-fit: cover;
-    height: 100%;
+.product-box .product-image {
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
 }
 
 .product-box a {
-    color: var(--dark);
-    text-decoration: none;
+  color: var(--dark);
+  text-decoration: none;
+}
+
+.product-box .product-detail {
+  text-align: center;
+}
+
+.product-box .product-name {
+  margin-bottom: 10px;
+}
+
+.product-box .prices {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-box .original-price {
+  color: gray;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.product-box .discounted-price {
+  font-size: 16px;
+  font-weight: normal;
+  text-decoration: line-through;
+  color: gray;
+}
+.product-box .product-name {
+  padding-top: 10px;
+  font-family: "Times New Roman", Times, serif, "Lucida Sans", Arial, sans-serif;
+  font-size: 22px; /* Kích thước tên sản phẩm lớn hơn */
+}
+
+.product-box .discounted-price {
+  color: red; /* Đổi màu chữ của giá giảm thành màu đỏ */
 }

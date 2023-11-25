@@ -160,13 +160,13 @@ const Header = () => {
             <nav id="main-nav">
               <ul id="main-menu">
                 <Link to={"/"}>
-                  <li className="text-dark">HOME</li>
+                  <li className="text-dark">Trang chủ</li>
                 </Link>
-                <li>FEATURE</li>
-                <li>SHOP</li>
-                <li>PRODUCT</li>
-                <li>PAGE</li>
-                <li>BLOG</li>
+                <li>Giảm giá</li>
+                <li>Bộ sưu tập</li>
+                <li>Sản phẩm</li>
+                <li>Chính sách</li>
+                <li>Giới thiệu</li>
               </ul>
             </nav>
           </div>
