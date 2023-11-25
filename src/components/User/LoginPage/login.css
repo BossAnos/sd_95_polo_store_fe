@@ -1,0 +1,21 @@
+.login-container {
+  border: 3px solid #98999a;
+  width: 65vh;
+  height: 80vh;
+  margin-left: 35%;
+}
+.text-login {
+  margin-top: 20px;
+  margin-left: 20px;
+  font-size: 25px;
+  font-weight: bolder;
+}
+.ant-input.ant-input-lg.css-dev-only-do-not-override-3mqfnx {
+  width: 50vh;
+}
+
+.btn.btn-dark {
+  background-color: black;
+  margin-top: 20px;
+  margin-left: 20px;
+}
