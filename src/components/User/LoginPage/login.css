@@ -6,7 +6,7 @@
 }
 .text-login {
   margin-top: 20px;
-  margin-left: 20px;
+  
   font-size: 25px;
   font-weight: bolder;
 }
@@ -17,5 +17,21 @@
 .btn.btn-dark {
   background-color: black;
   margin-top: 20px;
-  margin-left: 20px;
+ 
+}
+.cart-container{
+  border: 2px solid rgb(195, 189, 189);
+  height: 65vh;
+  width: 70vh;
+  margin-left: 70vh;
+  border-radius: 4px 4px 4px  4px;
+}
+/* .container-text{
+  display: flex;
+  align-items: center;
+  width: 400px;
+
+} */
+.p{
+font-size: 14px;
 }

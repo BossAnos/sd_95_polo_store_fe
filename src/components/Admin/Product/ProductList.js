@@ -25,6 +25,7 @@ import { SelectSearch } from "../../common/SelectSearch";
 import { LoadingBox, LoadingPage } from "../../common";
 import SearchBar from "../../../utils/Input/SearchBar";
 import TitleCard from "../../../utils/Cards/TitleCard";
+
 const { TabPane } = Tabs;
 
 const tabs = [
@@ -251,12 +252,12 @@ const ProductList = () => {
         </div>
       )}
       {!loading && (
-        <table className="table">
+        <table className="table__main">
           <thead>
             <tr>
               <th>STT</th>
               <th>Tên</th>
-              <th style={{ width: "70px" }}>Ảnh</th>
+              <th >Ảnh</th>
               <th>Danh mục</th>
               <th>Thương hiệu</th>
               <th>Chất Liệu</th>
@@ -271,15 +272,15 @@ const ProductList = () => {
                   <tr key={p.id}>
                     <td>{startIndex + index + 1}</td>
 
-                    <td>{p.name}</td>
+                    <td style={{ whiteSpace:"nowrap"}}>{p.name}</td>
                     <td
                       style={{
                         display: "flex",
                         justifyContent: "center",
-                        width: "70px",
+                        
                       }}
                     >
-                      <Image src={p.image} width={50} height={50}></Image>
+                      <Image src={p.image} width={80} height={100}></Image>
                     </td>
                     <td>{categoryMap[p.categoryId]}</td>
                     <td>{brandMap[p.brandId]}</td>

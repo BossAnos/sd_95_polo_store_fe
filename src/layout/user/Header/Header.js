@@ -153,7 +153,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-
       <div className="header_bottom bottom-part bottom-light">
         <div className="container">
           <div className="main-nav-center">
