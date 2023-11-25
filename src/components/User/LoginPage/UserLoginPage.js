@@ -21,7 +21,7 @@ const UserLoginPage = () => {
       toastService.success("Đăng nhập thành công");
       setPage("/");
     } catch (error) {
-      toastService.error(error.apiMessage);
+      toastService.error("Sai Email hoặc mật khẩu");
     }
   };
 

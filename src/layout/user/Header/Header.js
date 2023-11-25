@@ -47,52 +47,6 @@ const Header = () => {
 
   return (
     <header>
-      <div className="top-header top-header-dark2">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="header-contact">
-                <ul>
-                  <li>Welcome to Our store Men Wardrobe</li>
-                  <li>
-                    <i className="fa fa-phone" aria-hidden="true"></i>Call Us:
-                    0968.86.83.86
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-6 text-end top-header-right">
-              <ul className="header-dropdown">
-                <li className="onhover-dropdown mobile-account">
-                  {userAuthService.isLogin() && (
-                    <div className="userInfo">
-                      <i className="fa fa-user" aria-hidden="true"></i>
-                      {/* {useInfo?.name} */}
-                      <ul className="onhover-show-div">
-                        <li>
-                          <Link to={"/account"}>My Account</Link>
-                        </li>
-                        <li>
-                          <Link to={"/orders"}>My Orders</Link>
-                        </li>
-                        <hr></hr>
-                        <li onClick={logoutHandle}>
-                          <a>Logout</a>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                  {!userAuthService.isLogin() && (
-                    <div>
-                      <a onClick={() => navigateLogin()}>Login</a>
-                    </div>
-                  )}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="main_header">
         <div className="container">
           <div className="row">
@@ -102,10 +56,11 @@ const Header = () => {
                   <div className="brand-logo">
                     <Link to={"/"}>
                       <img
+                        style={{ marginTop: "-22px" }}
                         src="https://firebasestorage.googleapis.com/v0/b/sd-95-polostore.appspot.com/o/PoloStore.png?alt=media&token=030f29fd-d1b6-4146-a922-be92e0ec5573"
                         className="img-fluid blur-up lazyloaded"
                         alt=""
-                        width={"260px"}
+                        width={"180px"}
                       />
                     </Link>
                   </div>
@@ -115,12 +70,12 @@ const Header = () => {
                   className="form_search border-radius-0"
                   onFinish={searchProductHandle}
                 >
-                  <Form.Item name={"name"}>
+                  <Form.Item name={"name"} className="search-input">
                     <Input
                       id="query search-autocomplete"
                       type="search"
                       placeholder="Search products"
-                      className="nav-search nav-search-field"
+                      className="nav-search-field"
                     />
                   </Form.Item>
                   <button
@@ -131,7 +86,6 @@ const Header = () => {
                     <i className="fa fa-search"></i>
                   </button>
                 </Form>
-
                 <div className="menu-right pull-right">
                   <div>
                     <div className="icon-nav">
@@ -147,6 +101,52 @@ const Header = () => {
                       </ul>
                     </div>
                   </div>
+                </div>
+                <div className="">
+                  <ul className="header-dropdown">
+                    <li className="onhover-dropdown mobile-account">
+                      {userAuthService.isLogin() && (
+                        <div className="userInfo">
+                          <div className="flex items-center space-x-3">
+                            <div>
+                              <div className="font-bold">{useInfo?.name}</div>
+                            </div>
+                            <div className="avatar">
+                              <div className="mask mask-squircle w-12 h-12">
+                                <img
+                                  src={useInfo?.avatar}
+                                  alt="Avatar"
+                                  className="rounded-full"
+                                  style={{
+                                    width: "50px",
+                                    height: "50px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <ul className="onhover-show-div">
+                            <li>
+                              <Link to={"/account"}>My Account</Link>
+                            </li>
+                            <li>
+                              <Link to={"/orders"}>My Orders</Link>
+                            </li>
+                            <hr></hr>
+                            <li onClick={logoutHandle}>
+                              <a>Logout</a>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                      {!userAuthService.isLogin() && (
+                        <div>
+                          <a onClick={() => navigateLogin()}>Login</a>
+                        </div>
+                      )}
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
