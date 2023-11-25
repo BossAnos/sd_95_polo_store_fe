@@ -4,24 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="footer-light">
-      <div className="light-layout">
-        <div className="container">
-          <section className="small-section border-section border-top-0">
-            <div className="row">
-              <div className="col-lg-6"></div>
-              {/* <div className="col-lg-6">
-                            <form className="form-inline subscribe-form auth-form needs-validation" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank">
-                                <div className="form-group mx-sm-3">
-                                    <input type="text" className="form-control" name="EMAIL" id="mce-EMAIL" placeholder="Enter your email" required="required" />
-                                </div>
-                                <button type="submit" className="btn btn-solid" id="mc-submit">subscribe</button>
-                            </form>
-                        </div> */}
-            </div>
-          </section>
-        </div>
-      </div>
-
       <section className="section-b-space light-layout main-footer">
         <div className="container">
           <div className="row footer-theme partition-f">
@@ -33,7 +15,7 @@ const Footer = () => {
                       src="https://firebasestorage.googleapis.com/v0/b/sd-95-polostore.appspot.com/o/PoloStore.png?alt=media&token=030f29fd-d1b6-4146-a922-be92e0ec5573"
                       className="img-fluid blur-up lazyloaded"
                       alt=""
-                      width={"260px"}
+                      width={"150px"}
                     />
                   </Link>
                 </div>
@@ -74,11 +56,14 @@ const Footer = () => {
               </div>
             </div>
             <div className="col offset-xl-1">
-              <div className="sub-title">
+              <div
+                className="sub-title"
+                style={{ marginTop: "-70px", marginLeft: "90px" }}
+              >
                 <div className="footer-title">
                   <h4>LIÊN HỆ</h4>
                 </div>
-                <div className="footer-contant">
+                <div className="footer-contant" style={{ marginTop: "-20px" }}>
                   <ul>
                     <li>
                       <a href="#">Giới thiệu</a>
@@ -94,11 +79,11 @@ const Footer = () => {
               </div>
             </div>
             <div className="col">
-              <div className="sub-title">
+              <div className="sub-title" style={{ marginTop: "-70px" }}>
                 <div className="footer-title">
                   <h4>HỖ TRỢ KHÁCH HÀNG</h4>
                 </div>
-                <div className="footer-contant">
+                <div className="footer-contant" style={{ marginTop: "-20px" }}>
                   <ul>
                     <li>
                       <a href="#">Đăng ký tài khoản</a>
@@ -115,11 +100,11 @@ const Footer = () => {
             </div>
             <div className="col">
               <div className="sub-title">
-                <div className="footer-title">
+                <div className="footer-title" style={{ marginTop: "-70px" }}>
                   <h4>Thông tin cửa hàng</h4>
                 </div>
                 <div className="footer-contant">
-                  <ul className="contact-list">
+                  <ul className="contact-list" style={{ marginTop: "-20px" }}>
                     <li>
                       <i className="fa fa-map-marker"></i>
                       PoloStore, VietNam

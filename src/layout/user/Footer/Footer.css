@@ -143,3 +143,22 @@ footer p {
     padding-right: 7px;
     display: inline-block;
 }
+.footer-light{
+    border-top: 1px solid black;
+    padding: 20px;
+    margin-top: -40px;
+}
+.img-fluid.blur-up.lazyloaded{
+    margin-top: -70px;
+
+}
+.footer-social{
+    margin-top: -1px;
+}
+.section-b-space.light-layout.main-footer{
+    height: 20vh;
+}
+
+.footer-contant{
+
+}
