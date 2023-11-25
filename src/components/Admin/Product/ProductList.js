@@ -43,6 +43,11 @@ const tabs = [
     label: "Ngừng hoạt động",
     status: 0,
   },
+  {
+    key: "3",
+    label: "Đang khuyến mại",
+    status: 3,
+  },
 ];
 
 const ProductList = () => {

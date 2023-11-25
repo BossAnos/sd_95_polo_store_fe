@@ -6,6 +6,12 @@ export const getAllProducts = async (params) => {
   });
 };
 
+export const getAllProductsForUser = async (params) => {
+  return await adminClient.get("http://localhost:8080/admin/product/homepage", {
+    params,
+  });
+};
+
 export const getProductById = async (productId) => {
   return await adminClient.get(
     `http://localhost:8080/admin/product/${productId}`

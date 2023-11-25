@@ -11,6 +11,7 @@ import {
 } from "../components/Admin";
 import { UserLayout } from "../layout/user/UserLayout";
 import { UserLoginPage } from "../components/User/LoginPage";
+import { HomePage } from "../components/User/HomePage";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -75,6 +76,7 @@ const adminRoutes = [
   //   getUserRoute({ path: "/", component: HomePage }),
   //   getUserRoute({ path: "/sanpham/:masanpham", component: UserProductDetail }),
   //   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
+  getUserRoute({ path: "/", component: HomePage }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
   {
     path: "*",

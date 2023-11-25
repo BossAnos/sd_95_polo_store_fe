@@ -76,7 +76,7 @@ const AddProduct = () => {
         const sizeRes = await sizeService.getAllSizes();
         const colorRes = await colorService.getAllColors();
         const discountRes = await discountService.getAllDiscount({
-          statuses: "1",
+          status: "1",
         });
 
         const materialOptions = selectSearchDataUtil.transformSearchSelectData(
@@ -126,7 +126,7 @@ const AddProduct = () => {
             description,
             brandId,
             materialId,
-
+            discountId,
             productDetails,
           } = data;
 
@@ -160,7 +160,7 @@ const AddProduct = () => {
             description,
             brandId,
             materialId,
-
+            discountId,
             productDetailRepuests,
           };
 
@@ -288,7 +288,7 @@ const AddProduct = () => {
         ...pre,
       ];
     });
-    form.setFieldValue("discount_id", newDiscount.id);
+    form.setFieldValue("discountId", newDiscount.id);
   }
 
   const removeImage = async (form_id, imageIndex) => {
@@ -318,7 +318,7 @@ const AddProduct = () => {
     const fileList = Array.from(e.target.files);
     const newImages = fileList.map(async (file) => {
       const storageRef = storage.ref();
-      const imageRef = storageRef.child(`product/${file.name}`);
+      const imageRef = storageRef.child(file.name);
       await imageRef.put(file);
       const downloadUrl = await imageRef.getDownloadURL();
       return {
@@ -351,7 +351,7 @@ const AddProduct = () => {
     // Check Firebase Storage for uploaded images
     updatedDetailImages.forEach((image) => {
       const storageRef = storage.ref();
-      const imageRef = storageRef.child(`product/${file.name}`);
+      const imageRef = storageRef.child(image.name);
       imageRef
         .getDownloadURL()
         .then((downloadUrl) => {
@@ -480,6 +480,24 @@ const AddProduct = () => {
               <SelectSearch options={materialOptions} />
             </Form.Item>
             <Button onClick={() => setShowAddMaterialModal(true)}>
+              <i className="fa-solid fa-plus"></i>
+            </Button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <Form.Item
+              style={{
+                width: "95%",
+              }}
+              name="discountId"
+              label="Giảm giá"
+            >
+              <SelectSearch allowClear options={discountOptions} />
+            </Form.Item>
+            <Button onClick={() => setShowAddDiscountModal(true)}>
               <i className="fa-solid fa-plus"></i>
             </Button>
           </div>
@@ -637,31 +655,6 @@ const AddProduct = () => {
                           }
                         />
                       </Space>
-                      <div
-                        style={{
-                          display: "flex",
-                        }}
-                      >
-                        <Form.Item
-                          style={{
-                            width: "95%",
-                            marginLeft: "10px ",
-                          }}
-                          {...restField}
-                          name={[name, "discountId"]}
-                          label="Giảm giá"
-                        >
-                          <SelectSearch
-                            allowClear
-                            options={discountOptions}
-                            placeholder={1}
-                            style={{ width: "500px" }}
-                          />
-                        </Form.Item>
-                        <Button onClick={() => setShowAddDiscountModal(true)}>
-                          <i className="fa-solid fa-plus"></i>
-                        </Button>
-                      </div>
                       <Row gutter={[16, 16]} style={{ marginLeft: "10px" }}>
                         {images[key] &&
                           images[key].map((image, imageIndex) => (
