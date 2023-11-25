@@ -18,6 +18,12 @@ export const getProductById = async (productId) => {
   );
 };
 
+export const getProductDetailById = async (productId) => {
+  return await adminClient.get(
+    `http://localhost:8080/admin/product/productDetail/${productId}`
+  );
+};
+
 export const createProduct = async (createProductForm) => {
   return await adminClient.post(
     "http://localhost:8080/admin/product/add",

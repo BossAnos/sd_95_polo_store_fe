@@ -12,6 +12,7 @@ import {
 import { UserLayout } from "../layout/user/UserLayout";
 import { UserLoginPage } from "../components/User/LoginPage";
 import { HomePage } from "../components/User/HomePage";
+import { UserProductDetail } from "../components/User/Product/UserProductDetail/UserProductDetail";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -78,6 +79,7 @@ const adminRoutes = [
   //   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
   getUserRoute({ path: "/", component: HomePage }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
+  getUserRoute({ path: "/products/:productId", component: UserProductDetail }),
   {
     path: "*",
     component: NotFoundPage,
