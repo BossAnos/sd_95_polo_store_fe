@@ -13,14 +13,16 @@ const UserProductDetail = () => {
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([]);
+  const [listImages, setListImages] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [productDetailMap, setProductDetailMap] = useState([]);
-
+  const [price, setPrice] = useState(0);
   const [productDetailId, setProductDetailId] = useState("");
-
+  const [selectedImage, setSelectedImage] = useState(null);
   const [sizePicker, setSize] = useState("");
   const [colorPicker, setColor] = useState("");
+  const [pricecost, setPriceCost] = useState(0);
 
   const [quantityForm] = Form.useForm();
 
@@ -81,18 +83,49 @@ const UserProductDetail = () => {
     })();
   }, []);
 
-  const sizeChangeHandle = (index) => {
-    setSize(index);
-  };
-
   const getCurrentProductDetailKey = () => {
     return `${sizePicker?.id || ""}_${colorPicker?.id || ""}`;
   };
-
+  const handleImageSelect = (image) => {
+    setSelectedImage(image);
+  };
   const getAvailableQuanity = () => {
     const colorSizeKey = getCurrentProductDetailKey();
     const productDetail = productDetailMap[colorSizeKey];
     return productDetail?.quantity || 0;
+  };
+
+  // Find the first product detail initially
+  useEffect(() => {
+    // ...
+    if (sizes.length > 0) {
+      setSize(sizes[0]);
+    }
+    if (colors.length > 0) {
+      setColor(colors[0]);
+    }
+  }, [sizes, colors]);
+
+  useEffect(() => {
+    if (sizePicker && colorPicker) {
+      const currentProductDetailKey = `${sizePicker.id}_${colorPicker.id}`;
+      const productDetail = productDetailMap[currentProductDetailKey];
+      setProductDetailId(productDetail?.productDetailId || "");
+      setPrice(productDetail?.price || 0);
+      setPriceCost(productDetail?.pricecost || price);
+      const images = productDetail?.images || [];
+      setListImages(images);
+      console.log(images);
+    }
+  }, [sizePicker, colorPicker, productDetailMap]);
+
+  const isSizeAvailable = (colorId, sizeId) => {
+    const productDetailKey = `${sizeId}_${colorId}`;
+    return productDetailMap.hasOwnProperty(productDetailKey);
+  };
+  const isColorAvailable = (colorId, sizeId) => {
+    const productDetailKey = `${sizeId}_${colorId}`;
+    return productDetailMap.hasOwnProperty(productDetailKey);
   };
 
   // const addProductToCardHandle = async () => {
@@ -142,10 +175,6 @@ const UserProductDetail = () => {
   //   }
   // };
 
-  const getSelectedProductDetail = () => {
-    return productDetailMap[getCurrentProductDetailKey()];
-  };
-
   const canAddToCard = () => {
     const quantity = quantityForm.getFieldsValue()?.quantity;
     return quantity && quantity < getAvailableQuanity();
@@ -159,64 +188,50 @@ const UserProductDetail = () => {
     <div>
       <div className="breadcrumb-section">
         <div className="container">
-          <h2>PRODUCT</h2>
+          <div></div>
         </div>
       </div>
       <div className={"container product_detail"}>
         <div className={"row"}>
-          <div className={"col-6 "}>
+          <div className={"col-5"}>
             <div className={"main_image"}>
               <Carousel autoplay>
-                <div className={"main_image"}>
-                  <img
-                    className={"product-image"}
-                    src={images[0]}
-                    alt="Image 1"
-                  />
-                </div>
-                <div>
-                  <img
-                    className={"product-image"}
-                    src={images[0]}
-                    alt="Image 2"
-                  />
-                </div>
-                <div>
-                  <img
-                    className={"product-image"}
-                    src={images[0]}
-                    alt="Image 3"
-                  />
-                </div>
-                {/* Add more images here */}
+                {listImages.map((image, index) => (
+                  <div key={index} className="main_image">
+                    <img
+                      className="product-image"
+                      src={image.name}
+                      alt={`Image ${index + 1}`}
+                    />
+                  </div>
+                ))}
               </Carousel>
             </div>
           </div>
           <div className={"col-6"}>
             <div className={"product-right "}>
-              <div className={"product-count"}>
-                <ul>
-                  <li>
-                    <img
-                      src="http://themes.pixelstrap.com/multikart/assets/images/fire.gif"
-                      className="img-fluid"
-                      alt="image"
-                    />
-                    <span className="p-counter">37</span>
-                    <span className="lang">orders in last 24 hours</span>
-                  </li>
-                  <li>
-                    <img
-                      src="http://themes.pixelstrap.com/multikart/assets/images/person.gif"
-                      className="img-fluid user_img"
-                      alt="image"
-                    />
-                    <span className="p-counter">44</span>
-                    <span className="lang">active view this</span>
-                  </li>
-                </ul>
+              <div>
+                <h1
+                  style={{
+                    fontSize: "20px",
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  {product.name}
+                </h1>
+                {product.promotionPercent !== 0 && (
+                  <span
+                    className="promotionPercent"
+                    style={{ display: "inline-block", verticalAlign: "middle" }}
+                  >
+                    {product.promotionPercent}%
+                  </span>
+                )}
               </div>
-              <h2>{product.name}</h2>
+              <br></br>
+              <h4>Mã sản phẩm : APL{productDetailId}</h4>
+              <br></br>
               <div className="rating-section">
                 <div className="rating">
                   <i className="fa fa-star"></i> <i className="fa fa-star"></i>{" "}
@@ -226,92 +241,123 @@ const UserProductDetail = () => {
                 <h6>120 ratings</h6>
               </div>
 
-              <div className="label-section">
-                <span className="badge badge-grey-color">#1 Best seller</span>
-                <span className="label-text">in fashion</span>
-              </div>
-
               <h3 className="price-detail">
-                {product.productDetails.price}
-                <del>{product.productDetails.pricecost}</del>
-                <span>{product.promotionPercent}% off</span>
+                <div className="prices">
+                  {product.promotionPercent ? (
+                    <>
+                      <span className="originalPrice">
+                        {pricecost.toLocaleString()} VNĐ
+                      </span>
+                      {pricecost !== 0 && (
+                        <span className="discountedPrice">
+                          {price.toLocaleString()} VNĐ
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="originalPrice">
+                      {price.toLocaleString()} VNĐ
+                    </span>
+                  )}
+                </div>
               </h3>
 
-              <ul className="color-variant">
-                {colors.map((color, index) => {
-                  return (
-                    <li
-                      onClick={() => setColor(color)}
-                      className={
-                        color.index === colorPicker?.index ? "active" : ""
-                      }
-                      style={{
-                        border: "1px solid lightgray",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: "0.25rem",
-                      }}
-                      key={index}
-                    >
-                      {color.name}
-                    </li>
-                  );
-                })}
-              </ul>
+              <h6 className="product-title">
+                Số lượng tồn : {getAvailableQuanity()}
+              </h6>
 
+              <div className="qty-container">
+                <h6 className="product-title">Số lượng :</h6>
+                <div className="qty-box mt-3">
+                  <Form form={quantityForm}>
+                    <Form.Item name={"quantity"} initialValue={1}>
+                      <Input
+                        min={1}
+                        className="qty-input"
+                        style={{ width: "100px" }}
+                        type={"number"}
+                        placeholder={"Số lượng"}
+                      />
+                    </Form.Item>
+                  </Form>
+                </div>
+              </div>
+
+              <hr style={{ width: "400px" }}></hr>
+              <br></br>
+              <p>Màu sắc :</p>
+              <ul className="color-variant">
+                {colors.map((color, index) => (
+                  <li
+                    onClick={() => setColor(color)}
+                    className={`color-item ${
+                      color.id === colorPicker?.id ? "active" : ""
+                    }`}
+                    style={{
+                      border: "1px solid lightgray",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "50%",
+                      marginRight: "10px",
+                      cursor: "pointer",
+                      backgroundColor: color.name,
+                      textDecoration:
+                        !isSizeAvailable(color.id, sizePicker?.id) ||
+                        !isColorAvailable(color.id, sizePicker?.id)
+                          ? "line-through"
+                          : "none",
+                      pointerEvents:
+                        !isSizeAvailable(color.id, sizePicker?.id) ||
+                        !isColorAvailable(color.id, sizePicker?.id)
+                          ? "none"
+                          : "auto",
+                    }}
+                    key={index}
+                  >
+                    {color.name}
+                  </li>
+                ))}
+              </ul>
               <div
                 id="selectSize"
                 className="addeffect-section product-description border-product"
               >
-                <h6 className="product-title size-text">
-                  select size{" "}
-                  <span>
-                    <a
-                      href=""
-                      data-bs-toggle="modal"
-                      data-bs-target="#sizemodal"
-                    >
-                      size chart
-                    </a>
-                  </span>
-                </h6>
-                <h6 className="error-message">please select size</h6>
+                <p>Size : </p>
                 <div className="size-box">
-                  <ul>
-                    {sizes.map((size, index) => {
-                      return (
-                        <li
-                          key={index}
-                          className={
-                            size.index === sizePicker?.index ? "active" : ""
-                          }
-                          onClick={() => sizeChangeHandle(size)}
-                        >
-                          {size.name}
-                        </li>
-                      );
-                    })}
+                  <ul className="size-variant">
+                    {sizes.map((size, index) => (
+                      <li
+                        onClick={() => setSize(size)}
+                        className={`size-item ${
+                          size.id === sizePicker?.id ? "active" : ""
+                        }`}
+                        style={{
+                          textDecoration:
+                            !isSizeAvailable(colorPicker?.id, size.id) ||
+                            !isColorAvailable(colorPicker?.id, size.id)
+                              ? "line-through"
+                              : "none",
+                          cursor:
+                            !isSizeAvailable(colorPicker?.id, size.id) ||
+                            !isColorAvailable(colorPicker?.id, size.id)
+                              ? "not-allowed"
+                              : "pointer",
+                          pointerEvents:
+                            !isSizeAvailable(colorPicker?.id, size.id) ||
+                            !isColorAvailable(colorPicker?.id, size.id)
+                              ? "none"
+                              : "auto",
+                        }}
+                        key={index}
+                      >
+                        {size.name}
+                      </li>
+                    ))}
                   </ul>
                 </div>
-              </div>
-
-              <h6 className="product-title">Available</h6>
-
-              <div className="qty-box mt-3">{getAvailableQuanity()}</div>
-
-              <h6 className="product-title">quantity</h6>
-              <div className="qty-box mt-3">
-                <Form form={quantityForm}>
-                  <Form.Item name={"quantity"} initialValue={1}>
-                    <Input
-                      min={1}
-                      style={{ width: "100px" }}
-                      type={"number"}
-                      placeholder={"Số lượng"}
-                    />
-                  </Form.Item>
-                </Form>
               </div>
 
               <div className="product-buttons">
@@ -319,16 +365,18 @@ const UserProductDetail = () => {
                   id="cartEffect"
                   // onClick={addProductToCardHandle}
                   disabled={!canAddToCard()}
-                  className="btn btn-solid hover-solid btn-animation"
+                  className="btn btn-solid hover-solid btn-dark"
                 >
-                  <i className="fa fa-shopping-cart me-1"></i> add to cart
+                  <i className="fa fa-shopping-cart me-1"></i> Thêm vào giỏ hàng
                 </button>
               </div>
             </div>
           </div>
-
+          <hr></hr>
+          <br></br>
           <div className={"col-12"}>
-            <h2>Product detail</h2>
+            <br></br>
+            <h2>Thông tin sản phẩm</h2>
             <Divider />
             <div
               dangerouslySetInnerHTML={{ __html: product.description }}
