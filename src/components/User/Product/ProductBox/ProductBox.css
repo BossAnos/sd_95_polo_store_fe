@@ -48,13 +48,13 @@
   color: gray;
   font-size: 18px;
   font-weight: bold;
+  text-decoration: line-through;
   margin-right: 5px;
 }
 
 .product-box .discounted-price {
   font-size: 16px;
   font-weight: normal;
-  text-decoration: line-through;
   color: gray;
 }
 .product-box .product-name {
