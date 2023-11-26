@@ -5,7 +5,7 @@ import { productService } from "../../../../service/admin";
 import { LoadingPage } from "../../../common";
 import "./UserProductDetail.css";
 import { Carousel, Divider, Form, Input } from "antd";
-// import { cartService, userAuthService } from "../../../../service/user";
+import { cartService, userAuthService } from "../../../../service/user";
 import { useNavigateLoginPage } from "../../../../hook";
 
 const UserProductDetail = () => {
@@ -128,52 +128,56 @@ const UserProductDetail = () => {
     return productDetailMap.hasOwnProperty(productDetailKey);
   };
 
-  // const addProductToCardHandle = async () => {
-  //   if (!userAuthService.isLogin()) {
-  //     toastService.info(
-  //       <a>
-  //         You need to login to perform this action,
-  //         <div>
-  //           <a style={{ fontWeight: 700, color: "#007bff" }}>Login now</a>
-  //         </div>
-  //       </a>,
-  //       {
-  //         onClick: () => navigateLogin(),
-  //       }
-  //     );
-  //     return;
-  //   }
-  //   const quantity = quantityForm.getFieldsValue().quantity;
-  //   const productDetail = getSelectedProductDetail();
-  //   if (!productDetail) {
-  //     toastService.info("Please choose product model");
-  //     return;
-  //   }
-  //   if (!quantity) {
-  //     toastService.info("Please input quantity");
-  //     return;
-  //   }
-  //   if (quantity > productDetail.quantity) {
-  //     toastService.info("Please input quantity less than available");
-  //     return;
-  //   }
-  //   const req = {
-  //     color_id: productDetail.color_id,
-  //     product_detail_id: productDetail.product_detail_id,
-  //     product_id: product.id,
-  //     quantity: quantity,
-  //     size_id: productDetail.size_id,
-  //   };
+  const getSelectedProductDetail = () => {
+    return productDetailMap[getCurrentProductDetailKey()];
+  };
 
-  //   try {
-  //     const authInfo = await userAuthService.getAuthInfo();
-  //     const res = await cartService.addProduct(authInfo.id, req);
-  //     toastService.success("Add Product to cart successfully");
-  //     console.log(res);
-  //   } catch (error) {
-  //     toastService.error(error.apiMessage);
-  //   }
-  // };
+  const addProductToCardHandle = async () => {
+    if (!userAuthService.isLogin()) {
+      toastService.info(
+        <a>
+          Bạn cần đăng nhập
+          <div>
+            <a style={{ fontWeight: 700, color: "#007bff" }}>Login now</a>
+          </div>
+        </a>,
+        {
+          onClick: () => navigateLogin(),
+        }
+      );
+      return;
+    }
+    const quantity = quantityForm.getFieldsValue().quantity;
+    const productDetail = getSelectedProductDetail();
+    if (!productDetail) {
+      toastService.info("Please choose product model");
+      return;
+    }
+    if (!quantity) {
+      toastService.info("Please input quantity");
+      return;
+    }
+    if (quantity > productDetail.quantity) {
+      toastService.info("Please input quantity less than available");
+      return;
+    }
+    const req = {
+      color_id: productDetail.color_id,
+      product_detail_id: productDetail.product_detail_id,
+      product_id: product.id,
+      quantity: quantity,
+      size_id: productDetail.size_id,
+    };
+
+    try {
+      const authInfo = await userAuthService.getAuthInfo();
+      const res = await cartService.addProduct(authInfo.id, req);
+      toastService.success("Add Product to cart successfully");
+      console.log(res);
+    } catch (error) {
+      toastService.error(error.apiMessage);
+    }
+  };
 
   const canAddToCard = () => {
     const quantity = quantityForm.getFieldsValue()?.quantity;
