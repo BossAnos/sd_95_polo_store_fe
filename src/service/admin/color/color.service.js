@@ -1,7 +1,7 @@
 import { adminClient } from "../http";
 
 const getAllColors = async () => {
-  const res = await adminClient.get("http://localhost:8080/color/getall");
+  const res = await adminClient.get("http://localhost:8080/admin/color");
   return res;
 };
 

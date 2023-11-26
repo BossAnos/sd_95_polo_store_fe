@@ -13,6 +13,8 @@ import { UserLayout } from "../layout/user/UserLayout";
 import { UserLoginPage } from "../components/User/LoginPage";
 import { HomePage } from "../components/User/HomePage";
 import { UserProductDetail } from "../components/User/Product/UserProductDetail/UserProductDetail";
+import { ColorList } from "../components/Admin/Color/Color";
+import { SizeList } from "../components/Admin/Size/Sizes";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -52,6 +54,14 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/brand",
     component: BrandList,
+  }),
+  getAdminRoute({
+    path: "/admin/color",
+    component: ColorList,
+  }),
+  getAdminRoute({
+    path: "/admin/size",
+    component: SizeList,
   }),
   getAdminRoute({
     path: "/admin/product",
