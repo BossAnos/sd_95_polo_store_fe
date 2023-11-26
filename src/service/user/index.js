@@ -1,2 +1,3 @@
 import { userAuthService } from "./auth";
-export { userAuthService };
+import * as cartService from "./cart/cart.service";
+export { userAuthService, cartService };
