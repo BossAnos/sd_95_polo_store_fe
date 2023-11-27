@@ -17,6 +17,11 @@ import { ColorList } from "../components/Admin/Color/Color";
 import { SizeList } from "../components/Admin/Size/Sizes";
 import { CategoryList } from "../components/Admin/Categorie/Categorie";
 import { MaterialList } from "../components/Admin/Material/Material";
+import { HomeAccount } from "../components/User/Account/HomeAccount";
+import { AccountInfo } from "../components/User/Account/AccountInfo";
+import { AddressAcount } from "../components/User/Account/AddressAccount";
+import { ListOrderAccount } from "../components/User/Account/OrderAccount/ListOrderAcount";
+import { Home } from "heroicons-react";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -100,6 +105,10 @@ const adminRoutes = [
   getUserRoute({ path: "/", component: HomePage }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
   getUserRoute({ path: "/products/:productId", component: UserProductDetail }),
+   getUserRoute({ path: "/account", component: HomeAccount, guard: UserAuthGuard }),
+   getUserRoute({ path: "/accountInfo", component: AccountInfo, guard: UserAuthGuard }),
+   getUserRoute({ path: "/accountAddress", component: AddressAcount, guard: UserAuthGuard }),
+   getUserRoute({ path: "/accountOrder", component: ListOrderAccount, guard: UserAuthGuard }),
   {
     path: "*",
     component: NotFoundPage,

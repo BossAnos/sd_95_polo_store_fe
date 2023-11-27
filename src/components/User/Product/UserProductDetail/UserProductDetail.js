@@ -162,11 +162,10 @@ const UserProductDetail = () => {
       return;
     }
     const req = {
-      color_id: productDetail.color_id,
-      product_detail_id: productDetail.product_detail_id,
-      product_id: product.id,
+   
+     productDetailId: productDetailId,
       quantity: quantity,
-      size_id: productDetail.size_id,
+
     };
 
     try {
@@ -367,7 +366,7 @@ const UserProductDetail = () => {
               <div className="product-buttons">
                 <button
                   id="cartEffect"
-                  // onClick={addProductToCardHandle}
+                  onClick={addProductToCardHandle}
                   disabled={!canAddToCard()}
                   className="btn btn-solid hover-solid btn-dark"
                 >
