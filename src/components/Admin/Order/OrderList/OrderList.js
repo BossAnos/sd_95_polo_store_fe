@@ -46,28 +46,27 @@ const tabs = [
   },
 ];
 
-// const getUpdateAbleStatus = (statusCode) => {
-//   switch (statusCode) {
-//     case 1:
-//       return Trang_Thai_Don_Hang.filter((status) =>
-//         [6, 4].includes(status.value)
-//       );
-//     case 2:
-//       return Trang_Thai_Don_Hang.filter((status) => [4].includes(status.value));
-//     case 5:
-//       return Trang_Thai_Don_Hang.filter((status) => [4].includes(status.value));
-//     case 6:
-//       return Trang_Thai_Don_Hang.filter((status) =>
-//         [4, 7].includes(status.value)
-//       );
-//     case 7:
-//       return Trang_Thai_Don_Hang.filter((status) =>
-//         [4, 2].includes(status.value)
-//       );
-//     default:
-//       return [];
-//   }
-// };
+const getUpdateAbleStatus = (status) => {
+  switch (status) {
+    case 1:
+      return Status_Order.filter((status) =>
+        [7, 6].includes(status.value)
+      );
+    case 2:
+      return Status_Order.filter((status) => [4,5].includes(status.value));
+    case 7:
+      return Status_Order.filter((status) =>
+        [3, 6].includes(status.value)
+      );
+    case 3:
+      return Status_Order.filter((status) =>
+        [6, 2].includes(status.value)
+      );
+    
+    default:
+      return [];
+  }
+};
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -116,7 +115,7 @@ const OrderList = () => {
     const selectedTab = tabs.find((tab) => tab.key === activeTab);
     const orders = await getOrders({
       ...form,
-      trangthai: selectedTab.key,
+      statusCode: selectedTab.key,
     });
     setOrders(orders);
     setPage(1);
@@ -135,25 +134,25 @@ const OrderList = () => {
     setOrders([...orders]);
   };
 
-  // const updateOrderStatusHandle = (order, trangthai) => {
-  //   order.isUpdating = true;
-  //   setOrders([...orders]);
-  //   hoaDonService
-  //     .changeStatusOrder(order.id, status)
-  //     .then(() => {
-  //       order.status = status;
-  //       order.showUpdateStatusForm = false;
-  //       order.isUpdating = false;
-  //       setOrders([...orders]);
-  //       toastService.success("Cập nhật thành công");
-  //     })
-  //     .catch((err) => {
-  //       toastService.error(err.apiMessage);
-  //       order.showUpdateStatusForm = false;
-  //       order.isUpdating = false;
-  //       setOrders([...orders]);
-  //     });
-  // };
+  const updateOrderStatusHandle = (order, status) => {
+    order.isUpdating = true;
+    setOrders([...orders]);
+
+      orderService.changeStatusOrder(order.id, status)
+      .then(() => {
+        order.status = status;
+        order.showUpdateStatusForm = false;
+        order.isUpdating = false;
+        setOrders([...orders]);
+        toastService.success("Cập nhật thành công");
+      })
+      .catch((err) => {
+        toastService.error(err.apiMessage);
+        order.showUpdateStatusForm = false;
+        order.isUpdating = false;
+        setOrders([...orders]);
+      });
+  };
 
   const orderStatusTabChangeHandle = (key) => {
     console.log("Selected Tab Key:", key);
@@ -234,7 +233,7 @@ const OrderList = () => {
                     }}
                   >
                     <div className="actions">
-                      {/* <div className="d-flex">
+                      <div className="d-flex">
                         <Form.Item
                           style={{ margin: 0 }}
                           initialValue={order.status}
@@ -269,7 +268,7 @@ const OrderList = () => {
                             }
                           )}
                         </Form.Item>
-                      </div> */}
+                      </div>
                     </div>
                   </td>
                 </tr>
