@@ -1,4 +1,4 @@
-import { Checkbox, Form, Input, Select } from "antd";
+import { Checkbox, Form, Input, Select, Radio, Button } from "antd";
 import "./Checkout.css";
 import { useEffect, useState } from "react";
 import { userAuthService, cartService } from "../../../service/user";
@@ -12,6 +12,7 @@ const Checkout = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const userInfo = userAuthService.getAuthInfo();
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -32,6 +33,10 @@ const Checkout = () => {
     })();
   }, []);
 
+  const handleClick = (addressId) => {
+    setSelectedAddress(addressId);
+  };
+
   const addOrderSubmitHandle = async () => {
     const userInfo = userAuthService.getAuthInfo();
     try {
@@ -48,10 +53,11 @@ const Checkout = () => {
           soluong: cp.soluong,
         };
       });
-      const selectedAdress = formValue.selectedAdress;
+      const selectedAddress = formValue.selectedAddress;
       const address = userInfo.address.find(
-        (address) => address.id == selectedAdress
+        (address) => address.id === selectedAddress
       );
+
       const request = {
         ...formValue,
         address,
@@ -119,28 +125,24 @@ const Checkout = () => {
                       <Input placeholder="Phone number" size="large" />
                     </Form.Item>
                   </div>
-                  <Form.Item
-                    label="Địa chỉ"
-                    name="selectedAddress"
-                    rules={[{ required: true, message: "Address is required" }]}
-                  >
-                    <Select placeholder="Select address" size="large">
-                      {userInfo.address.map((address) => (
-                        <Select.Option key={address.id} value={address.id}>
-                          {`${address.fullAddress}`}
-                        </Select.Option>
-                      ))}
-                    </Select>
+                  <Form.Item label="Địa chỉ" name="selectedAddress">
+                    {userInfo.address.map((address, index) => (
+                      <div key={address.id} className="address-button-wrapper">
+                        <span>{address.fullAddress}</span>
+                        <Button
+                          className={
+                            selectedAddress === address.id ? "selected" : ""
+                          }
+                          onClick={() => handleClick(address.id)}
+                        >
+                          {selectedAddress === address.id ? "Đã chọn" : "Chọn"}
+                        </Button>
+                      </div>
+                    ))}
                   </Form.Item>
                 </div>
-                <div className="d-flex justify-content-between align-items-center">
-                  <Checkbox>Save address for next time</Checkbox>
-                  <button
-                    className="btn btn-primary"
-                    onClick={addOrderSubmitHandle}
-                  >
-                    Đặt hàng
-                  </button>
+                <div className="">
+                  <button className="btn btn-primary">Thêm địa chỉ</button>
                 </div>
               </Form>
             </div>
