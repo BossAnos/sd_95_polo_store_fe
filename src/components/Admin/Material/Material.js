@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { sizeService } from "../../../service/admin";
+import { materialService } from "../../../service/admin";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
 import "../admin-product.css"
@@ -21,15 +21,15 @@ const tabs = [
   },
 ];
 
-const SizeList = () => {
-  const [size, setSize] = useState([]);
+const MaterialList = () => {
+  const [material, setMaterial] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
 
   useEffect(() => {
     (async () => {
-      const body = await sizeService.getAllSizes();
-      console.log("All Sizes:", body.data); // Add this line to check the data received
-      setSize(body.data);
+      const body = await materialService.getAllMaterial();
+      console.log("All Material:", body.data); // Add this line to check the data received
+      setMaterial(body.data);
     })();
   }, []);
 
@@ -37,7 +37,7 @@ const SizeList = () => {
     setActiveTab(key);
   };
 
-  const filteredSizes = size.filter(
+  const filteredmaterials = material.filter(
     (item) => item.status === parseInt(activeTab, 10)
   );
 
@@ -55,8 +55,8 @@ const SizeList = () => {
         ))}
       </Tabs>
       <br />
-      <Link to={"/admin/size/add"}>
-        <Button type="primary" className="btn-customer__add ">Thêm Size</Button>
+      <Link to={"/admin/material/add"}>
+        <Button type="primary" className="btn-customer__add ">Thêm vật liệu</Button>
       </Link>
       <br />
       <br />
@@ -65,38 +65,30 @@ const SizeList = () => {
         <thead>
           <tr>
             <th>STT</th>
-            <th>Tên Size</th>
+            <th>Tên màu sắc</th>
             <th>Mô tả</th>
             <th>Actions</th>
-            <th>shirtlength</th>
-            <th>shirtwidth</th>
-            <th>sleevelenght</th>
-            <th>shoulderlength</th>
           </tr>
         </thead>
         <tbody>
-          {filteredSizes.length === 0 ? (
+          {filteredmaterials.length === 0 ? (
             <tr>
               <td colSpan="4">Không có giá trị.</td>
             </tr>
           ) : (
-            filteredSizes.map((size, index) => {
+            filteredmaterials.map((material, index) => {
               return (
-                <tr key={size.id}>
+                <tr key={material.id}>
                   <td style={{paddingLeft:"60px"}}>{index + 1}</td>
-                  <td>{size.name}</td>
-                  <td>{size.description}</td>
-                  <td>{size.shirtlength}</td>
-                  <td>{size.shirtwidth}</td>
-                  <td>{size.sleevelenght}</td>
-                  <td>{size.shoulderlength}</td>
+                  <td>{material.name}</td>
+                  <td>{material.description}</td>
                   <td>
                     <div
                       className="actions"
                       style={{ display: "flex", alignItems: "center" }}
                     >
                       <div className="action">
-                        <Link to={`/admin/size/update/${size.id}`}>
+                        <Link to={`/admin/material/update/${material.id}`}>
                           <Button type="primary" className="btn">
                             <i className="fa-regular fa-pen-to-square"></i>
                           </Button>
@@ -104,8 +96,8 @@ const SizeList = () => {
                       </div>
                       <div className="action">
                         <Popconfirm
-                          title="Xoá màu sắc"
-                          description="Bạn có chắc chắn muốn xoá màu  sắc này?"
+                          title="Xoá chất liệu"
+                          description="Bạn có chắc chắn muốn xoá chất liệu này?"
                           okText="Xoá"
                           cancelText="Huỷ"
                         >
@@ -127,4 +119,4 @@ const SizeList = () => {
   );
 };                                                   
 
-export { SizeList };
+export {MaterialList };
