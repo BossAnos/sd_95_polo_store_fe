@@ -17,6 +17,8 @@ import { ColorList } from "../components/Admin/Color/Color";
 import { SizeList } from "../components/Admin/Size/Sizes";
 import { CategoryList } from "../components/Admin/Categorie/Categorie";
 import { MaterialList } from "../components/Admin/Material/Material";
+import { UserCart } from "../components/User/Cart/UserCart";
+import { Checkout } from "../components/User/Checkout/Checkout";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -100,6 +102,12 @@ const adminRoutes = [
   getUserRoute({ path: "/", component: HomePage }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
   getUserRoute({ path: "/products/:productId", component: UserProductDetail }),
+  getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
+  getUserRoute({
+    path: "/checkout",
+    component: Checkout,
+    guard: UserAuthGuard,
+  }),
   {
     path: "*",
     component: NotFoundPage,

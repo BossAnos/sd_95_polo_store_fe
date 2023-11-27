@@ -162,17 +162,15 @@ const UserProductDetail = () => {
       return;
     }
     const req = {
-      color_id: productDetail.color_id,
-      product_detail_id: productDetail.product_detail_id,
-      product_id: product.id,
+      productDetailId: productDetailId,
+
       quantity: quantity,
-      size_id: productDetail.size_id,
     };
 
     try {
       const authInfo = await userAuthService.getAuthInfo();
       const res = await cartService.addProduct(authInfo.id, req);
-      toastService.success("Add Product to cart successfully");
+      toastService.success("Thêm vào giỏ hàng thành công");
       console.log(res);
     } catch (error) {
       toastService.error(error.apiMessage);
@@ -367,7 +365,7 @@ const UserProductDetail = () => {
               <div className="product-buttons">
                 <button
                   id="cartEffect"
-                  // onClick={addProductToCardHandle}
+                  onClick={addProductToCardHandle}
                   disabled={!canAddToCard()}
                   className="btn btn-solid hover-solid btn-dark"
                 >

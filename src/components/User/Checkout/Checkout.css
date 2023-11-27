@@ -1,0 +1,114 @@
+.checkout-page .checkout-title {
+    margin-bottom: 25px;
+}
+
+.checkout-page .checkout-details{ 
+    position: relative;
+    background-color: #f9f9f9;
+    border: none;
+    padding: 40px;
+    max-width: 500px;
+}
+
+.order-box {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.order-box .title-box {
+    position: relative;
+    padding-bottom: 25px;
+    color: #444;
+    font-weight: 600;
+    font-size: 22px;
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 20px;
+}
+
+.order-box .title-box span {
+    position: relative;
+    width: 35%;
+    float: right;
+    line-height: 1.2em;
+}
+
+.order-box .qty {
+    position: relative;
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 30px;
+}
+
+.order-box .qty li {
+    position: relative;
+    display: block;
+    font-size: 15px;
+    color: #444;
+    line-height: 20px;
+    margin-bottom: 20px;
+}
+
+.order-box .qty li span {
+    float: right;
+    font-size: 18px;
+    line-height: 20px;
+    color: #232323;
+    font-weight: 400;
+    width: 35%;
+}
+
+.order-box .sub-total {
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+}
+
+.order-box .sub-total li {
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    line-height: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.order-box .sub-total li .count {
+    position: relative;
+    font-size: 18px;
+    line-height: 20px;
+    color: #ff4c3b;
+    font-weight: 400;
+    width: 35%;
+    float: right;
+}
+
+.order-box .total {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.order-box .total li {
+    position: relative;
+    display: block;
+    font-weight: 400;
+    color: #333;
+    line-height: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.order-box .total li .count {
+    position: relative;
+    font-size: 18px;
+    line-height: 20px;
+    color: #ff4c3b;
+    font-weight: 400;
+    float: right;
+    width: 35%;
+}
+
+.custom-user-form{
+    display: flex;
+    gap: 30px;
+}
