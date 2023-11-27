@@ -21,6 +21,7 @@ import { HomeAccount } from "../components/User/Account/HomeAccount";
 import { AccountInfo } from "../components/User/Account/AccountInfo";
 import { AddressAcount } from "../components/User/Account/AddressAccount";
 import { ListOrderAccount } from "../components/User/Account/OrderAccount/ListOrderAcount";
+import { OrderList } from "../components/Admin/Order/OrderList/OrderList";
 import { Home } from "heroicons-react";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
@@ -90,6 +91,7 @@ const adminRoutes = [
     path: "/admin/product/add",
     component: AddProduct,
   }),
+  getAdminRoute({ path: "/admin/orders", component: OrderList }),
   // getAdminRoute({ path: "admin/product", component: ProductList }),
   // getAdminRoute({ path: "admin/color", component: ColorList }),
   // getAdminRoute({ path: "admin/brand", component: BrandsList }),
