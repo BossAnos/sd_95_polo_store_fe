@@ -4,3 +4,12 @@ export const getOrders = async (params) => {
       params,
     });
   };
+
+  export const changeStatusOrder = async (id, status) => {
+    return await adminClient.put(
+      `http://localhost:8080/admin/order/updateStatus/${id}`,
+      {
+        status: status,
+      }
+    );
+  };
