@@ -15,6 +15,8 @@ import { HomePage } from "../components/User/HomePage";
 import { UserProductDetail } from "../components/User/Product/UserProductDetail/UserProductDetail";
 import { ColorList } from "../components/Admin/Color/Color";
 import { SizeList } from "../components/Admin/Size/Sizes";
+import { CategoryList } from "../components/Admin/Categorie/Categorie";
+import { MaterialList } from "../components/Admin/Material/Material";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -62,6 +64,14 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/size",
     component: SizeList,
+  }),
+  getAdminRoute({
+    path: "/admin/material",
+    component: MaterialList,
+  }),
+  getAdminRoute({
+    path: "/admin/category",
+    component: CategoryList,
   }),
   getAdminRoute({
     path: "/admin/product",
