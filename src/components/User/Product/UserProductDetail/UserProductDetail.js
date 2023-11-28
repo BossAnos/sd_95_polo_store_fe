@@ -171,7 +171,7 @@ const UserProductDetail = () => {
     try {
       const authInfo = await userAuthService.getAuthInfo();
       const res = await cartService.addProduct(authInfo.id, req);
-      toastService.success("Add Product to cart successfully");
+      toastService.success("Thêm vào giỏ hàng thành công");
       console.log(res);
     } catch (error) {
       toastService.error(error.apiMessage);

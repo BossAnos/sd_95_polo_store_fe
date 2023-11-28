@@ -1,0 +1,66 @@
+
+.carts{
+    padding: 70px 0;
+}
+
+.cart-section .cart-table, .wishlist-section .cart-table {
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.cart-table thead th {
+    font-weight: 900;
+    color: #222;
+    text-transform: uppercase;
+    font-size: 14px;
+    border-top: 0;
+    text-align: center;
+    padding: 0 0.75rem 0.75rem 0.75rem;
+}
+
+.cart .table thead th {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.cart tbody tr td a img {
+    height: 90px;
+}
+
+.cart tbody tr td {
+    min-width: 210px;
+    vertical-align: middle;
+    color: #777;
+    border-top: 0;
+    border-bottom: 1px solid #eee !important;
+    text-align: center;
+}
+
+.cart thead tr td:first-child,
+.cart tbody tr td:first-child {
+    width: 50px !important;
+    min-width: 50px !important;
+}
+
+.cart tbody tr td:first-child label {
+    width: auto;
+    min-width: fit-content;
+}
+
+.cart .td-color  {
+    color: #ff4c3b;
+}
+
+.cart tfoot tr td:first-child {
+    width: 85%;
+    font-size: 15px;
+    padding-right: 10px;
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.cart tfoot tr td, .wishlist-section tfoot tr td {
+    padding-top: 35px;
+    padding-bottom: 0;
+    text-align: right;
+    border: none;
+}
