@@ -16,7 +16,7 @@ const menus = [
         name: "Tổng quát",
       },
       {
-        path: "/admin/Order",
+        path: "/admin/orders",
         icon: <Icons.TruckIcon className={iconClasses} />,
         name: "Đơn hàng",
       },

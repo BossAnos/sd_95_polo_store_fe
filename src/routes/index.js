@@ -17,8 +17,16 @@ import { ColorList } from "../components/Admin/Color/Color";
 import { SizeList } from "../components/Admin/Size/Sizes";
 import { CategoryList } from "../components/Admin/Categorie/Categorie";
 import { MaterialList } from "../components/Admin/Material/Material";
+
 import { UserCart } from "../components/User/Cart/UserCart";
 import { Checkout } from "../components/User/Checkout/Checkout";
+
+import { HomeAccount } from "../components/User/Account/HomeAccount";
+import { AccountInfo } from "../components/User/Account/AccountInfo";
+import { AddressAcount } from "../components/User/Account/AddressAccount";
+import { ListOrderAccount } from "../components/User/Account/OrderAccount/ListOrderAcount";
+import { OrderList } from "../components/Admin/Order/OrderList/OrderList";
+import { Home } from "heroicons-react";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -87,6 +95,7 @@ const adminRoutes = [
     path: "/admin/product/add",
     component: AddProduct,
   }),
+  getAdminRoute({ path: "/admin/orders", component: OrderList }),
   // getAdminRoute({ path: "admin/product", component: ProductList }),
   // getAdminRoute({ path: "admin/color", component: ColorList }),
   // getAdminRoute({ path: "admin/brand", component: BrandsList }),
@@ -108,6 +117,10 @@ const adminRoutes = [
     component: Checkout,
     guard: UserAuthGuard,
   }),
+   getUserRoute({ path: "/account", component: HomeAccount, guard: UserAuthGuard }),
+   getUserRoute({ path: "/accountInfo", component: AccountInfo, guard: UserAuthGuard }),
+   getUserRoute({ path: "/accountAddress", component: AddressAcount, guard: UserAuthGuard }),
+   getUserRoute({ path: "/accountOrder", component: ListOrderAccount, guard: UserAuthGuard }),
   {
     path: "*",
     component: NotFoundPage,

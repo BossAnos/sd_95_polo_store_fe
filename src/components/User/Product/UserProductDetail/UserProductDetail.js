@@ -162,9 +162,10 @@ const UserProductDetail = () => {
       return;
     }
     const req = {
-      productDetailId: productDetailId,
-
+   
+     productDetailId: productDetailId,
       quantity: quantity,
+
     };
 
     try {
