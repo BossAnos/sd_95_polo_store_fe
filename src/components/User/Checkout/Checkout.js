@@ -1,7 +1,11 @@
 import { Checkbox, Form, Input, Select, Radio, Button } from "antd";
 import "./Checkout.css";
 import { useEffect, useState } from "react";
-import { userAuthService, cartService } from "../../../service/user";
+import {
+  userAuthService,
+  cartService,
+  orderService,
+} from "../../../service/user";
 import { toastService } from "../../../service/common";
 import { useNavigate } from "react-router-dom";
 import { LoadingPage } from "../../common/LoadingPage";
@@ -20,7 +24,7 @@ const Checkout = () => {
         const res = await cartService.getCheckoutByStatus();
 
         setCheckOutProducts(res.data.cartDetailResponses);
-        console.log(res);
+        console.log(checkOutProducts);
 
         const userInfo = userAuthService.getAuthInfo();
         form.setFieldValue("username", userInfo?.name || "");
@@ -46,29 +50,26 @@ const Checkout = () => {
     }
     try {
       const formValue = form.getFieldsValue();
-      const hoadonchitiet = checkOutProducts.map((cp) => {
+      const orderDetailRequest = checkOutProducts.map((cp) => {
+        const price =
+          cp.priceCore !== cp.pricePromotion ? cp.pricePromotion : cp.priceCore;
         return {
-          dongia: cp.giaban,
-          machitietsanpham: cp.mactsp,
-          soluong: cp.soluong,
+          price: cp.price,
+          productDetaiId: cp.productDetailId,
+          quantity: cp.quantity,
         };
       });
-      const selectedAddress = formValue.selectedAddress;
-      const address = userInfo.address.find(
-        (address) => address.id === selectedAddress
-      );
 
       const request = {
         ...formValue,
-        address,
-        hoadonchitiet,
-        tonggia: getSubTotalPrice(),
+        address:
+          userInfo.address.find((address) => address.id === selectedAddress)
+            ?.fullAddress || "",
+        orderDetailRequest,
+        totalPrice: getSubTotalPrice(),
       };
-      console.log(userInfo?.makhachhang);
-      // const addOrderRes = await hoaDonKhachHang.addOrder(
-      //   userInfo.makhachhang,
-      //   request
-      // );
+      console.log(userInfo?.id);
+      const addOrderRes = await orderService.addOrder(userInfo.id, request);
       toastService.success("Checkout Successfully");
       navigate("/orders");
     } catch (error) {
