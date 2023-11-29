@@ -14,6 +14,7 @@ import { Status_Order, Status_Order_Map } from "../../../common/StatusOrder";
 import { SelectSearch } from "../../../common/SelectSearch";
 import { LoadingBox } from "../../../common";
 import { Link } from "react-router-dom";
+import "../oder.css"
 
 const tabs = [
   {
@@ -185,10 +186,10 @@ const OrderList = () => {
         </Form.Item>
       </Form>
 
-      <table className="mt-3 table table-bordered">
+      <table className="table-order">
         <thead>
           <tr>
-            <th>Mã hóa đơn</th>
+            <th className="text-mahoadon">Mã hóa đơn</th>
             <th>Khách hàng</th>
             <th>Địa chỉ</th>
             <th>Số điện thoại</th>
@@ -248,7 +249,7 @@ const OrderList = () => {
                                 okText="Xác nhận"
                                 cancelText="Huỷ"
                               >
-                                <Button
+                                <Button className="btn-dathang"
                                   key={option.value}
                                   type={
                                     option.value === "CANCELED"
