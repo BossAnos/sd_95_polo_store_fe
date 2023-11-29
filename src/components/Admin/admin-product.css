@@ -42,3 +42,27 @@ td {
 thead {
   padding: 0;
 }
+.input-soluong{
+  width: 70px;
+align-items: center;
+margin-right: 50px;
+}
+.td-color{
+margin-right:70px;
+}
+.btn-xoa{
+  margin-right: 90px;
+}
+.text-giohang{
+  font-size: 30px;
+  font-weight: bold;
+  margin-left: 60px;
+  padding-top: 40px;
+}
+.btn-thanhtoan{
+  border: 3px solid black;
+  border-radius: 3px;
+  color: white;
+  background-color: black;
+  margin-right: 150px;
+}

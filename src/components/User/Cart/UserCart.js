@@ -6,6 +6,7 @@ import { toastService } from "../../../service/common";
 import { Link, useNavigate } from "react-router-dom";
 import { DebounceInput, EmptyPage, LoadingPage } from "../../common";
 import { useNavigateLoginPage } from "../../../hook";
+import  "../../Admin/admin-product.css"
 
 const UserCart = () => {
   const [products, setProducts] = useState([]);
@@ -143,25 +144,25 @@ const UserCart = () => {
     <div className="cart">
       <div className="breadcrumb-section">
         <div className="container">
-          <h2>CART</h2>
+          <h1 className="text-giohang">Thông tin giỏ hàng </h1>
         </div>
       </div>
       <div className="carts">
         <div className="container">
           <div className="col-sm-12 table-responsive-xs">
-            <table className="table cart-table">
+            <table className="table__main">
               <thead>
-                <tr className="table-head">
-                  <th style={{ display: "flex" }}>
-                    <Checkbox
+                <tr >
+                  <th >
+                    <Checkbox style={{ minWidth:"10px"}}
                       checked={products.every((p) => p.checked)}
                       onChange={(e) => checkAllProduct(e)}
                     ></Checkbox>
                   </th>
                   <th>Tên sản phẩm</th>
-                  <th>Số lượng</th>
-                  <th>Tổng giá</th>
-                  <th>action</th>
+                  <th style={{paddingLeft:"90px"}}>Số lượng</th>
+                  <th style={{paddingLeft:"100px"}}>Tổng giá</th>
+                  <th style={{paddingLeft:"80px"}}>action</th>
                 </tr>
               </thead>
               <tbody>
@@ -169,7 +170,7 @@ const UserCart = () => {
                   return (
                     <tr key={index}>
                       <td>
-                        <Checkbox
+                        <Checkbox 
                           checked={p.checked}
                           onChange={(e) => checkProductChangeHandle(p, e)}
                         ></Checkbox>
@@ -218,12 +219,12 @@ const UserCart = () => {
                       </td>
 
                       <td>
-                        <DebounceInput
+                        <DebounceInput className="input-soluong"
                           min={1}
                           type="number"
                           onSubmit={(e) => quantityChangeHandle(p, e)}
                           defaultValue={p.quantity}
-                          style={{ width: "70px" }}
+                        
                         />
                       </td>
                       <td>
@@ -245,7 +246,7 @@ const UserCart = () => {
                           okText="Có"
                           cancelText="Không"
                         >
-                          <Button>
+                          <Button  className="btn-xoa">
                             <i className="fa fa-close"></i>
                           </Button>
                         </Popconfirm>
@@ -260,9 +261,10 @@ const UserCart = () => {
               <table className="table cart-table ">
                 <tfoot>
                   <tr>
-                    <td>total price :</td>
+                 
+                    <td style={{paddingRight:"220px"}}>total price :</td>
                     <td>
-                      <h3>{getTotalPrice().toLocaleString()}</h3>
+                      <h3 style={{paddingRight:"160px"}}>{getTotalPrice().toLocaleString()}</h3>
                     </td>
                   </tr>
                 </tfoot>
@@ -274,9 +276,9 @@ const UserCart = () => {
             <div className="d-flex justify-content-end">
               <button
                 onClick={() => checkOutClickHandle()}
-                className="btn btn-solid"
+                className="btn-thanhtoan "
               >
-                check out
+               Thanh toán
               </button>
             </div>
           </div>
