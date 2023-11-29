@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { colorService } from "../../../service/admin";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
-import "../admin-product.css"
+import { useNavigate, useParams } from "react-router-dom";
+import "../admin-product.css";
 
 const { TabPane } = Tabs;
 
 const tabs = [
-
   {
     key: "1",
     label: "Đang hoạt động",
@@ -24,6 +24,7 @@ const tabs = [
 const ColorList = () => {
   const [color, setColor] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -56,67 +57,69 @@ const ColorList = () => {
       </Tabs>
       <br />
       <Link to={"/admin/color/add"}>
-        <Button type="primary" className="btn-customer__add ">Thêm màu sắc</Button>
+        <Button type="primary" className="btn-customer__add ">
+          Thêm màu sắc
+        </Button>
       </Link>
       <br />
       <br />
       <div className="table__main">
-      <table>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Tên màu sắc</th>
-            <th>Mô tả</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredColors.length === 0 ? (
+        <table>
+          <thead>
             <tr>
-              <td colSpan="4">Không có giá trị.</td>
+              <th>STT</th>
+              <th>Tên màu sắc</th>
+              <th>Mô tả</th>
+              <th>Actions</th>
             </tr>
-          ) : (
-            filteredColors.map((color, index) => {
-              return (
-                <tr key={color.id}>
-                  <td style={{paddingLeft:"60px"}}>{index + 1}</td>
-                  <td>{color.name}</td>
-                  <td>{color.description}</td>
-                  <td>
-                    <div
-                      className="actions"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <div className="action">
-                        <Link to={`/admin/color/update/${color.id}`}>
-                          <Button type="primary" className="btn">
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
-                        </Link>
+          </thead>
+          <tbody>
+            {filteredColors.length === 0 ? (
+              <tr>
+                <td colSpan="4">Không có giá trị.</td>
+              </tr>
+            ) : (
+              filteredColors.map((color, index) => {
+                return (
+                  <tr key={color.id}>
+                    <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
+                    <td>{color.name}</td>
+                    <td>{color.description}</td>
+                    <td>
+                      <div
+                        className="actions"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <div className="action">
+                          <Link to={`/admin/color/update/${color.id}`}>
+                            <Button type="primary" className="btn">
+                              <i className="fa-regular fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </div>
+                        <div className="action">
+                          <Popconfirm
+                            title="Xoá màu sắc"
+                            description="Bạn có chắc chắn muốn xoá màu  sắc này?"
+                            okText="Xoá"
+                            cancelText="Huỷ"
+                          >
+                            <button className="btn">
+                              <i className="fa-sharp fa-solid fa-trash"></i>
+                            </button>
+                          </Popconfirm>
+                        </div>
                       </div>
-                      <div className="action">
-                        <Popconfirm
-                          title="Xoá màu sắc"
-                          description="Bạn có chắc chắn muốn xoá màu  sắc này?"
-                          okText="Xoá"
-                          cancelText="Huỷ"
-                        >
-                          <button className="btn">
-                            <i className="fa-sharp fa-solid fa-trash"></i>
-                          </button>
-                        </Popconfirm>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-};                                                   
+};
 
 export { ColorList };
