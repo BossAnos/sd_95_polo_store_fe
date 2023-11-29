@@ -10,7 +10,7 @@ import {
   Tabs,
 } from "antd";
 import { toastService } from "../../../../service/common";
-import { Status_Order,Status_Order_Map } from "../../../common/StatusOrder";
+import { Status_Order, Status_Order_Map } from "../../../common/StatusOrder";
 import { SelectSearch } from "../../../common/SelectSearch";
 import { LoadingBox } from "../../../common";
 import { Link } from "react-router-dom";
@@ -49,20 +49,18 @@ const tabs = [
 const getUpdateAbleStatus = (status) => {
   switch (status) {
     case 1:
-      return Status_Order.filter((status) =>
-        [7, 6].includes(status.value)
-      );
+      return Status_Order.filter((status) => [2, 7].includes(status.value));
     case 2:
-      return Status_Order.filter((status) => [4,5].includes(status.value));
-    case 7:
-      return Status_Order.filter((status) =>
-        [3, 6].includes(status.value)
-      );
+      return Status_Order.filter((status) => [3, 7].includes(status.value));
     case 3:
-      return Status_Order.filter((status) =>
-        [6, 2].includes(status.value)
-      );
-    
+      return Status_Order.filter((status) => [4, 7].includes(status.value));
+    case 4:
+      return Status_Order.filter((status) => [5, 6].includes(status.value));
+    case 6:
+      return Status_Order.filter((status) => [7, 8].includes(status.value));
+    case 8:
+      return Status_Order.filter((status) => [5].includes(status.value));
+
     default:
       return [];
   }
@@ -138,7 +136,8 @@ const OrderList = () => {
     order.isUpdating = true;
     setOrders([...orders]);
 
-      orderService.changeStatusOrder(order.id, status)
+    orderService
+      .changeStatusOrder(order.id, status)
       .then(() => {
         order.status = status;
         order.showUpdateStatusForm = false;
@@ -206,9 +205,7 @@ const OrderList = () => {
               return (
                 <tr key={order.id}>
                   <td>
-                    <Link to={`/admin/orders/${order.id}`}>
-                      {order.id}
-                    </Link>
+                    <Link to={`/admin/orders/${order.id}`}>{order.id}</Link>
                   </td>
                   <td>{order.username}</td>
                   <td>{order.address}</td>
@@ -238,35 +235,33 @@ const OrderList = () => {
                           style={{ margin: 0 }}
                           initialValue={order.status}
                         >
-                          {getUpdateAbleStatus(order.status).map(
-                            (option) => {
-                              console.log(order.status);
-                              return (
-                                <Popconfirm
-                                  title="Cập nhật"
-                                  description="Bạn có chắc muốn xác nhận ?"
-                                  onConfirm={() =>
-                                    updateOrderStatusHandle(order, option.value)
+                          {getUpdateAbleStatus(order.status).map((option) => {
+                            console.log(order.status);
+                            return (
+                              <Popconfirm
+                                title="Cập nhật"
+                                description="Bạn có chắc muốn xác nhận ?"
+                                onConfirm={() =>
+                                  updateOrderStatusHandle(order, option.value)
+                                }
+                                // onCancel={cancel}
+                                okText="Xác nhận"
+                                cancelText="Huỷ"
+                              >
+                                <Button
+                                  key={option.value}
+                                  type={
+                                    option.value === "CANCELED"
+                                      ? "danger"
+                                      : "primary"
                                   }
-                                  // onCancel={cancel}
-                                  okText="Xác nhận"
-                                  cancelText="Huỷ"
+                                  disabled={order.isUpdating}
                                 >
-                                  <Button
-                                    key={option.value}
-                                    type={
-                                      option.value === "CANCELED"
-                                        ? "danger"
-                                        : "primary"
-                                    }
-                                    disabled={order.isUpdating}
-                                  >
-                                    {option.label}
-                                  </Button>
-                                </Popconfirm>
-                              );
-                            }
-                          )}
+                                  {option.label}
+                                </Button>
+                              </Popconfirm>
+                            );
+                          })}
                         </Form.Item>
                       </div>
                     </div>
