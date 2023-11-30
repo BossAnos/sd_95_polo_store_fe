@@ -29,6 +29,7 @@ import { OrderList } from "../components/Admin/Order/OrderList/OrderList";
 import { Home } from "heroicons-react";
 import { TransactionSuccess } from "../components/User/Checkout/TransactionSuccess";
 // import { getMessage } from "@reduxjs/toolkit/dist/actionCreatorInvariantMiddleware";
+import { AddColor } from "../components/Admin/Color/AddColor/Addcolor";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -80,6 +81,10 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/color",
     component: ColorList,
+  }),
+  getAdminRoute({
+    path: "admin/color/add",
+    component: AddColor,
   }),
   getAdminRoute({
     path: "/admin/size",

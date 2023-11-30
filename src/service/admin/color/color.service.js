@@ -17,9 +17,11 @@ const deleteColor = async (id) => {
   return res;
 };
 
-const createColor = async (form) => {
-  const res = await adminClient.post(`/mv-core/v1/admin/color/create`, form);
-  return res;
+export const createColor = async (form) => {
+  return await adminClient.post(
+    "http://localhost:8080/admin/color/add",
+    form
+  );
 };
 
 const updateColor = async (form) => {
@@ -30,4 +32,4 @@ const updateColor = async (form) => {
   return res;
 };
 
-export { getAllColors, deleteColor, createColor, updateColor, getOne };
+export { getAllColors, deleteColor, updateColor, getOne };

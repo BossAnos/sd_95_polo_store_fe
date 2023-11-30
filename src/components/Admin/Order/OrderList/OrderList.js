@@ -14,6 +14,7 @@ import { Status_Order, Status_Order_Map } from "../../../common/StatusOrder";
 import { SelectSearch } from "../../../common/SelectSearch";
 import { LoadingBox } from "../../../common";
 import { Link } from "react-router-dom";
+import "../oder.css"
 
 const tabs = [
   {
@@ -193,6 +194,7 @@ const OrderList = () => {
         </Form.Item>
       </Form>
 
+
       <table className="table">
         <thead>
           <tr>
@@ -206,6 +208,10 @@ const OrderList = () => {
         </thead>
         <thead>
           <tr>
+      <table className="table-order">
+        <thead>
+          <tr>
+            <th className="text-mahoadon">Mã hóa đơn</th>
             <th>Khách hàng</th>
             <th>Thanh toán</th>
             <th>Hóa đơn</th>
@@ -227,6 +233,7 @@ const OrderList = () => {
               const formattedPrice = order.totalPrice.toLocaleString();
 
               return (
+
                 <>
                   <tr key={order.id}>
                     <td
@@ -276,6 +283,57 @@ const OrderList = () => {
                                   description="Bạn có chắc muốn xác nhận?"
                                   onConfirm={() =>
                                     updateOrderStatusHandle(order, option.value)
+                <tr key={order.id}>
+                  <td>
+                    <Link to={`/admin/orders/${order.id}`}>{order.id}</Link>
+                  </td>
+                  <td>{order.username}</td>
+                  <td>{order.address}</td>
+                  <td>{order.phone}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>{order.note}</td>
+                  <td>
+                    {!order.showUpdateStatusForm && (
+                      <div>
+                        {Status_Order_Map[order.status]}
+                        {/* {getUpdateAbleStatus(order.status)?.length !== 0 &&
+                                    <button className="btn" onClick={() => toggleShowUpdateOrderForm(order)} >
+                                        <i className="fa-regular fa-pen-to-square"></i>
+                                    </button>} */}
+                      </div>
+                    )}
+                  </td>
+                  <td
+                    style={{
+                      width: "auto",
+                      minWidth: "250px",
+                    }}
+                  >
+                    <div className="actions">
+                      <div className="d-flex">
+                        <Form.Item
+                          style={{ margin: 0 }}
+                          initialValue={order.status}
+                        >
+                          {getUpdateAbleStatus(order.status).map((option) => {
+                            console.log(order.status);
+                            return (
+                              <Popconfirm
+                                title="Cập nhật"
+                                description="Bạn có chắc muốn xác nhận ?"
+                                onConfirm={() =>
+                                  updateOrderStatusHandle(order, option.value)
+                                }
+                                // onCancel={cancel}
+                                okText="Xác nhận"
+                                cancelText="Huỷ"
+                              >
+                                <Button className="btn-dathang"
+                                  key={option.value}
+                                  type={
+                                    option.value === "CANCELED"
+                                      ? "danger"
+                                      : "primary"
                                   }
                                   okText="Xác nhận"
                                   cancelText="Hủy"
