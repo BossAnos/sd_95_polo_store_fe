@@ -75,6 +75,7 @@ const OrderList = () => {
   const [filterForm] = Form.useForm();
   const LIMIT = 10;
   const [loading, setLoading] = useState(true);
+  const [transaction, setTransactionData] = useState([]);
 
   const onPageChange = async (e) => {
     setPage(e);
@@ -88,6 +89,13 @@ const OrderList = () => {
           statusCode: selectedTab.key,
         });
         setOrders(orders);
+        console.log(orders);
+        orders.forEach((order) => {
+          const transactions = order.transactions;
+          console.log(transactions);
+          // Perform further processing with transactions
+        });
+
         setPage(1);
       } catch (error) {
         toastService.error(error.apiMessage);
@@ -185,88 +193,113 @@ const OrderList = () => {
         </Form.Item>
       </Form>
 
-      <table className="mt-3 table table-bordered">
+      <table className="table">
         <thead>
           <tr>
-            <th>Mã hóa đơn</th>
+            <th
+              colspan="10"
+              style={{ height: "10px", backgroundColor: "blueviolet" }}
+            >
+              Quản lý hóa đơn
+            </th>
+          </tr>
+        </thead>
+        <thead>
+          <tr>
             <th>Khách hàng</th>
-            <th>Địa chỉ</th>
-            <th>Số điện thoại</th>
-            <th>Tổng tiền</th>
-            <th>Ghi chú</th>
+            <th>Thanh toán</th>
+            <th>Hóa đơn</th>
             <th>Trạng thái</th>
-            <th>Thao tác</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {orders
             .slice((page - 1) * LIMIT, (page - 1) * LIMIT + LIMIT)
             .map((order) => {
+              const createDate = new Date(order.create_date);
+              // Lấy ngày từ đối tượng Date
+              const day = createDate.getDate();
+              const month = createDate.getMonth() + 1;
+              const year = createDate.getFullYear();
+              // Định dạng chuỗi ngày tháng
+              const formattedDate = `${day}/${month}/${year}`;
+              const formattedPrice = order.totalPrice.toLocaleString();
+
               return (
-                <tr key={order.id}>
-                  <td>
-                    <Link to={`/admin/orders/${order.id}`}>{order.id}</Link>
-                  </td>
-                  <td>{order.username}</td>
-                  <td>{order.address}</td>
-                  <td>{order.phone}</td>
-                  <td>{order.totalPrice}</td>
-                  <td>{order.note}</td>
-                  <td>
-                    {!order.showUpdateStatusForm && (
-                      <div>
-                        {Status_Order_Map[order.status]}
-                        {/* {getUpdateAbleStatus(order.status)?.length !== 0 &&
-                                    <button className="btn" onClick={() => toggleShowUpdateOrderForm(order)} >
-                                        <i className="fa-regular fa-pen-to-square"></i>
-                                    </button>} */}
-                      </div>
-                    )}
-                  </td>
-                  <td
-                    style={{
-                      width: "auto",
-                      minWidth: "250px",
-                    }}
-                  >
-                    <div className="actions">
-                      <div className="d-flex">
-                        <Form.Item
-                          style={{ margin: 0 }}
-                          initialValue={order.status}
-                        >
-                          {getUpdateAbleStatus(order.status).map((option) => {
-                            console.log(order.status);
-                            return (
-                              <Popconfirm
-                                title="Cập nhật"
-                                description="Bạn có chắc muốn xác nhận ?"
-                                onConfirm={() =>
-                                  updateOrderStatusHandle(order, option.value)
-                                }
-                                // onCancel={cancel}
-                                okText="Xác nhận"
-                                cancelText="Huỷ"
-                              >
-                                <Button
-                                  key={option.value}
-                                  type={
-                                    option.value === "CANCELED"
-                                      ? "danger"
-                                      : "primary"
+                <>
+                  <tr key={order.id}>
+                    <td
+                      colSpan="7"
+                      style={{ height: "10px", backgroundColor: "lightgray " }}
+                    >
+                      {formattedDate} | Mã đơn hàng : ĐH{order.id}
+                    </td>
+                  </tr>
+                  <tr key={order.id}>
+                    <td>
+                      {order.username}
+                      <br></br>
+                      {order.phone}
+                      <br></br>
+                      {order.address}
+                    </td>
+                    <td> {order.transactions.description}</td>
+                    <td>
+                      Tổng đơn : {formattedPrice} VNĐ
+                      <br></br>
+                      Hình thức : {order.shopping}
+                    </td>
+
+                    <td>
+                      {!order.showUpdateStatusForm && (
+                        <div>{Status_Order_Map[order.status]}</div>
+                      )}
+                    </td>
+                    <td
+                      style={{
+                        width: "auto",
+                        minWidth: "250px",
+                      }}
+                    >
+                      <div className="actions">
+                        <div className="d-flex">
+                          <Form.Item
+                            style={{ margin: 0 }}
+                            initialValue={order.status}
+                          >
+                            {getUpdateAbleStatus(order.status).map((option) => {
+                              console.log(order.status);
+                              return (
+                                <Popconfirm
+                                  title="Cập nhật"
+                                  description="Bạn có chắc muốn xác nhận?"
+                                  onConfirm={() =>
+                                    updateOrderStatusHandle(order, option.value)
                                   }
-                                  disabled={order.isUpdating}
+                                  okText="Xác nhận"
+                                  cancelText="Hủy"
                                 >
-                                  {option.label}
-                                </Button>
-                              </Popconfirm>
-                            );
-                          })}
-                        </Form.Item>
+                                  <button
+                                    key={option.value}
+                                    className={
+                                      option.value === "CANCELED"
+                                        ? "btn btn-danger"
+                                        : "btn btn-primary"
+                                    }
+                                    disabled={order.isUpdating}
+                                  >
+                                    {option.label}
+                                  </button>
+                                </Popconfirm>
+                              );
+                            })}
+                          </Form.Item>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                </>
               );
             })}
         </tbody>

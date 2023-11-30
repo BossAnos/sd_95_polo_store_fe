@@ -27,6 +27,8 @@ import { AddressAcount } from "../components/User/Account/AddressAccount";
 import { ListOrderAccount } from "../components/User/Account/OrderAccount/ListOrderAcount";
 import { OrderList } from "../components/Admin/Order/OrderList/OrderList";
 import { Home } from "heroicons-react";
+import { TransactionSuccess } from "../components/User/Checkout/TransactionSuccess";
+// import { getMessage } from "@reduxjs/toolkit/dist/actionCreatorInvariantMiddleware";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -46,6 +48,14 @@ const getUserRoute = ({ path, component, guard }) => {
     path,
     component,
     layout: UserLayout,
+    guard: guard || NoGuard,
+  };
+};
+
+const getMessageUrl = ({ path, component, guard }) => {
+  return {
+    path,
+    component,
     guard: guard || NoGuard,
   };
 };
@@ -109,6 +119,7 @@ const adminRoutes = [
   //   getUserRoute({ path: "/sanpham/:masanpham", component: UserProductDetail }),
   //   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
   getUserRoute({ path: "/", component: HomePage }),
+  getMessageUrl({ path: "/success", component: TransactionSuccess }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
   getUserRoute({ path: "/products/:productId", component: UserProductDetail }),
   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
@@ -117,10 +128,26 @@ const adminRoutes = [
     component: Checkout,
     guard: UserAuthGuard,
   }),
-   getUserRoute({ path: "/account", component: HomeAccount, guard: UserAuthGuard }),
-   getUserRoute({ path: "/accountInfo", component: AccountInfo, guard: UserAuthGuard }),
-   getUserRoute({ path: "/accountAddress", component: AddressAcount, guard: UserAuthGuard }),
-   getUserRoute({ path: "/accountOrder", component: ListOrderAccount, guard: UserAuthGuard }),
+  getUserRoute({
+    path: "/account",
+    component: HomeAccount,
+    guard: UserAuthGuard,
+  }),
+  getUserRoute({
+    path: "/accountInfo",
+    component: AccountInfo,
+    guard: UserAuthGuard,
+  }),
+  getUserRoute({
+    path: "/accountAddress",
+    component: AddressAcount,
+    guard: UserAuthGuard,
+  }),
+  getUserRoute({
+    path: "/accountOrder",
+    component: ListOrderAccount,
+    guard: UserAuthGuard,
+  }),
   {
     path: "*",
     component: NotFoundPage,
