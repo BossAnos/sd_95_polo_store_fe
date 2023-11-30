@@ -1,10 +1,11 @@
-import { Checkbox, Form, Input, Select, Radio, Button } from "antd";
+import { Checkbox, Form, Input, Select, Radio, Button, Space } from "antd";
 import "./Checkout.css";
 import { useEffect, useState } from "react";
 import {
   userAuthService,
   cartService,
   orderService,
+  transactionService,
 } from "../../../service/user";
 import { toastService } from "../../../service/common";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const userInfo = userAuthService.getAuthInfo();
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("COD");
 
   useEffect(() => {
     (async () => {
@@ -68,10 +70,23 @@ const Checkout = () => {
         orderDetailRequest,
         totalPrice: getSubTotalPrice(),
       };
-      console.log(userInfo?.id);
+
       const addOrderRes = await orderService.addOrder(userInfo.id, request);
+      console.log(addOrderRes.data);
+      const { id, totalPrice } = addOrderRes.data;
+      console.log(addOrderRes.data);
+      if (paymentMethod === "VNP") {
+        const paymentUrlRes = await transactionService.TransactionUrl({
+          orderId: id,
+          totalPrice,
+        });
+        const { url } = paymentUrlRes.data;
+        console.log(url);
+        window.location.href = url;
+      } else {
+        console.log("ncc");
+      }
       toastService.success("Checkout Successfully");
-      navigate("/orders");
     } catch (error) {
       toastService.error(error.apiMessage);
     }
@@ -146,6 +161,20 @@ const Checkout = () => {
                   <button className="btn btn-primary">Thêm địa chỉ</button>
                 </div>
               </Form>
+              <div>
+                <label>Phương thức thanh toán</label>
+              </div>
+              <Radio.Group value={paymentMethod}>
+                <Space
+                  direction="vertical"
+                  onChange={(e) => setPaymentMethod(e.target.defaultValue)}
+                >
+                  <Radio value={"COD"} defaultChecked={true}>
+                    Thanh toán khi nhận hàng
+                  </Radio>
+                  <Radio value={"VNP"}>Thanh toán bằng VNPAY</Radio>
+                </Space>
+              </Radio.Group>
             </div>
             <div className="col-6">
               <div className="checkout-details">

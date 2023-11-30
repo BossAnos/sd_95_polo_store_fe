@@ -15,9 +15,12 @@ const handleError = (e) => {
   throw new AppApiError(e);
 };
 
-const post = async (url, body = {}) => {
+const post = async (url, body = {}, { params } = {}) => {
   try {
-    const res = await instance.post(url, body);
+    const res = await instance.post(url, body, {
+      body,
+      params,
+    });
     return res.data;
   } catch (error) {
     handleError(error);
