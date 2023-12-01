@@ -56,7 +56,7 @@ const Checkout = () => {
         const price =
           cp.priceCore !== cp.pricePromotion ? cp.pricePromotion : cp.priceCore;
         return {
-          price: cp.price,
+          price: price,
           productDetaiId: cp.productDetailId,
           quantity: cp.quantity,
         };
@@ -103,6 +103,20 @@ const Checkout = () => {
             ? product.priceCore
             : product.pricePromotion;
         return total + price * product.quantity;
+      }, 0);
+  };
+  const getPrice = () => {
+    if (checkOutProducts?.length === 0) {
+      return 0;
+    }
+    return checkOutProducts
+      .filter((p) => p)
+      .reduce((product) => {
+        const price =
+          product.priceCore === product.pricePromotion
+            ? product.priceCore
+            : product.pricePromotion;
+        return price * product.quantity;
       }, 0);
   };
 

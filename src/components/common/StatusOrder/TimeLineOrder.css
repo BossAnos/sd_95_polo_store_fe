@@ -1,0 +1,91 @@
+.order-status-container {
+  display: flex;
+  align-items: center;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  position: relative;
+}
+
+.status-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-border {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 44px;
+  height: 44px;
+  border: 2px solid black;
+  border-radius: 50%;
+  transition: border-color 0.5s, background-color 0.5s; /* Thêm thuộc tính transition */
+}
+
+.status-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.status-label {
+  margin-top: 4px;
+}
+
+.status-item.active .status-border {
+  border-color: green;
+}
+
+.status-item.active .status-label {
+  color: green;
+}
+
+.status-item.current .status-border {
+  border-color: green;
+  background-color: green;
+}
+
+.status-item.current .status-label {
+  color: green;
+}
+
+.status-connector {
+  flex-grow: 1;
+  border: none;
+  height: 2px;
+  background-color: black;
+  transition: background-color 0.5s; /* Thêm thuộc tính transition */
+}
+
+.status-connector.active {
+  background-color: green;
+}
+
+.status-item.active .status-circle {
+  border-color: green; /* Thêm thuộc tính border-color */
+}
+
+.status-item.current .status-circle {
+  background-color: green; /* Thêm thuộc tính background-color */
+}
+
+.status-item.active .status-icon {
+  color: green; /* Thêm thuộc tính color */
+}
+
+.status-item.current .status-icon {
+  color: white; /* Thêm thuộc tính color */
+}
+
+.status-item.active .status-label {
+  color: green;
+}

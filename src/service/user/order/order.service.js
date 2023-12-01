@@ -6,6 +6,12 @@ export const getOrderForUser = async () => {
   return await userClient.get(`http://localhost:8080/customer/order/${id}`);
 };
 
+export const getOneOrderForUser = async (id) => {
+  return await userClient.get(
+    `http://localhost:8080/customer/order/getOne/${id}`
+  );
+};
+
 export const addOrder = async (id, form) => {
   return await userClient.post(
     `http://localhost:8080/customer/order/${id}`,

@@ -31,6 +31,7 @@ import { TransactionSuccess } from "../components/User/Checkout/TransactionSucce
 // import { getMessage } from "@reduxjs/toolkit/dist/actionCreatorInvariantMiddleware";
 import { AddColor } from "../components/Admin/Color/AddColor/Addcolor";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
+import { OrderDetailUser } from "../components/User/Account/OrderAccount/OrderDetail";
 const NoGuard = ({ children }) => {
   return <>{children}</>;
 };
@@ -127,6 +128,11 @@ const adminRoutes = [
   getMessageUrl({ path: "/success", component: TransactionSuccess }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
   getUserRoute({ path: "/products/:productId", component: UserProductDetail }),
+  getUserRoute({
+    path: "/order/:id",
+    component: OrderDetailUser,
+    guard: UserAuthGuard,
+  }),
   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
   getUserRoute({
     path: "/checkout",
