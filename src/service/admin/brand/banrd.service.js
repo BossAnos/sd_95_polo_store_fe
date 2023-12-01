@@ -5,4 +5,10 @@ const getAllBrands = async () => {
   return res;
 };
 
-export { getAllBrands };
+const changeStatus = async (id) => {
+  const res = await adminClient.put(
+    `http://localhost:8080/admin/brand/changeStatus/${id}`
+  );
+};
+
+export { getAllBrands, changeStatus };
