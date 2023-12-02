@@ -79,11 +79,11 @@
 }
 
 .status-item.active .status-icon {
-  color: green; /* Thêm thuộc tính color */
+  color: red; /* Thêm thuộc tính color */
 }
 
 .status-item.current .status-icon {
-  color: white; /* Thêm thuộc tính color */
+  color: red; /* Thêm thuộc tính color */
 }
 
 .status-item.active .status-label {

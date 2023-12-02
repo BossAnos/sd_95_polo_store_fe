@@ -6,6 +6,7 @@ import {
   FaClipboard,
   FaShippingFast,
   FaShoppingBag,
+  FaBan,
 } from "react-icons/fa";
 import "./TimeLineOrder.css";
 import { TiArrowRight } from "react-icons/ti";
@@ -28,6 +29,8 @@ const OrderStatus = ({ currentStatus, order }) => {
       icon: FaShippingFast,
       dateKey: "shipDate",
     },
+    // Commented out "Hủy" status to separate it from other statuses
+    // { value: 7, label: "Hủy", icon: FaBan, dateKey: "cancelDate" },
   ];
 
   const optionalStatusList = [
@@ -53,6 +56,14 @@ const OrderStatus = ({ currentStatus, order }) => {
         const isCurrentStatus = status.value === currentStatus;
         const isLastStatus = index === mandatoryStatusList.length - 1;
         const statusDate = order[status.dateKey];
+
+        // Kiểm tra nếu trạng thái hiện tại là 7
+        if (currentStatus === 7) {
+          // Nếu trạng thái đang xét không phải là 7, ẩn nó
+          if (status.value !== 7) {
+            return null;
+          }
+        }
 
         return (
           <React.Fragment key={status.value}>
@@ -85,12 +96,8 @@ const OrderStatus = ({ currentStatus, order }) => {
                   {format(new Date(statusDate), "dd/MM/yyyy")}
                 </div>
               )}
-              {/* Hiển thị dòng trạng thái */}
-              {isStatusActive && !isLastStatus && (
-                <div className="status-line"></div>
-              )}
             </div>
-            {!isLastStatus && (
+            {!isLastStatus && status.value !== 7 && (
               <div
                 className={`status-connector ${isStatusActive ? "active" : ""}`}
               ></div>
@@ -99,9 +106,26 @@ const OrderStatus = ({ currentStatus, order }) => {
         );
       })}
 
+      {/* Separate "Hủy" status from other statuses */}
+      {currentStatus === 7 && (
+        <div className="status-item active">
+          <div className="status-circle active">
+            <div className="status-border"></div>
+            <FaBan className="status-icon" aria-label="Hủy" />
+          </div>
+          <span className="status-label active">Hủy</span>
+          {/* Hiển thị ngày tương ứng */}
+          {order.cancelDate && (
+            <div className="status-date">
+              {format(new Date(order.cancelDate), "dd/MM/yyyy")}
+            </div>
+          )}
+        </div>
+      )}
+
       {shouldDisplayOptionalStatus && displayedOptionalStatus && (
-        <>
-          <div className="status-connector active"></div>
+        <React.Fragment>
+          <div className="status-connector"></div>
           <div className="status-item active">
             <div className="status-circle active">
               <div className="status-border green"></div>
@@ -116,17 +140,16 @@ const OrderStatus = ({ currentStatus, order }) => {
               {displayedOptionalStatus.label}
             </span>
             {/* Hiển thị ngày tương ứng */}
-            {displayedOptionalStatus.dateKey &&
-              order[displayedOptionalStatus.dateKey] && (
-                <div className="status-date">
-                  {format(
-                    new Date(order[displayedOptionalStatus.dateKey]),
-                    "dd/MM/yyyy"
-                  )}
-                </div>
-              )}
+            {order[displayedOptionalStatus.dateKey] && (
+              <div className="status-date">
+                {format(
+                  new Date(order[displayedOptionalStatus.dateKey]),
+                  "dd/MM/yyyy"
+                )}
+              </div>
+            )}
           </div>
-        </>
+        </React.Fragment>
       )}
     </div>
   );
