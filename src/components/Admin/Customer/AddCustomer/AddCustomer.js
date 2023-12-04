@@ -1,14 +1,14 @@
 import { Button, Form, Input } from "antd";
-import { colorService } from "../../../../service/admin";
+import { customerService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddColor = () => {
+const AddCustomer = () => {
   const navigate = useNavigate();
-  const addColorlHandle = async (form) => {
+  const addCustomerlHandle = async (form) => {
     try {
-      colorService.createColor(form);
-      toastService.success("Thêm màu sắc thành công");
-      navigate("/admin/color");
+      customerService.createCustomer(form);
+      toastService.success("Thêm khách hàng thành công");
+      navigate("/admin/customer");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -17,7 +17,7 @@ const AddColor = () => {
 
   return (
     <Form
-      onFinish={addColorlHandle}
+      onFinish={addCustomerlHandle}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 8 }}
     >
@@ -29,19 +29,19 @@ const AddColor = () => {
         <Input />
       </Form.Item>
       <Form.Item
-        label="Tên"
-        name="description"
-        rules={[{ required: true, message: "Tên không được trống" }]}
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: "Email không được trống" }]}
       >
         <Input />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
         <Button type="primary" htmlType="submit">
-          Thêm màu sắc  
+          Thêm khách hàng 
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export { AddColor };
+export { AddCustomer };

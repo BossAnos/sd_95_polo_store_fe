@@ -67,11 +67,11 @@ const SizeList = () => {
             <th>STT</th>
             <th>Tên Size</th>
             <th>Mô tả</th>
-            <th>Actions</th>
             <th>shirtlength</th>
             <th>shirtwidth</th>
             <th>sleevelenght</th>
             <th>shoulderlength</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

@@ -1,14 +1,14 @@
 import { Button, Form, Input } from "antd";
-import { colorService } from "../../../../service/admin";
+import { categoryService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddColor = () => {
+const AddCategory = () => {
   const navigate = useNavigate();
-  const addColorlHandle = async (form) => {
-    try {
-      colorService.createColor(form);
-      toastService.success("Thêm màu sắc thành công");
-      navigate("/admin/color");
+  const addCategorylHandle = async (form) => {
+    try {   
+      categoryService.createCategory(form);
+      toastService.success("Thêm loại áo thành công");
+      navigate("/admin/category");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -17,7 +17,7 @@ const AddColor = () => {
 
   return (
     <Form
-      onFinish={addColorlHandle}
+      onFinish={addCategorylHandle}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 8 }}
     >
@@ -31,17 +31,17 @@ const AddColor = () => {
       <Form.Item
         label="Tên"
         name="description"
-        rules={[{ required: true, message: "Tên không được trống" }]}
+        rules={[{ required: true, message: "Mô tả không được trống" }]}
       >
         <Input />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
         <Button type="primary" htmlType="submit">
-          Thêm màu sắc  
+          Thêm loại áo 
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export { AddColor };
+export { AddCategory };

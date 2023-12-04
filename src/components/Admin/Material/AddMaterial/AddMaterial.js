@@ -1,14 +1,14 @@
 import { Button, Form, Input } from "antd";
-import { colorService } from "../../../../service/admin";
+import { materialService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddColor = () => {
+const AddMaterial = () => {
   const navigate = useNavigate();
-  const addColorlHandle = async (form) => {
+  const addMateriallHandle = async (form) => {
     try {
-      colorService.createColor(form);
-      toastService.success("Thêm màu sắc thành công");
-      navigate("/admin/color");
+     materialService.createMaterial(form);
+      toastService.success("Thêm chất liệu thành công");
+      navigate("/admin/material");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -17,7 +17,7 @@ const AddColor = () => {
 
   return (
     <Form
-      onFinish={addColorlHandle}
+      onFinish={addMateriallHandle}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 8 }}
     >
@@ -37,11 +37,11 @@ const AddColor = () => {
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
         <Button type="primary" htmlType="submit">
-          Thêm màu sắc  
+          Thêm chất liệu 
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export { AddColor };
+export { AddMaterial };
