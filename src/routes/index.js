@@ -136,7 +136,7 @@ const adminRoutes = [
     component: AddMaterial,
   }),
   getAdminRoute({
-    path: "/admin/material/update:id",
+    path: "/admin/material/update/:id",
     component: UpdateMaterial,
   }),
   getAdminRoute({
