@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { userAuthService } from "../../../../service/user";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
+import"../Account.css"
 
 
 const AddressAcount = () =>{
@@ -15,8 +16,8 @@ const AddressAcount = () =>{
       }, []);
     return(
         <div>
-            <h1>ĐỊA CHỈ NHẬN HÀNG</h1>
-            <p>Lưu tất cả địa chỉ giao hàng của bạn (Nhà, văn phòng, nơi cư trú của gia đình, v.v ). Bạn sẽ không phải điền lại địa chỉ giao hàng mỗi khi đặt hàng</p>
+            <h1 style={{marginLeft:"50px" , fontWeight:"bolder"}}>ĐỊA CHỈ NHẬN HÀNG</h1>
+            <p style={{marginLeft:"50px" }}>Lưu tất cả địa chỉ giao hàng của bạn (Nhà, văn phòng, nơi cư trú của gia đình, v.v ). Bạn sẽ không phải điền lại địa chỉ giao hàng mỗi khi đặt hàng</p>
 <hr></hr>
 <div className="table__main">
       <table>
@@ -68,7 +69,7 @@ const AddressAcount = () =>{
         </tbody>
       </table>
       </div>
-            <button className="btn btn-dark">Thêm địa chỉ nhận hàng</button>
+            <button className="btn-themdiachi">Thêm địa chỉ nhận hàng</button>
         </div>
     );
 };

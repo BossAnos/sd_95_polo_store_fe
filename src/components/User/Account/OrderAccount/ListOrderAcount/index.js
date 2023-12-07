@@ -15,8 +15,8 @@ const ListOrderAccount = () => {
   }, []);
   return (
     <div>
-      <h1>Đơn hàng của bạn</h1>
-      <p>
+      <h1 style={{marginLeft:"50px" , fontWeight:"bolder"}}>Đơn hàng của bạn</h1>
+      <p style={{marginLeft:"50px"}}>
         Kiểm tra trạng thái và thông tin liên quan đến đơn hàng của bạn. Bạn có
         thể huỷ đơn hoặc có thể đặt lại hàng
       </p>
@@ -52,7 +52,9 @@ const ListOrderAccount = () => {
                       </div>
                       Ngày đặt hàng : {formattedDate}
                       <br></br>
-                      Giá: {formattedPrice} VNĐ
+                      <div style={{display:"flex"}}> Giá: <p style={{color:"red"}}>{formattedPrice} VNĐ</p></div>
+
+                     
                     </td>
                     <td>
                       <div
@@ -61,7 +63,7 @@ const ListOrderAccount = () => {
                       >
                         <div className="action">
                           <Link to={`/order/${order.id}`}>
-                            <button className="btn btn-dark">
+                            <button className="btn-dark">
                               Xem chi tiết
                             </button>
                           </Link>
@@ -73,7 +75,7 @@ const ListOrderAccount = () => {
                             okText="Yes"
                             cancelText="No"
                           >
-                            <button className="btn btn-dark ">Hủy</button>
+                            <button className="btn-huydonhang" style={{marginLeft:"10px"}}>Hủy</button>
                           </Popconfirm>
                         </div>
                       </div>
