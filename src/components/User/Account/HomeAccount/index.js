@@ -13,7 +13,7 @@ const HomeAccount = () =>{
             <p>Kiểm tra trạng thái và thông tin liên quan đến đơn hàng của bạn. Bạn có thể huỷ đơn hoặc có thể đặt lại hàng</p>
             <Link className="accountInfo">Đổi mật khẩu</Link>
             <p>Bạn có thể thay đổi mật khẩu. Để bảo mật thông tin cá nhân, bạn nên sử dụng một mật khẩu an toàn và thay đổi mật khẩu khi cần thiết</p>
-            <button className="btn btn-dark">Đăng xuất</button>
+            <button className="btn-dark">Đăng xuất</button>
         </div>
     );
 };

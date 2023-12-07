@@ -72,7 +72,7 @@ const UserLoginPage = () => {
                   <Input placeholder="password" type="password" size="large" />
                 </Form.Item>
                 <a  href="#" style={{backgroundColor:"white"}}>Quên mật khẩu ?</a> <br></br>
-                <button type="submit" className="btn btn-dark">
+                <button type="submit" className="btn-login">
                   Đăng nhập
                 </button>
               </Form>

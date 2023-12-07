@@ -15,6 +15,7 @@ import { Status_Order, Status_Order_Map } from "../../../common/StatusOrder";
 import { SelectSearch } from "../../../common/SelectSearch";
 import { LoadingBox } from "../../../common";
 import { Link } from "react-router-dom";
+import "../oder.css"
 
 const tabs = [
   {
@@ -230,11 +231,11 @@ const OrderList = () => {
       </Form>
 
       <table className="table">
-        <thead>
+        <thead style={{}}>
           <tr>
             <th
               colspan="10"
-              style={{ height: "10px", backgroundColor: "blueviolet" }}
+              style={{ height: "10px", backgroundColor: "blueviolet",marginTop:"-100px" }}
             >
               Quản lý hóa đơn
             </th>
@@ -288,8 +289,10 @@ const OrderList = () => {
                     </td>
                     <td>{order.transactions.description}</td>
                     <td>
-                      Tổng đơn: {formattedPrice} VNĐ
-                      <br />
+                      <div  style={{display:"flex"}}>
+                      Tổng đơn:<p  style={{color:"red"}}>{formattedPrice} VNĐ</p> 
+                      </div>
+                
                       Trọng lượng đơn hàng: {order.weight}g
                       <br />
                       Hình thức: {order.shopping}
@@ -321,23 +324,26 @@ const OrderList = () => {
                                 style={{
                                   display: "inline-block",
                                   marginRight: "10px",
+                                  width:"170px"
                                 }}
                               >
                                 {option.value === 7 ? (
-                                  <button
+                                  <button style={{  width:"110px"}}
                                     className="btn btn-danger"
                                     disabled={order.isUpdating}
                                     onClick={() => openCancelModal(order.id)}
                                   >
-                                    {option.label}
+                                    <p style={{marginTop:"-5px"}}> {option.label}</p>
+                                   
                                   </button>
                                 ) : option.value === 2 ? (
-                                  <button
+                                  <button  style={{  width:"110px",paddingTop:"-100px"}}
                                     className="btn btn-primary"
                                     disabled={order.isUpdating}
                                     onClick={openStatus2Modal}
                                   >
-                                    {option.label}
+                                    <p  style={{marginTop:"-5px"}}> {option.label}</p>
+                                   
                                   </button>
                                 ) : (
                                   <Popconfirm
@@ -354,9 +360,11 @@ const OrderList = () => {
                                   >
                                     <button
                                       className="btn btn-primary"
+                                      style={{  width:"165px",paddingTop:"-100px"}}
                                       disabled={order.isUpdating}
                                     >
-                                      {option.label}
+                                      <p  style={{marginTop:"-5px"}}>  {option.label}</p>
+                                    
                                     </button>
                                   </Popconfirm>
                                 )}
@@ -410,6 +418,8 @@ const OrderList = () => {
                                       style: {
                                         backgroundColor: "blue",
                                         color: "white",
+                                        width:"100px"
+                                        
                                       },
                                     }}
                                   >
