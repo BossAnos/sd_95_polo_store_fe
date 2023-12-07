@@ -265,9 +265,9 @@ const CreateOrder = () => {
       title: "Hành động",
       key: "action",
       render: (text, record) => (
-        <Button type="primary" onClick={() => handleProductSelect(record)}>
+        <button type="primary" onClick={() => handleProductSelect(record)}>
           Chọn
-        </Button>
+        </button>
       ),
     },
   ];
@@ -293,35 +293,35 @@ const CreateOrder = () => {
               <div style={{ display: "flex" }}>
                 <Form layout="vertical" form={form}>
                   <div>
-                    <h2>Thông tin hóa đơn {index + 1}</h2>
+                    <h2 style={{fontWeight:"bolder"}}>Thông tin hóa đơn {index + 1}</h2>
                     <div>
-                      <Form.Item
+                      <Form.Item style={{fontWeight:"bolder",marginTop:"20px"}}
                         label="Tên người nhận"
                         name={["sales", index, "username"]}
                       >
-                        <Input type="text" />
+                        <Input type="text" style={{width:"180px"}}/>
                       </Form.Item>
-                      <Form.Item
+                      <Form.Item style={{fontWeight:"bolder"}}
                         label="Số điện thoại"
                         name={["sales", index, "phone"]}
                       >
-                        <Input type="text" />
+                        <Input type="text" style={{width:"180px"}} />
                       </Form.Item>
-                      <Form.Item
+                      <Form.Item style={{fontWeight:"bolder"}}
                         label="Địa chỉ"
                         name={["sales", index, "address"]}
                       >
-                        <Input type="text" />
+                        <Input type="text" style={{width:"180px"}} />
                       </Form.Item>
 
-                      <Form.Item label="Phương thức thanh toán">
-                        <Select
+                      <Form.Item style={{fontWeight:"bolder"}} label="Phương thức thanh toán">
+                        <Select style={{width:"180px"}}
                           defaultValue={sale.transaction}
                           onChange={(value) =>
                             handlePaymentMethodChange(index, value)
                           }
                         >
-                          <Select.Option value={3}>
+                          <Select.Option  value={3}>
                             Thanh toán tại quầy
                           </Select.Option>
                           <Select.Option value={1}>
@@ -330,8 +330,8 @@ const CreateOrder = () => {
                         </Select>
                       </Form.Item>
 
-                      <Form.Item label="Phương thức mua hàng">
-                        <Select
+                      <Form.Item style={{fontWeight:"bolder"}} label="Phương thức mua hàng">
+                        <Select style={{width:"180px"}}
                           defaultValue={sale.deliveryOption}
                           onChange={(value) =>
                             handleDeliveryOptionChange(index, value)
@@ -360,10 +360,10 @@ const CreateOrder = () => {
                 </Form>
 
                 <div className="price-table-container">
-                  <h3>Bảng giá</h3>
+                  <h3 style={{fontWeight:"bolder"}}>Bảng giá</h3>
                   <table>
                     <thead>
-                      <tr>
+                      <tr className="tr-banggia">
                         <th>STT</th>
                         <th>Sản phẩm</th>
                         <th>Hình ảnh</th>
@@ -374,14 +374,14 @@ const CreateOrder = () => {
                     </thead>
                     <tbody>
                       {sale.products.map((product, productIndex) => (
-                        <tr key={productIndex}>
+                        <tr className="tr-banggia" key={productIndex}>
                           <td>{productIndex + 1}</td>
                           <td>
                             {product.nameProduct} - {product.nameSize} -{" "}
                             {product.nameColor}
                           </td>
                           <td>
-                            <img src={product.image} alt={product.name} />
+                            <img className="img-a" src={product.image} alt={product.name} />
                           </td>
                           <td className="quantity-column">
                             <input
@@ -393,7 +393,7 @@ const CreateOrder = () => {
                               }
                             />
                           </td>
-                          <td>{product.price * product.quantity}VNĐ</td>{" "}
+                          <td style={{color:"red"}}>{product.price * product.quantity}VNĐ</td>{" "}
                           {/* Calculate total price */}
                           <td>
                             <button
@@ -410,8 +410,14 @@ const CreateOrder = () => {
                   </table>
                   <div>
                     <h4>
-                      <h4>Tổng giá: {calculateTotalPrice(sale)} VNĐ</h4>
-                      <h4>Tổng trọng lượng: {totalWeight(sale)} g</h4>
+                      <h4  style={{display:"flex"}}>
+                      Tổng giá:
+                         <p style={{color:"red"}}>
+                          {calculateTotalPrice(sale)} VNĐ
+                        </p>
+                        </h4 >
+                      <h4 style={{display:"flex"}}>Tổng trọng lượng: <p style={{color:"red"}}>{totalWeight(sale)} g
+                        </p></h4>
                     </h4>
                   </div>
                   <button onClick={() => handleAddProduct(index)}>
@@ -420,12 +426,12 @@ const CreateOrder = () => {
                 </div>
               </div>
 
-              <Button
-                type="primary"
+              <button className="btn-guidonhang"
+              
                 onClick={() => addOrderSubmitHandle(activeTab)}
               >
                 Gửi đơn hàng
-              </Button>
+              </button>
             </TabPanel>
           ))}
         </Tabs>

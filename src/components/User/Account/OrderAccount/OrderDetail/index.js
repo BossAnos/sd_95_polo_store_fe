@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toastService } from "../.././../../../service/common";
 import OrderStatus from "../../../../common/StatusOrder/OrderStatusTimeLine";
 import { format } from "date-fns";
-
+import "./OrderDetail.css"
 const OrderDetailUser = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
@@ -34,8 +34,8 @@ const OrderDetailUser = () => {
 
   return (
     <>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ marginRight: "10px" }}>Đơn hàng ĐH{order.id} ----</div>
+      <div className="text-top" style={{ display: "flex",margin:"40px 80px"}}>
+        <div className="" style={{ marginRight: "10px" , fontWeight:"bolder"}}>Đơn hàng ĐH{order.id} ----</div>
         {!order.showUpdateStatusForm && (
           <div>{Status_Order_Map[order.status]}</div>
         )}
@@ -44,21 +44,21 @@ const OrderDetailUser = () => {
         <OrderStatus currentStatus={order.status} order={order} />
       )}
       <br></br>
-      <h5>Thông tin sản phẩm</h5>
+      <h5 style={{marginLeft:"78px"}}>Thông tin sản phẩm</h5>
       <br></br>
       <hr></hr>
       <br></br>
       {products.map((p, index) => {
         return (
-          <tr key={index}>
+          <tr key={index} className="tr-oder">
             <td style={{ width: "1000px" }}>
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: "flex",padding:"0px 30px" }}>
                 <img
                   src={p.image}
                   style={{ width: "70px", marginRight: "10px" }}
                 />
                 <div>
-                  <div>{p.nameProduct}</div>
+                  <div style={{paddingTop:"20px"}}>{p.nameProduct}</div>
                   <div>
                     Size: {p.nameSize}, Màu: {p.nameColor}
                   </div>
@@ -66,22 +66,24 @@ const OrderDetailUser = () => {
                 </div>
               </div>
             </td>
-            <td style={{ color: "red" }}>{p.price} VNĐ</td>
+            <td style={{ color: "red"  ,position:"relative"}}>
+              <div style={{position:"absolute",top:"50px",right:"20px",width:"100px"}}>{p.price} VNĐ</div></td>
           </tr>
         );
       })}
       ;<br></br>
       <hr></hr>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex",margin:"30px 78px" }}>
         <div style={{ marginRight: "20px" }}>
-          <h2>Thông tin khách hàng</h2>
-          <div>Tên người nhận: {order.username}</div>
+          <h2  style={{fontWeight:"bolder" , fontSize:"20px"}}>Thông tin khách hàng</h2>
+          <div className="tennguoinhan">Tên người nhận: {order.username}</div>
           <div>Địa chỉ nhận hàng: {order.address}</div>
           <div>Số điện thoại: {order.phone}</div>
         </div>
-        <div style={{ marginRight: "0px" }}>
-          <h2>Chi tiết thanh toán</h2>
-          <div>Đơn giá: {order.totalPrice} VNĐ</div>
+        <div className="container-chitietthanhtoan">
+          <h2 style={{fontWeight:"bolder", fontSize:"20px"}}>Chi tiết thanh toán</h2>
+          <div className="divdongia">Đơn giá:<p className="dongia"> {order.totalPrice} VNĐ</p></div>
+          <div>Phí ship: </div>
           <div>Phương thức thanh toán: {order.nameTransaction}</div>
         </div>
       </div>

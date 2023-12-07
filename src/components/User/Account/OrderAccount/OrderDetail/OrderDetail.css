@@ -1,55 +1,39 @@
-.timeline {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
 
-.timeline-item {
-  float: left;
-  width: 25%;
-  text-align: center;
-  position: relative;
+.dongia{
+  color: red;
+   
 }
-
-.timeline-item:before {
-  content: "";
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 2px;
-  background-color: gray;
-  z-index: -1;
+.divdongia{
+ display: flex;
+ margin-top: 20px;
 }
-
-.timeline-item:first-child:before {
-  display: none;
+.container-chitietthanhtoan{
+  margin-left: 420px;
 }
-
-.timeline-item:after {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 12px;
-  background-color: gray;
-  border-radius: 50%;
-  z-index: 1;
+.tennguoinhan{
+  margin-top: 20px;
 }
-
-.timeline-item:last-child:after {
-  background-color: green;
+.tr-oder:hover{
+  background-color: initial;
+  color: initial;
 }
-
-.timeline-item.active {
-  color: green;
+button{
+  background-color: black;
+  color: white;
+  height: 30px;
+  width: 100px;
+  border-radius: 5px;
 }
-
-.timeline-item.active:before,
-.timeline-item.active:after {
-  background-color: green;
+button:hover{
+  background-color: #0055ff;
+}
+.btn-guidonhang{
+  background-color: black;
+  color: white;
+  height: 30px;
+  width: 100px;
+  border-radius: 3px;
+} 
+.btn-guidonhang:hover{
+  background-color: #0055ff;
 }

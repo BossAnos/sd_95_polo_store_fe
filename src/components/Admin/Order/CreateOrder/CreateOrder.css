@@ -18,3 +18,15 @@
   border: 1px solid black;
   padding: 20px;
 }
+.tr-banggia  {
+  font-size: 14px;
+  height: 1rem;
+}
+.price-table-container {
+  border: 1px solid #98999a;
+  border-radius: 3px;
+}
+.img-a{
+  width: 100px;
+  height: 100px;
+}
