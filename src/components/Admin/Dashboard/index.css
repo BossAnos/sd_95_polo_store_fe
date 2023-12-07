@@ -1,0 +1,11 @@
+.dashboard-item {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.dashboard-value {
+  font-weight: bold;
+  font-size: 24px;
+}
