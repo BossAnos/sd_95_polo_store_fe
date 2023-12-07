@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { orderService } from "../../../../service/admin";
 import {
+  Modal,
   Button,
   Form,
   Input,
@@ -58,6 +59,7 @@ const getUpdateAbleStatus = (status) => {
       return Status_Order.filter((status) => [5, 6].includes(status.value));
     case 6:
       return Status_Order.filter((status) => [7, 8].includes(status.value));
+
     case 8:
       return Status_Order.filter((status) => [5].includes(status.value));
 
@@ -75,7 +77,30 @@ const OrderList = () => {
   const [filterForm] = Form.useForm();
   const LIMIT = 10;
   const [loading, setLoading] = useState(true);
-  const [transaction, setTransactionData] = useState([]);
+  const [showStatus2Modal, setShowStatus2Modal] = useState(false);
+  const [note, setNote] = useState("");
+  const [shipCost, setShipCost] = useState(0);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+
+  const [cancelModalOrderId, setCancelModalOrderId] = useState(null);
+
+  const openCancelModal = (orderId) => {
+    setCancelModalOrderId(orderId);
+    setShowCancelModal(true);
+  };
+
+  const closeCancelModal = () => {
+    setShowCancelModal(false);
+  };
+
+  const openStatus2Modal = (orderId) => {
+    setCancelModalOrderId(orderId);
+    setShowStatus2Modal(true);
+  };
+
+  const closeStatus2Modal = () => {
+    setShowStatus2Modal(false);
+  };
 
   const onPageChange = async (e) => {
     setPage(e);
@@ -93,7 +118,6 @@ const OrderList = () => {
         orders.forEach((order) => {
           const transactions = order.transactions;
           console.log(transactions);
-          // Perform further processing with transactions
         });
 
         setPage(1);
@@ -140,12 +164,18 @@ const OrderList = () => {
     setOrders([...orders]);
   };
 
-  const updateOrderStatusHandle = (order, status) => {
+  const updateOrderStatusHandle = (order, status, note, shipCost) => {
     order.isUpdating = true;
     setOrders([...orders]);
 
+    const params = {
+      status: status,
+      note: note,
+      shipCost: shipCost,
+    };
+
     orderService
-      .changeStatusOrder(order.id, status)
+      .changeStatusOrder(order.id, params)
       .then(() => {
         order.status = status;
         order.showUpdateStatusForm = false;
@@ -159,6 +189,12 @@ const OrderList = () => {
         order.isUpdating = false;
         setOrders([...orders]);
       });
+    setNote("");
+    setShipCost(0);
+    setShowStatus2Modal(false);
+    setShowCancelModal(false);
+    setCancelModalOrderId(null);
+    console.log(params);
   };
 
   const orderStatusTabChangeHandle = (key) => {
@@ -209,7 +245,7 @@ const OrderList = () => {
             <th>Khách hàng</th>
             <th>Thanh toán</th>
             <th>Hóa đơn</th>
-            <th>Trạng thái</th>
+
             <th>Action</th>
           </tr>
         </thead>
@@ -218,88 +254,184 @@ const OrderList = () => {
             .slice((page - 1) * LIMIT, (page - 1) * LIMIT + LIMIT)
             .map((order) => {
               const createDate = new Date(order.create_date);
-              // Lấy ngày từ đối tượng Date
               const day = createDate.getDate();
               const month = createDate.getMonth() + 1;
               const year = createDate.getFullYear();
-              // Định dạng chuỗi ngày tháng
               const formattedDate = `${day}/${month}/${year}`;
               const formattedPrice = order.totalPrice.toLocaleString();
 
               return (
-                <>
-                  <tr key={order.id}>
+                <Fragment key={order.id}>
+                  <tr>
                     <td
-                      colSpan="7"
-                      style={{ height: "10px", backgroundColor: "lightgray " }}
+                      colSpan="5"
+                      style={{
+                        height: "10px",
+                        backgroundColor: "lightgray",
+                      }}
                     >
-                      {formattedDate} | Mã đơn hàng : ĐH{order.id}
-                    </td>
-                  </tr>
-                  <tr key={order.id}>
-                    <td>
-                      {order.username}
-                      <br></br>
-                      {order.phone}
-                      <br></br>
-                      {order.address}
-                    </td>
-                    <td> {order.transactions.description}</td>
-                    <td>
-                      Tổng đơn : {formattedPrice} VNĐ
-                      <br></br>
-                      Hình thức : {order.shopping}
-                    </td>
-
-                    <td>
+                      {formattedDate} | Mã đơn hàng: ĐH{order.id} | Trạng thái :{" "}
                       {!order.showUpdateStatusForm && (
-                        <div>{Status_Order_Map[order.status]}</div>
+                        <div style={{ color: "red", display: "inline" }}>
+                          {Status_Order_Map[order.status]}
+                        </div>
                       )}
                     </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      {order.username}
+                      <br />
+                      {order.phone}
+                      <br />
+                      {order.address}
+                    </td>
+                    <td>{order.transactions.description}</td>
+                    <td>
+                      Tổng đơn: {formattedPrice} VNĐ
+                      <br />
+                      Trọng lượng đơn hàng: {order.weight}g
+                      <br />
+                      Hình thức: {order.shopping}
+                      <br></br>
+                      {order.shipCost && order.shipCost !== 0 && (
+                        <>
+                          Phí ship: {order.shipCost.toLocaleString()} VNĐ
+                          <br />
+                        </>
+                      )}
+                      <br />
+                    </td>
+
                     <td
                       style={{
                         width: "auto",
                         minWidth: "250px",
                       }}
                     >
-                      <div className="actions">
+                      <div className="actions" style={{ whiteSpace: "nowrap" }}>
                         <div className="d-flex">
                           <Form.Item
                             style={{ margin: 0 }}
                             initialValue={order.status}
                           >
-                            {getUpdateAbleStatus(order.status).map((option) => {
-                              console.log(order.status);
-                              return (
-                                <Popconfirm
-                                  title="Cập nhật"
-                                  description="Bạn có chắc muốn xác nhận?"
-                                  onConfirm={() =>
-                                    updateOrderStatusHandle(order, option.value)
-                                  }
-                                  okText="Xác nhận"
-                                  cancelText="Hủy"
-                                >
+                            {getUpdateAbleStatus(order.status).map((option) => (
+                              <div
+                                key={option.value}
+                                style={{
+                                  display: "inline-block",
+                                  marginRight: "10px",
+                                }}
+                              >
+                                {option.value === 7 ? (
                                   <button
-                                    key={option.value}
-                                    className={
-                                      option.value === "CANCELED"
-                                        ? "btn btn-danger"
-                                        : "btn btn-primary"
-                                    }
+                                    className="btn btn-danger"
                                     disabled={order.isUpdating}
+                                    onClick={() => openCancelModal(order.id)}
                                   >
                                     {option.label}
                                   </button>
-                                </Popconfirm>
-                              );
-                            })}
+                                ) : option.value === 2 ? (
+                                  <button
+                                    className="btn btn-primary"
+                                    disabled={order.isUpdating}
+                                    onClick={openStatus2Modal}
+                                  >
+                                    {option.label}
+                                  </button>
+                                ) : (
+                                  <Popconfirm
+                                    title="Cập nhật"
+                                    description="Bạn có chắc muốn xác nhận?"
+                                    onConfirm={() =>
+                                      updateOrderStatusHandle(
+                                        order,
+                                        option.value
+                                      )
+                                    }
+                                    okText="Xác nhận"
+                                    cancelText="Hủy"
+                                  >
+                                    <button
+                                      className="btn btn-primary"
+                                      disabled={order.isUpdating}
+                                    >
+                                      {option.label}
+                                    </button>
+                                  </Popconfirm>
+                                )}
+
+                                {option.value === 7 && (
+                                  <Modal
+                                    visible={
+                                      showCancelModal &&
+                                      order.id === cancelModalOrderId
+                                    }
+                                    onCancel={closeCancelModal}
+                                    onOk={() => {
+                                      updateOrderStatusHandle(order, 7, note);
+                                    }}
+                                    okText="Xác nhận"
+                                    cancelText="Hủy"
+                                    okButtonProps={{
+                                      style: {
+                                        backgroundColor: "green",
+                                        color: "white",
+                                      },
+                                    }}
+                                  >
+                                    <h3>Ghi chú:</h3>
+                                    <textarea
+                                      style={{
+                                        width: "400px",
+                                        height: "100px",
+                                      }}
+                                      value={note}
+                                      onChange={(e) => setNote(e.target.value)}
+                                    ></textarea>
+                                  </Modal>
+                                )}
+
+                                {option.value === 2 && (
+                                  <Modal
+                                    visible={showStatus2Modal}
+                                    onCancel={closeStatus2Modal}
+                                    onOk={() => {
+                                      updateOrderStatusHandle(
+                                        order,
+                                        2,
+                                        null,
+                                        shipCost
+                                      );
+                                    }}
+                                    okText="Xác nhận"
+                                    cancelText="Hủy"
+                                    okButtonProps={{
+                                      style: {
+                                        backgroundColor: "blue",
+                                        color: "white",
+                                      },
+                                    }}
+                                  >
+                                    <h3>Phí vận chuyển:</h3>
+                                    <input
+                                      type="text"
+                                      value={shipCost}
+                                      onChange={(e) =>
+                                        setShipCost(e.target.value)
+                                      }
+                                      style={{ width: "100%" }}
+                                    />
+                                  </Modal>
+                                )}
+                              </div>
+                            ))}
                           </Form.Item>
                         </div>
                       </div>
                     </td>
                   </tr>
-                </>
+                </Fragment>
               );
             })}
         </tbody>

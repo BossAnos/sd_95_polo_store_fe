@@ -5,8 +5,8 @@ const Status_Order = [
   { value: 4, label: "Đang giao hàng" },
   { value: 5, label: "Hoàn thành" },
   { value: 6, label: "Hàng bị hoàn" },
-  { value: 7, label: "Huỷ" },
-  { value: 8, label: "Giao lại" },
+  { value: 7, label: "Huỷ", note: true },
+  { value: 8, label: "Giao lại", shipCost: true },
 ];
 
 const Status_Order_Map = Status_Order.reduce((acrr, pre) => {

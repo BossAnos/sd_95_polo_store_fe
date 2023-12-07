@@ -21,7 +21,7 @@ const menus = [
         name: "Đơn hàng",
       },
       {
-        path: "/admin/addOrder",
+        path: "/admin/orders/create",
         icon: <Icons.ShoppingCartIcon className={iconClasses} />,
         name: "Tạo Hóa Đơn",
       },

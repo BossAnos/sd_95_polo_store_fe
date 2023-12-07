@@ -535,13 +535,18 @@ const AddProduct = () => {
                             </strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-46px" }}>
+                            <strong style={{ marginLeft: "-80px" }}>
                               Gía nhập
                             </strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-44px" }}>
+                            <strong style={{ marginLeft: "-110px" }}>
                               Gía bán
+                            </strong>
+                          </Col>
+                          <Col span={4}>
+                            <strong style={{ marginLeft: "-150px" }}>
+                              Trọng lượng
                             </strong>
                           </Col>
                           <Col span={4}>
@@ -631,6 +636,19 @@ const AddProduct = () => {
                           ]}
                         >
                           <Input placeholder="Giá bán" />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...restField}
+                          name={[name, "weight"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Vui lòng nhập cân nặng sản phẩm",
+                            },
+                          ]}
+                        >
+                          <Input placeholder="Trọng lượng" />
                         </Form.Item>
                         <Form.Item
                           onChange={(e) => {

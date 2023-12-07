@@ -32,6 +32,8 @@ import { TransactionSuccess } from "../components/User/Checkout/TransactionSucce
 import { AddColor } from "../components/Admin/Color/AddColor/Addcolor";
 // import { ProductList, ColorList, BrandsList } from "../pages/admin";
 import { OrderDetailUser } from "../components/User/Account/OrderAccount/OrderDetail";
+import { CreateOrder } from "../components/Admin/Order/CreateOrder/CreateOrder";
+
 import { AddCategory } from "../components/Admin/Categorie/AddCategorie/AddCategori";
 import { AddMaterial } from "../components/Admin/Material/AddMaterial/AddMaterial";
 import { AddBrand } from "../components/Admin/Brand/AddBrand/AddBrand";
@@ -42,6 +44,7 @@ import { UpdateCategory } from "../components/Admin/Categorie/UpdateCategory/Upd
 import { UpdateSize } from "../components/Admin/Size/UpdateSize/UpdateSize";
 import { UpdateBrand } from "../components/Admin/Brand/UpdateBrand/UpdateBrand";
 import { AddCustomer } from "../components/Admin/Customer/AddCustomer/AddCustomer";
+
 const NoGuard = ({ children }) => {
   return <>{children}</>;
 };
@@ -164,18 +167,8 @@ const adminRoutes = [
     component: AddProduct,
   }),
   getAdminRoute({ path: "/admin/orders", component: OrderList }),
-  // getAdminRoute({ path: "admin/product", component: ProductList }),
-  // getAdminRoute({ path: "admin/color", component: ColorList }),
-  // getAdminRoute({ path: "admin/brand", component: BrandsList }),
-  //   getAdminRoute({ path: "/admin/chatlieu/add", component: AddChatLieu }),
-  //   getAdminRoute({
-  //     path: "/admin/chatlieu/update/:machatlieu",
-  //     component: UpdateChatLieu,
-  //   }),
-  //   getUserRoute({ path: "/login", component: UserLoginPage }),
-  //   getUserRoute({ path: "/", component: HomePage }),
-  //   getUserRoute({ path: "/sanpham/:masanpham", component: UserProductDetail }),
-  //   getUserRoute({ path: "/carts", component: UserCart, guard: UserAuthGuard }),
+  getAdminRoute({ path: "/admin/orders/create", component: CreateOrder }),
+
   getUserRoute({ path: "/", component: HomePage }),
   getMessageUrl({ path: "/success", component: TransactionSuccess }),
   getUserRoute({ path: "/login", component: UserLoginPage }),

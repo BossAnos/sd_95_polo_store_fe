@@ -55,9 +55,10 @@ const Checkout = () => {
       const orderDetailRequest = checkOutProducts.map((cp) => {
         const price =
           cp.priceCore !== cp.pricePromotion ? cp.pricePromotion : cp.priceCore;
+
         return {
           price: price,
-          productDetaiId: cp.productDetailId,
+          productDetailId: cp.productDetailId,
           quantity: cp.quantity,
         };
       });
@@ -69,6 +70,7 @@ const Checkout = () => {
             ?.fullAddress || "",
         orderDetailRequest,
         totalPrice: getSubTotalPrice(),
+        weight: getWeight(),
       };
 
       const addOrderRes = await orderService.addOrder(userInfo.id, request);
@@ -105,18 +107,19 @@ const Checkout = () => {
         return total + price * product.quantity;
       }, 0);
   };
-  const getPrice = () => {
+
+  const getWeight = () => {
     if (checkOutProducts?.length === 0) {
       return 0;
     }
     return checkOutProducts
       .filter((p) => p)
-      .reduce((product) => {
+      .reduce((total, product) => {
         const price =
           product.priceCore === product.pricePromotion
             ? product.priceCore
             : product.pricePromotion;
-        return price * product.quantity;
+        return total + product.weight * product.quantity;
       }, 0);
   };
 
