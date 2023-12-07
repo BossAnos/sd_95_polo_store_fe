@@ -43,11 +43,11 @@ const ListOrderAccount = () => {
                   <tr key={order.id}>
                     <td style={{ width: "1000px" }}>
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <div style={{ marginRight: "10px" }}>
+                        <div style={{ marginRight: "10px"}}>
                           Đơn hàng ĐH{order.id} ----
                         </div>
                         {!order.showUpdateStatusForm && (
-                          <div>{Status_Order_Map[order.status]}</div>
+                          <div style={{}}>{Status_Order_Map[order.status]}</div>
                         )}
                       </div>
                       Ngày đặt hàng : {formattedDate}

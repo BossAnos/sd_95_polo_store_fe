@@ -209,3 +209,16 @@ del {
   color: black;
   text-decoration: line-through;
 }
+.btn-solid{
+width: 180px;
+
+}
+.size-item{
+  padding-top: 12px;
+}
+.size-box{
+margin-left: 3px;
+
+}
+
+

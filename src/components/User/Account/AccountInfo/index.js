@@ -9,7 +9,7 @@ import {
     DeleteOutlined,
     UploadOutlined,
   } from "@ant-design/icons";
-
+import "./css.css"
 const AccountInfo = () =>{
 const [authInfo, setAuthInfo] = useState({});
 const [form] = Form.useForm();
@@ -24,15 +24,15 @@ const [form] = Form.useForm();
     })();
   }, []);
     return(
-        <div>
-            <h1>Thông tin cá nhân</h1>
+        <div className="cart-my" >
+            <h1  style={{fontWeight:"bolder", fontSize:"20px",marginLeft:"40%",marginTop:"20px",marginBottom:"20px"}}>Thông tin cá nhân</h1>
             <Form
       form={form}
     //   onFinish={updateHandle}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 8 }}
     >
-        <Image src={authInfo.avatar} width={300} ></Image>
+        <Image className="img-avatrt" src={authInfo.avatar} width={300} ></Image>
         <Form.Item
                           onChange={(e) => {
                             // fileChangeHandle(key, e);
@@ -45,12 +45,14 @@ const [form] = Form.useForm();
                             showUploadList={false}
                             multiple
                           >
-                            <Button icon={<UploadOutlined />}>
+                            <Button className="btn-img" icon={<UploadOutlined />}>
                               Upload image
                             </Button>
                           </Upload>
                         </Form.Item>
-      <Form.Item
+
+                        <div className="infor">
+                        <Form.Item
         label="Họ và tên"
         name="name"
         rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
@@ -79,6 +81,8 @@ const [form] = Form.useForm();
           Cập nhật Thông tin
         </button>
       </Form.Item>
+                        </div>
+   
     </Form>
 
 </div>

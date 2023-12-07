@@ -275,9 +275,9 @@ const CreateOrder = () => {
   return (
     <div className="sales-page-container">
       <div className="sales-info-container">
-        <button onClick={handleCreateSale}>Tạo hóa đơn</button>
+        <button  className="btn-taohoadon" onClick={handleCreateSale}>Tạo hóa đơn</button>
         <Tabs>
-          <TabList>
+          <TabList >
             {sales.map((sale, index) => (
               <Tab
                 key={index}
@@ -409,18 +409,18 @@ const CreateOrder = () => {
                     </tbody>
                   </table>
                   <div>
-                    <h4>
-                      <h4  style={{display:"flex"}}>
+                    <h4 className="text-tonggia">
+                      <h4   style={{display:"flex"}}>
                       Tổng giá:
                          <p style={{color:"red"}}>
                           {calculateTotalPrice(sale)} VNĐ
                         </p>
                         </h4 >
-                      <h4 style={{display:"flex"}}>Tổng trọng lượng: <p style={{color:"red"}}>{totalWeight(sale)} g
+                      <h4 className="text-tonggia2" style={{display:"flex"}}>Tổng trọng lượng: <p style={{color:"red"}}>{totalWeight(sale)} g
                         </p></h4>
                     </h4>
                   </div>
-                  <button onClick={() => handleAddProduct(index)}>
+                  <button className="btn-tonggia" onClick={() => handleAddProduct(index)}>
                     Thêm sản phẩm
                   </button>
                 </div>

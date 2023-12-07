@@ -62,9 +62,9 @@ const UpdateColor = () => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4 }}>
-        <Button type="primary" htmlType="submit">
+        <button type="primary" htmlType="submit">
           Cập nhật màu sắc
-        </Button>
+        </button>
       </Form.Item>
     </Form>
   );
