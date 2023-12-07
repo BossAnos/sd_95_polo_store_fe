@@ -23,9 +23,9 @@ const CustomerList = () => {
       }}
     >
       <br></br>
-      <Link to={"/admin/chatlieu/add"}>
+      <Link to={"/admin/customer/add"}>
         <Button type="primary" className="btn-customer__add">
-          Thêm chất liệu sản phẩm +
+          Thêm khách hàng 
         </Button>
       </Link>
       <br></br>

@@ -1,14 +1,14 @@
 import { Button, Form, Input } from "antd";
-import { colorService } from "../../../../service/admin";
+import { brandService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddColor = () => {
+const AddBrand = () => {
   const navigate = useNavigate();
-  const addColorlHandle = async (form) => {
+  const addBrandlHandle = async (form) => {
     try {
-      colorService.createColor(form);
-      toastService.success("Thêm màu sắc thành công");
-      navigate("/admin/color");
+     brandService.createBrands(form);
+      toastService.success("Thêm thương hiệu thành công");
+      navigate("/admin/brand");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -17,13 +17,13 @@ const AddColor = () => {
 
   return (
     <Form
-      onFinish={addColorlHandle}
+      onFinish={addBrandlHandle}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 8 }}
     >
       <Form.Item
         label="Tên"
-        name="name"
+        name="nameBrand"
         rules={[{ required: true, message: "Tên không được trống" }]}
       >
         <Input />
@@ -37,11 +37,11 @@ const AddColor = () => {
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
         <Button type="primary" htmlType="submit">
-          Thêm màu sắc  
+          Thêm thương hiệu   
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export { AddColor };
+export { AddBrand };

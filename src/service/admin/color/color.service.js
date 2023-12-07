@@ -6,7 +6,7 @@ const getAllColors = async () => {
 };
 
 const getOne = async (id) => {
-  const res = await adminClient.get(`/mv-core/v1/admin/color/${id}`);
+  const res = await adminClient.get(`http://localhost:8080/admin/color/${id}`);
   return res;
 };
 
@@ -24,12 +24,6 @@ export const createColor = async (form) => {
   );
 };
 
-const updateColor = async (form) => {
-  const res = await adminClient.post(
-    `/mv-core/v1/admin/color/update/${form.id}`,
-    form
-  );
-  return res;
-};
 
-export { getAllColors, deleteColor, updateColor, getOne };
+
+export { getAllColors, deleteColor, getOne };

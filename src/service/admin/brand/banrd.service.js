@@ -11,4 +11,15 @@ const changeStatus = async (id) => {
   );
 };
 
-export { getAllBrands, changeStatus };
+export const createBrands = async (form) => {
+  return await adminClient.post(
+    "http://localhost:8080/admin/brand/add",
+    form
+  );
+};
+
+const getOne = async (id) => {
+  const res = await adminClient.get(`http://localhost:8080/admin/brand/${id}`);
+  return res;
+};
+export { getAllBrands, changeStatus ,getOne};

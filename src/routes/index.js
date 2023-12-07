@@ -34,6 +34,17 @@ import { AddColor } from "../components/Admin/Color/AddColor/Addcolor";
 import { OrderDetailUser } from "../components/User/Account/OrderAccount/OrderDetail";
 import { CreateOrder } from "../components/Admin/Order/CreateOrder/CreateOrder";
 
+import { AddCategory } from "../components/Admin/Categorie/AddCategorie/AddCategori";
+import { AddMaterial } from "../components/Admin/Material/AddMaterial/AddMaterial";
+import { AddBrand } from "../components/Admin/Brand/AddBrand/AddBrand";
+import { AddSize } from "../components/Admin/Size/AddSize/AddSize";
+import { UpdateColor } from "../components/Admin/Color/UpdateColor/UpdateColor";
+import { UpdateMaterial } from "../components/Admin/Material/UpdateMaterial/UpdateMaterial";
+import { UpdateCategory } from "../components/Admin/Categorie/UpdateCategory/UpdateCtegory";
+import { UpdateSize } from "../components/Admin/Size/UpdateSize/UpdateSize";
+import { UpdateBrand } from "../components/Admin/Brand/UpdateBrand/UpdateBrand";
+import { AddCustomer } from "../components/Admin/Customer/AddCustomer/AddCustomer";
+
 const NoGuard = ({ children }) => {
   return <>{children}</>;
 };
@@ -78,8 +89,20 @@ const adminRoutes = [
     component: CustomerList,
   }),
   getAdminRoute({
+    path: "/admin/customer/add",
+    component: AddCustomer,
+  }),
+  getAdminRoute({
     path: "/admin/brand",
     component: BrandList,
+  }),
+  getAdminRoute({
+    path: "/admin/brand/add",
+    component: AddBrand,
+  }),
+  getAdminRoute({
+    path: "/admin/brand/update/:id",
+    component: UpdateBrand,
   }),
   getAdminRoute({
     path: "/admin/color",
@@ -90,16 +113,46 @@ const adminRoutes = [
     component: AddColor,
   }),
   getAdminRoute({
+    path: "admin/color/update/:id",
+    component: UpdateColor,
+  }),
+  getAdminRoute({
     path: "/admin/size",
     component: SizeList,
   }),
+  getAdminRoute({
+    path: "/admin/size/add",
+    component: AddSize,
+  }),
+  getAdminRoute({
+    path: "/admin/size/update/:id",
+    component: UpdateSize,
+  }),
+  
+  
   getAdminRoute({
     path: "/admin/material",
     component: MaterialList,
   }),
   getAdminRoute({
+    path: "/admin/material/add",
+    component: AddMaterial,
+  }),
+  getAdminRoute({
+    path: "/admin/material/update/:id",
+    component: UpdateMaterial,
+  }),
+  getAdminRoute({
     path: "/admin/category",
     component: CategoryList,
+  }),
+  getAdminRoute({
+    path: "/admin/category/add",
+    component: AddCategory,
+  }),
+  getAdminRoute({
+    path: "/admin/category/update/:id",
+    component: UpdateCategory,
   }),
   getAdminRoute({
     path: "/admin/product",
