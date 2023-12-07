@@ -74,7 +74,7 @@ const OrderDetailUser = () => {
       ;<br></br>
       <hr></hr>
       <div style={{ display: "flex",margin:"30px 78px" }}>
-        <div style={{ marginRight: "20px" }}>
+        <div style={{ marginRight: "20px" }} className="info">
           <h2  style={{fontWeight:"bolder" , fontSize:"20px"}}>Thông tin khách hàng</h2>
           <div className="tennguoinhan">Tên người nhận: {order.username}</div>
           <div>Địa chỉ nhận hàng: {order.address}</div>

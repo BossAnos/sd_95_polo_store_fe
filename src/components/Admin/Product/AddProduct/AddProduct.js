@@ -723,9 +723,9 @@ const AddProduct = () => {
           </div>
         </div>
 
-        <Button className="mt-3" htmlType="submit" type="primary">
+        <button  className="mt-3" htmlType="submit" type="primary">
           {productId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
-        </Button>
+        </button>
       </Form>
     </div>
   );

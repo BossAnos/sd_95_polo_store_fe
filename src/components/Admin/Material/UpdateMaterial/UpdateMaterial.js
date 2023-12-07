@@ -62,9 +62,9 @@ const UpdateMaterial = () => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4 }}>
-        <Button type="primary" htmlType="submit">
+        <button type="primary" htmlType="submit">
           Cập nhật chất liệu
-        </Button>
+        </button>
       </Form.Item>
     </Form>
   );

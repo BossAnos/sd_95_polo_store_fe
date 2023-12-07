@@ -304,8 +304,11 @@ const UserProductDetail = () => {
                       width: "30px",
                       height: "30px",
                       borderRadius: "50%",
-                      marginRight: "10px",
+                    
                       cursor: "pointer",
+                      width:"50px",
+                      height:"50px",
+                      border:"2px solid #c3bebd",
                       backgroundColor: color.name,
                       textDecoration:
                         !isSizeAvailable(color.id, sizePicker?.id) ||
@@ -335,9 +338,11 @@ const UserProductDetail = () => {
                       <li
                         onClick={() => setSize(size)}
                         className={`size-item ${
+                          
                           size.id === sizePicker?.id ? "active" : ""
                         }`}
                         style={{
+                          
                           textDecoration:
                             !isSizeAvailable(colorPicker?.id, size.id) ||
                             !isColorAvailable(colorPicker?.id, size.id)
@@ -353,6 +358,10 @@ const UserProductDetail = () => {
                             !isColorAvailable(colorPicker?.id, size.id)
                               ? "none"
                               : "auto",
+                              border:"2px solid #c3bebd",
+                              width:"50px",
+                      height:"50px",
+                           
                         }}
                         key={index}
                       >
@@ -368,7 +377,7 @@ const UserProductDetail = () => {
                   id="cartEffect"
                   onClick={addProductToCardHandle}
                   disabled={!canAddToCard()}
-                  className="btn btn-solid hover-solid btn-dark"
+                  className="btn-solid"
                 >
                   <i className="fa fa-shopping-cart me-1"></i> Thêm vào giỏ hàng
                 </button>

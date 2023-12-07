@@ -233,10 +233,10 @@ const ProductList = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button htmlType={"submit"}>Search</Button>
+          <button htmlType={"submit"}>Search</button>
         </Form.Item>
         <Link to={"/admin/product/add"}>
-          <Button className="">Thêm sản phẩm</Button>
+          <button className="">Thêm sản phẩm</button>
         </Link>
       </Form>
       <span>Tổng số sản phẩm: {filteredProducts.length}</span>
@@ -293,9 +293,9 @@ const ProductList = () => {
                       >
                         <div className="action">
                           <Link to={`/admin/product/update/${p.id}`}>
-                            <Button type="primary" className="btn">
+                            <button type="primary" className="btn">
                               <i className="fa-regular fa-pen-to-square"></i>
-                            </Button>
+                            </button>
                           </Link>
                         </div>
                         <div className="action">

@@ -1,6 +1,7 @@
 .btn-customer__add {
   background-color: black;
   margin: 0px 50px;
+  
 }
 .btn-customer__add:hover {
   background-color: #e5e7eb;
@@ -65,4 +66,8 @@ margin-right:70px;
   color: white;
   background-color: black;
   margin-right: 150px;
+}
+.btn{
+  width: 30px;
+ 
 }
