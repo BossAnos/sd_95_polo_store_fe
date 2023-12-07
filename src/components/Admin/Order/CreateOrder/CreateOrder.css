@@ -1,0 +1,20 @@
+.custom-modal .ant-modal-content {
+  width: 800px;
+}
+.sales-page-container {
+  display: flex;
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: white;
+}
+
+.sales-info-container {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.price-table-container {
+  flex: 1;
+  border: 1px solid black;
+  padding: 20px;
+}

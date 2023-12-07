@@ -9,6 +9,7 @@ import * as sizeService from "./size/size";
 import * as discountService from "./discount/discount.service";
 import * as imageService from "./image/image.service";
 import * as orderService from "./order/order.service";
+import * as productDetailService from "./productDetail/productDetail";
 export {
   adminAuthService,
   colorService,
@@ -20,5 +21,6 @@ export {
   sizeService,
   discountService,
   imageService,
-  orderService
+  orderService,
+  productDetailService,
 };
