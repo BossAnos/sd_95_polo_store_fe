@@ -10,6 +10,7 @@ import * as discountService from "./discount/discount.service";
 import * as imageService from "./image/image.service";
 import * as orderService from "./order/order.service";
 import * as productDetailService from "./productDetail/productDetail";
+import * as adminService from "./admin/admin.service";
 export {
   adminAuthService,
   colorService,
@@ -23,4 +24,5 @@ export {
   imageService,
   orderService,
   productDetailService,
+  adminService,
 };

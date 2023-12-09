@@ -44,6 +44,8 @@ import { UpdateCategory } from "../components/Admin/Categorie/UpdateCategory/Upd
 import { UpdateSize } from "../components/Admin/Size/UpdateSize/UpdateSize";
 import { UpdateBrand } from "../components/Admin/Brand/UpdateBrand/UpdateBrand";
 import { AddCustomer } from "../components/Admin/Customer/AddCustomer/AddCustomer";
+import { DiscountList } from "../components/Admin/Discount/AddDiscountToProduct";
+import { AdminList } from "../components/Admin/AdminList/Admin";
 
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -128,8 +130,7 @@ const adminRoutes = [
     path: "/admin/size/update/:id",
     component: UpdateSize,
   }),
-  
-  
+
   getAdminRoute({
     path: "/admin/material",
     component: MaterialList,
@@ -157,6 +158,14 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/product",
     component: ProductList,
+  }),
+  getAdminRoute({
+    path: "/admin/discount",
+    component: DiscountList,
+  }),
+  getAdminRoute({
+    path: "/admin/manger",
+    component: AdminList,
   }),
   getAdminRoute({
     path: "/admin/product/update/:productId",
