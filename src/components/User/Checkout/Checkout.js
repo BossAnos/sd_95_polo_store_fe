@@ -131,7 +131,7 @@ const Checkout = () => {
     <div className="checkout-page">
       <div className="breadcrumb-section">
         <div className="container">
-          <h2>THANH TOÁN</h2>
+          <h2 style={{fontWeight:"bolder",marginLeft:"300px",marginTop:"30px"}}>THANH TOÁN</h2>
         </div>
       </div>
       <div className="section-b-space">
@@ -140,7 +140,7 @@ const Checkout = () => {
             <div className="col-6">
               <Form layout="vertical" form={form}>
                 <div>
-                  <div className="d-flex custom-user-form">
+                  <div className="d-flex custom-user-form"  style={{marginLeft:"300px",marginTop:"30px"}}>
                     <Form.Item
                       label="Tên người nhận"
                       name="username"
@@ -148,40 +148,40 @@ const Checkout = () => {
                         { required: true, message: "Full name is required" },
                       ]}
                     >
-                      <Input placeholder="Full name" size="large" />
+                      <Input placeholder="Full name" size="large" style={{width:"200px"}} />
                     </Form.Item>
                     <Form.Item
                       label="Số điện thoại"
                       name="phone"
                       rules={[{ required: true, message: "Phone is required" }]}
                     >
-                      <Input placeholder="Phone number" size="large" />
+                      <Input placeholder="Phone number" size="large" style={{width:"200px"}}/>
                     </Form.Item>
-                  </div>
-                  <Form.Item label="Địa chỉ" name="selectedAddress">
+                  </div >
+                  <Form.Item  style={{marginLeft:"300px"}} label="Địa chỉ" name="selectedAddress">
                     {userInfo.address.map((address, index) => (
                       <div key={address.id} className="address-button-wrapper">
                         <span>{address.fullAddress}</span>
-                        <Button
+                        <button
                           className={
                             selectedAddress === address.id ? "selected" : ""
                           }
                           onClick={() => handleClick(address.id)}
                         >
                           {selectedAddress === address.id ? "Đã chọn" : "Chọn"}
-                        </Button>
+                        </button>
                       </div>
                     ))}
                   </Form.Item>
                 </div>
                 <div className="">
-                  <button className="btn btn-primary">Thêm địa chỉ</button>
+                  <button className=""  style={{marginLeft:"300px"}}>Thêm địa chỉ</button>
                 </div>
               </Form>
-              <div>
+              <div  style={{marginLeft:"300px",marginTop:"30px"}}>
                 <label>Phương thức thanh toán</label>
               </div>
-              <Radio.Group value={paymentMethod}>
+              <Radio.Group  style={{marginLeft:"300px"}} value={paymentMethod}>
                 <Space
                   direction="vertical"
                   onChange={(e) => setPaymentMethod(e.target.defaultValue)}
