@@ -24,6 +24,10 @@ export const createColor = async (form) => {
   );
 };
 
+const changeStatus = async (id) => {
+  const res = await adminClient.put(
+    `http://localhost:8080/admin/color/changeStatus/${id}`
+  );
+};
 
-
-export { getAllColors, deleteColor, getOne };
+export { getAllColors, deleteColor, getOne ,changeStatus};
