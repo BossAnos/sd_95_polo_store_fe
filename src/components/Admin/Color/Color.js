@@ -3,6 +3,7 @@ import { colorService } from "../../../service/admin";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
+import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
 const { TabPane } = Tabs;
@@ -41,6 +42,12 @@ const ColorList = () => {
   const filteredColors = color.filter(
     (item) => item.status === parseInt(activeTab, 10)
   );
+  const handleDelete = async (id) => {
+    const body = await colorService.changeStatus(id);
+
+    toastService.info("Thay đổi trạng thái thành công ");
+  };
+
 
   return (
     <div
@@ -98,11 +105,12 @@ const ColorList = () => {
                           </Link>
                         </div>
                         <div className="action">
-                          <Popconfirm
-                            title="Xoá màu sắc"
-                            description="Bạn có chắc chắn muốn xoá màu  sắc này?"
-                            okText="Xoá"
-                            cancelText="Huỷ"
+                        <Popconfirm
+                            title="Đổi trạng thái"
+                            description="Bạn có chắc chắn muốn thay đổi trạng thái?"
+                            onConfirm={() => handleDelete(color.id)}
+                            okText="Yes"
+                            cancelText="No"
                           >
                             <button className="btn">
                               <i className="fa-sharp fa-solid fa-trash"></i>

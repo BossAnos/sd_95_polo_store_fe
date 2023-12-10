@@ -15,5 +15,9 @@ const getOne = async (id) => {
   const res = await adminClient.get(`http://localhost:8080/admin/category/${id}`);
   return res;
 };
-
-export { getAllCategory ,getOne};
+const changeStatus = async (id) => {
+  const res = await adminClient.put(
+    `http://localhost:8080/admin/category/changeStatus/${id}`
+  );
+};
+export { getAllCategory ,getOne,changeStatus};

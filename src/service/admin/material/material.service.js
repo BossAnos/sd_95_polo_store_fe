@@ -15,6 +15,10 @@ const getOne = async (id) => {
   const res = await adminClient.get(`http://localhost:8080/admin/material/${id}`);
   return res;
 };
+const changeStatus = async (id) => {
+  const res = await adminClient.put(
+    `http://localhost:8080/admin/material/changeStatus/${id}`
+  );
+};
 
-
-export { getAllMaterial , getOne};
+export { getAllMaterial , getOne,changeStatus};

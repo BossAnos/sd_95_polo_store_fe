@@ -3,9 +3,15 @@ import { sizeService } from "../../../service/admin";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
 import "../admin-product.css"
+import { toastService } from "../../../service/common";
 
 const { TabPane } = Tabs;
 
+const handleDelete = async (id) => {
+  const body = await sizeService.changeStatus(id);
+
+  toastService.info("Thay đổi trạng thái thành công ");
+};
 const tabs = [
 
   {
@@ -103,16 +109,17 @@ const SizeList = () => {
                         </Link>
                       </div>
                       <div className="action">
-                        <Popconfirm
-                          title="Xoá màu sắc"
-                          description="Bạn có chắc chắn muốn xoá màu  sắc này?"
-                          okText="Xoá"
-                          cancelText="Huỷ"
-                        >
-                          <button className="btn">
-                            <i className="fa-sharp fa-solid fa-trash"></i>
-                          </button>
-                        </Popconfirm>
+                      <Popconfirm
+                            title="Đổi trạng thái"
+                            description="Bạn có chắc chắn muốn thay đổi trạng thái?"
+                            onConfirm={() => handleDelete(size.id)}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <button className="btn">
+                              <i className="fa-sharp fa-solid fa-trash"></i>
+                            </button>
+                          </Popconfirm>
                       </div>
                     </div>
                   </td>
