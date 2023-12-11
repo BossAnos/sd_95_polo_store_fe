@@ -87,6 +87,7 @@ const Checkout = () => {
         window.location.href = url;
       } else {
         console.log("ncc");
+        navigate("/");
       }
       toastService.success("Checkout Successfully");
     } catch (error) {
@@ -131,7 +132,15 @@ const Checkout = () => {
     <div className="checkout-page">
       <div className="breadcrumb-section">
         <div className="container">
-          <h2 style={{fontWeight:"bolder",marginLeft:"300px",marginTop:"30px"}}>THANH TOÁN</h2>
+          <h2
+            style={{
+              fontWeight: "bolder",
+              marginLeft: "300px",
+              marginTop: "30px",
+            }}
+          >
+            THANH TOÁN
+          </h2>
         </div>
       </div>
       <div className="section-b-space">
@@ -140,7 +149,10 @@ const Checkout = () => {
             <div className="col-6">
               <Form layout="vertical" form={form}>
                 <div>
-                  <div className="d-flex custom-user-form"  style={{marginLeft:"300px",marginTop:"30px"}}>
+                  <div
+                    className="d-flex custom-user-form"
+                    style={{ marginLeft: "300px", marginTop: "30px" }}
+                  >
                     <Form.Item
                       label="Tên người nhận"
                       name="username"
@@ -148,17 +160,29 @@ const Checkout = () => {
                         { required: true, message: "Full name is required" },
                       ]}
                     >
-                      <Input placeholder="Full name" size="large" style={{width:"200px"}} />
+                      <Input
+                        placeholder="Full name"
+                        size="large"
+                        style={{ width: "200px" }}
+                      />
                     </Form.Item>
                     <Form.Item
                       label="Số điện thoại"
                       name="phone"
                       rules={[{ required: true, message: "Phone is required" }]}
                     >
-                      <Input placeholder="Phone number" size="large" style={{width:"200px"}}/>
+                      <Input
+                        placeholder="Phone number"
+                        size="large"
+                        style={{ width: "200px" }}
+                      />
                     </Form.Item>
-                  </div >
-                  <Form.Item  style={{marginLeft:"300px"}} label="Địa chỉ" name="selectedAddress">
+                  </div>
+                  <Form.Item
+                    style={{ marginLeft: "300px" }}
+                    label="Địa chỉ"
+                    name="selectedAddress"
+                  >
                     {userInfo.address.map((address, index) => (
                       <div key={address.id} className="address-button-wrapper">
                         <span>{address.fullAddress}</span>
@@ -175,13 +199,18 @@ const Checkout = () => {
                   </Form.Item>
                 </div>
                 <div className="">
-                  <button className=""  style={{marginLeft:"300px"}}>Thêm địa chỉ</button>
+                  <button className="" style={{ marginLeft: "300px" }}>
+                    Thêm địa chỉ
+                  </button>
                 </div>
               </Form>
-              <div  style={{marginLeft:"300px",marginTop:"30px"}}>
+              <div style={{ marginLeft: "300px", marginTop: "30px" }}>
                 <label>Phương thức thanh toán</label>
               </div>
-              <Radio.Group  style={{marginLeft:"300px"}} value={paymentMethod}>
+              <Radio.Group
+                style={{ marginLeft: "300px" }}
+                value={paymentMethod}
+              >
                 <Space
                   direction="vertical"
                   onChange={(e) => setPaymentMethod(e.target.defaultValue)}

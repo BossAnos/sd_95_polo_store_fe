@@ -4,6 +4,7 @@ import { Modal, Table, Button, Input, Image, Form, Select } from "antd";
 import "react-tabs/style/react-tabs.css";
 import { orderService, adminAuthService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
+import { SERVER_URL } from "../../../../constant";
 
 import { productDetailService } from "../../../../service/admin";
 import "./CreateOrder.css";
@@ -24,7 +25,8 @@ const CreateOrder = () => {
   const [products, setProducts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [shippingFee, setShippingFee] = useState(0);
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [urlPdf, setUrlPdf] = useState("");
   const [form] = Form.useForm();
   useEffect(() => {
     (async () => {
@@ -211,10 +213,31 @@ const CreateOrder = () => {
       };
 
       console.log(request);
+      try {
+        const newOrder = await orderService.addOrder(adminInfo.id, request);
+        toastService.success("Add order success");
+        setUrlPdf(
+          "http://localhost:8080/admin/order/export/" + newOrder.data.id
+        );
+        console.log(urlPdf);
+        setModalOpen(true);
+        const updatedSales = [...sales];
+        updatedSales[0].username = "";
+        updatedSales[0].phone = "";
+        updatedSales[0].address = "";
+        updatedSales[0].products = [];
+        updatedSales[0].shippingFee = 0;
+        updatedSales[0].deliveryOption = "Tại quầy";
+        updatedSales[0].transaction = 2;
 
-      const addOrderRes = await orderService.addOrder(adminInfo.id, request);
+        setSales(updatedSales);
+        setActiveTab(0);
 
-      toastService.success("Checkout Successfully");
+        // Reset form fields
+        form.resetFields();
+      } catch (e) {
+        toastService.error(e.apiMessage);
+      }
     } catch (error) {
       toastService.error(error.apiMessage);
     }
@@ -275,9 +298,21 @@ const CreateOrder = () => {
   return (
     <div className="sales-page-container">
       <div className="sales-info-container">
-        <button  className="btn-taohoadon" onClick={handleCreateSale}>Tạo hóa đơn</button>
+        <Modal
+          title="Thanh toán thành công. Bạn có muốn xuất hóa đơn không ?"
+          centered
+          open={modalOpen}
+          onOk={() => {
+            setModalOpen(false);
+            window.open(urlPdf, "_blank");
+          }}
+          onCancel={() => setModalOpen(false)}
+        ></Modal>
+        <button className="btn-taohoadon" onClick={handleCreateSale}>
+          Tạo hóa đơn
+        </button>
         <Tabs>
-          <TabList >
+          <TabList>
             {sales.map((sale, index) => (
               <Tab
                 key={index}
@@ -293,35 +328,44 @@ const CreateOrder = () => {
               <div style={{ display: "flex" }}>
                 <Form layout="vertical" form={form}>
                   <div>
-                    <h2 style={{fontWeight:"bolder"}}>Thông tin hóa đơn {index + 1}</h2>
+                    <h2 style={{ fontWeight: "bolder" }}>
+                      Thông tin hóa đơn {index + 1}
+                    </h2>
                     <div>
-                      <Form.Item style={{fontWeight:"bolder",marginTop:"20px"}}
+                      <Form.Item
+                        style={{ fontWeight: "bolder", marginTop: "20px" }}
                         label="Tên người nhận"
                         name={["sales", index, "username"]}
                       >
-                        <Input type="text" style={{width:"180px"}}/>
+                        <Input type="text" style={{ width: "180px" }} />
                       </Form.Item>
-                      <Form.Item style={{fontWeight:"bolder"}}
+                      <Form.Item
+                        style={{ fontWeight: "bolder" }}
                         label="Số điện thoại"
                         name={["sales", index, "phone"]}
                       >
-                        <Input type="text" style={{width:"180px"}} />
+                        <Input type="text" style={{ width: "180px" }} />
                       </Form.Item>
-                      <Form.Item style={{fontWeight:"bolder"}}
+                      <Form.Item
+                        style={{ fontWeight: "bolder" }}
                         label="Địa chỉ"
                         name={["sales", index, "address"]}
                       >
-                        <Input type="text" style={{width:"180px"}} />
+                        <Input type="text" style={{ width: "180px" }} />
                       </Form.Item>
 
-                      <Form.Item style={{fontWeight:"bolder"}} label="Phương thức thanh toán">
-                        <Select style={{width:"180px"}}
+                      <Form.Item
+                        style={{ fontWeight: "bolder" }}
+                        label="Phương thức thanh toán"
+                      >
+                        <Select
+                          style={{ width: "180px" }}
                           defaultValue={sale.transaction}
                           onChange={(value) =>
                             handlePaymentMethodChange(index, value)
                           }
                         >
-                          <Select.Option  value={3}>
+                          <Select.Option value={3}>
                             Thanh toán tại quầy
                           </Select.Option>
                           <Select.Option value={1}>
@@ -330,8 +374,12 @@ const CreateOrder = () => {
                         </Select>
                       </Form.Item>
 
-                      <Form.Item style={{fontWeight:"bolder"}} label="Phương thức mua hàng">
-                        <Select style={{width:"180px"}}
+                      <Form.Item
+                        style={{ fontWeight: "bolder" }}
+                        label="Phương thức mua hàng"
+                      >
+                        <Select
+                          style={{ width: "180px" }}
                           defaultValue={sale.deliveryOption}
                           onChange={(value) =>
                             handleDeliveryOptionChange(index, value)
@@ -360,7 +408,17 @@ const CreateOrder = () => {
                 </Form>
 
                 <div className="price-table-container">
-                  <h3 style={{fontWeight:"bolder"}}>Bảng giá</h3>
+                  <button
+                    className="btn-tonggia"
+                    onClick={() => handleAddProduct(index)}
+                  >
+                    Thêm sản phẩm
+                  </button>
+                  <br />
+                  <br />
+                  <h3 style={{ fontWeight: "bolder" }}>Hóa đơn </h3>
+                  <br />
+                  <br />
                   <table>
                     <thead>
                       <tr className="tr-banggia">
@@ -373,61 +431,78 @@ const CreateOrder = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {sale.products.map((product, productIndex) => (
-                        <tr className="tr-banggia" key={productIndex}>
-                          <td>{productIndex + 1}</td>
-                          <td>
-                            {product.nameProduct} - {product.nameSize} -{" "}
-                            {product.nameColor}
-                          </td>
-                          <td>
-                            <img className="img-a" src={product.image} alt={product.name} />
-                          </td>
-                          <td className="quantity-column">
-                            <input
-                              type="number"
-                              value={product.quantity}
-                              style={{ width: "50px", textAlign: "center" }}
-                              onChange={(e) =>
-                                handleQuantityChange(index, productIndex, e)
-                              }
-                            />
-                          </td>
-                          <td style={{color:"red"}}>{product.price * product.quantity}VNĐ</td>{" "}
-                          {/* Calculate total price */}
-                          <td>
-                            <button
-                              onClick={() =>
-                                handleRemoveProduct(index, productIndex)
-                              }
-                            >
-                              Xóa
-                            </button>
+                      {sale.products.length > 0 ? (
+                        sale.products.map((product, productIndex) => (
+                          <tr className="tr-banggia" key={productIndex}>
+                            <td>{productIndex + 1}</td>
+                            <td>
+                              {product.nameProduct} - {product.nameSize} -{" "}
+                              {product.nameColor}
+                            </td>
+                            <td>
+                              <img
+                                className="img-a"
+                                src={product.image}
+                                alt={product.name}
+                              />
+                            </td>
+                            <td className="quantity-column">
+                              <input
+                                type="number"
+                                value={product.quantity}
+                                style={{ width: "50px", textAlign: "center" }}
+                                onChange={(e) =>
+                                  handleQuantityChange(index, productIndex, e)
+                                }
+                              />
+                            </td>
+                            <td style={{ color: "red" }}>
+                              {product.price * product.quantity}VNĐ
+                            </td>
+                            <td>
+                              <button
+                                onClick={() =>
+                                  handleRemoveProduct(index, productIndex)
+                                }
+                              >
+                                Xóa
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" style={{ textAlign: "center" }}>
+                            Không có sản phẩm nào
                           </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
-                  <div>
-                    <h4 className="text-tonggia">
-                      <h4   style={{display:"flex"}}>
-                      Tổng giá:
-                         <p style={{color:"red"}}>
-                          {calculateTotalPrice(sale)} VNĐ
-                        </p>
-                        </h4 >
-                      <h4 className="text-tonggia2" style={{display:"flex"}}>Tổng trọng lượng: <p style={{color:"red"}}>{totalWeight(sale)} g
-                        </p></h4>
-                    </h4>
-                  </div>
-                  <button className="btn-tonggia" onClick={() => handleAddProduct(index)}>
-                    Thêm sản phẩm
-                  </button>
+                  {sale.products.length > 0 && (
+                    <div>
+                      <h4 className="text-tonggia">
+                        <h4 style={{ display: "flex" }}>
+                          Tổng giá:
+                          <p style={{ color: "red" }}>
+                            {calculateTotalPrice(sale)} VNĐ
+                          </p>
+                        </h4>
+                        <h4
+                          className="text-tonggia2"
+                          style={{ display: "flex" }}
+                        >
+                          Tổng trọng lượng:{" "}
+                          <p style={{ color: "red" }}>{totalWeight(sale)} g</p>
+                        </h4>
+                      </h4>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <button className="btn-guidonhang"
-              
+              <button
+                className="btn-guidonhang"
                 onClick={() => addOrderSubmitHandle(activeTab)}
               >
                 Gửi đơn hàng

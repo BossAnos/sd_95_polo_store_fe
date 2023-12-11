@@ -15,7 +15,7 @@ import { Status_Order, Status_Order_Map } from "../../../common/StatusOrder";
 import { SelectSearch } from "../../../common/SelectSearch";
 import { LoadingBox } from "../../../common";
 import { Link } from "react-router-dom";
-import "../oder.css"
+import "../oder.css";
 
 const tabs = [
   {
@@ -58,9 +58,22 @@ const getUpdateAbleStatus = (status) => {
       return Status_Order.filter((status) => [4, 7].includes(status.value));
     case 4:
       return Status_Order.filter((status) => [5, 6].includes(status.value));
+    case 5:
+      return [
+        {
+          value: 5,
+          label: "Đã hoàn thành",
+        },
+      ];
     case 6:
       return Status_Order.filter((status) => [7, 8].includes(status.value));
-
+    case 7:
+      return [
+        {
+          value: 7,
+          label: "Đã hủy",
+        },
+      ];
     case 8:
       return Status_Order.filter((status) => [5].includes(status.value));
 
@@ -235,7 +248,11 @@ const OrderList = () => {
           <tr>
             <th
               colspan="10"
-              style={{ height: "10px", backgroundColor: "blueviolet",marginTop:"-100px" }}
+              style={{
+                height: "10px",
+                backgroundColor: "blueviolet",
+                marginTop: "-100px",
+              }}
             >
               Quản lý hóa đơn
             </th>
@@ -289,15 +306,15 @@ const OrderList = () => {
                     </td>
                     <td>{order.transactions.description}</td>
                     <td>
-                      <div  style={{display:"flex"}}>
-                      Tổng đơn:<p  style={{color:"red"}}>{formattedPrice} VNĐ</p> 
+                      <div style={{ display: "flex" }}>
+                        Tổng đơn hàng:
+                        <p style={{ color: "red" }}>{formattedPrice} VNĐ</p>
                       </div>
-                
                       Trọng lượng đơn hàng: {order.weight}g
                       <br />
                       Hình thức: {order.shopping}
-                      <br></br>
-                      {order.shipCost && order.shipCost !== 0 && (
+                      <br />
+                      {order.shipCost !== null && order.shipCost !== 0 && (
                         <>
                           Phí ship: {order.shipCost.toLocaleString()} VNĐ
                           <br />
@@ -324,26 +341,42 @@ const OrderList = () => {
                                 style={{
                                   display: "inline-block",
                                   marginRight: "10px",
-                                  width:"170px"
+                                  width: "170px",
                                 }}
                               >
                                 {option.value === 7 ? (
-                                  <button style={{  width:"110px"}}
+                                  <button
+                                    style={{ width: "110px" }}
                                     className="btn btn-danger"
                                     disabled={order.isUpdating}
                                     onClick={() => openCancelModal(order.id)}
                                   >
-                                    <p style={{marginTop:"-5px"}}> {option.label}</p>
-                                   
+                                    <p style={{ marginTop: "-5px" }}>
+                                      {option.label}
+                                    </p>
                                   </button>
                                 ) : option.value === 2 ? (
-                                  <button  style={{  width:"110px",paddingTop:"-100px"}}
+                                  <button
+                                    style={{
+                                      width: "110px",
+                                      paddingTop: "-100px",
+                                    }}
                                     className="btn btn-primary"
                                     disabled={order.isUpdating}
                                     onClick={openStatus2Modal}
                                   >
-                                    <p  style={{marginTop:"-5px"}}> {option.label}</p>
-                                   
+                                    <p style={{ marginTop: "-5px" }}>
+                                      {option.label}
+                                    </p>
+                                  </button>
+                                ) : option.value === 5 ? (
+                                  <button
+                                    style={{ width: "150px" }}
+                                    className="btn btn-primary"
+                                  >
+                                    <p style={{ marginTop: "-5px" }}>
+                                      {option.label}
+                                    </p>
                                   </button>
                                 ) : (
                                   <Popconfirm
@@ -360,11 +393,15 @@ const OrderList = () => {
                                   >
                                     <button
                                       className="btn btn-primary"
-                                      style={{  width:"165px",paddingTop:"-100px"}}
+                                      style={{
+                                        width: "165px",
+                                        paddingTop: "-100px",
+                                      }}
                                       disabled={order.isUpdating}
                                     >
-                                      <p  style={{marginTop:"-5px"}}>  {option.label}</p>
-                                    
+                                      <p style={{ marginTop: "-5px" }}>
+                                        {option.label}
+                                      </p>
                                     </button>
                                   </Popconfirm>
                                 )}
@@ -418,8 +455,7 @@ const OrderList = () => {
                                       style: {
                                         backgroundColor: "blue",
                                         color: "white",
-                                        width:"100px"
-                                        
+                                        width: "100px",
                                       },
                                     }}
                                   >
