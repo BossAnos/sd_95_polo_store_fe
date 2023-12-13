@@ -15,8 +15,10 @@ const ListOrderAccount = () => {
   }, []);
   return (
     <div>
-      <h1 style={{marginLeft:"50px" , fontWeight:"bolder"}}>Đơn hàng của bạn</h1>
-      <p style={{marginLeft:"50px"}}>
+      <h1 style={{ marginLeft: "50px", fontWeight: "bolder" }}>
+        Đơn hàng của bạn
+      </h1>
+      <p style={{ marginLeft: "50px" }}>
         Kiểm tra trạng thái và thông tin liên quan đến đơn hàng của bạn. Bạn có
         thể huỷ đơn hoặc có thể đặt lại hàng
       </p>
@@ -43,7 +45,7 @@ const ListOrderAccount = () => {
                   <tr key={order.id}>
                     <td style={{ width: "1000px" }}>
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <div style={{ marginRight: "10px"}}>
+                        <div style={{ marginRight: "10px" }}>
                           Đơn hàng ĐH{order.id} ----
                         </div>
                         {!order.showUpdateStatusForm && (
@@ -52,9 +54,11 @@ const ListOrderAccount = () => {
                       </div>
                       Ngày đặt hàng : {formattedDate}
                       <br></br>
-                      <div style={{display:"flex"}}> Giá: <p style={{color:"red"}}>{formattedPrice} VNĐ</p></div>
-
-                     
+                      <div style={{ display: "flex" }}>
+                        {" "}
+                        Giá:{" "}
+                        <p style={{ color: "red" }}>{formattedPrice} VNĐ</p>
+                      </div>
                     </td>
                     <td>
                       <div
@@ -63,20 +67,8 @@ const ListOrderAccount = () => {
                       >
                         <div className="action">
                           <Link to={`/order/${order.id}`}>
-                            <button className="btn-dark">
-                              Xem chi tiết
-                            </button>
+                            <button className="btn-dark">Xem chi tiết</button>
                           </Link>
-                        </div>
-                        <div className="action">
-                          <Popconfirm
-                            title="Hủy đơn hàng"
-                            description="Bạn có chắc chắn muốn hủy đơn hàng này?"
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <button className="btn-huydonhang" style={{marginLeft:"10px"}}>Hủy</button>
-                          </Popconfirm>
                         </div>
                       </div>
                     </td>

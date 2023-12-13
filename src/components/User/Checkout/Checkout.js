@@ -10,6 +10,7 @@ import {
 import { toastService } from "../../../service/common";
 import { useNavigate } from "react-router-dom";
 import { LoadingPage } from "../../common/LoadingPage";
+import AddAddress from "../Address/CreateAddress/CreateAddress";
 
 const Checkout = () => {
   const [checkOutProducts, setCheckOutProducts] = useState([]);
@@ -19,6 +20,11 @@ const Checkout = () => {
   const userInfo = userAuthService.getAuthInfo();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+
+  const handleAddAddressClick = () => {
+    setIsAddAddressModalOpen(true);
+  };
 
   useEffect(() => {
     (async () => {
@@ -41,6 +47,14 @@ const Checkout = () => {
 
   const handleClick = (addressId) => {
     setSelectedAddress(addressId);
+  };
+
+  const handleAddSuccess = (data) => {
+    // Handle the data after successfully adding the address
+    console.log(data);
+    // You can update the UI with the added address data here
+
+    setIsAddAddressModalOpen(false);
   };
 
   const addOrderSubmitHandle = async () => {
@@ -130,6 +144,11 @@ const Checkout = () => {
 
   return (
     <div className="checkout-page">
+      <AddAddress
+        open={isAddAddressModalOpen}
+        onCancel={() => setIsAddAddressModalOpen(false)}
+        onAddSuccess={handleAddSuccess}
+      />
       <div className="breadcrumb-section">
         <div className="container">
           <h2
@@ -199,7 +218,11 @@ const Checkout = () => {
                   </Form.Item>
                 </div>
                 <div className="">
-                  <button className="" style={{ marginLeft: "300px" }}>
+                  <button
+                    className=""
+                    style={{ marginLeft: "300px" }}
+                    onClick={handleAddAddressClick}
+                  >
                     Thêm địa chỉ
                   </button>
                 </div>

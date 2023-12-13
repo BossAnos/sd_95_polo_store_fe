@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { colorService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs } from "antd";
+import { Button, Popconfirm, Tabs, Form } from "antd";
 import { Link } from "react-router-dom";
+import { AddColor } from "./AddColor/Addcolor";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
@@ -25,12 +26,13 @@ const tabs = [
 const ColorList = () => {
   const [color, setColor] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
-  const navigate = useNavigate();
+  const [showColorModal, setShowColorModal] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     (async () => {
       const body = await colorService.getAllColors();
-      console.log("All Color:", body.data); // Add this line to check the data received
+      console.log("All Color:", body.data);
       setColor(body.data);
     })();
   }, []);
@@ -49,6 +51,12 @@ const ColorList = () => {
   };
 
 
+  async function createColor(newColor) {
+    const createdColor = await colorService.createColor(newColor);
+    setColor((prevColors) => [...prevColors, createdColor]);
+    setShowColorModal(false);
+  }
+
   return (
     <div
       style={{
@@ -57,17 +65,26 @@ const ColorList = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <AddColor
+        open={showColorModal}
+        onColorFinish={createColor}
+        onCancel={() => setShowColorModal(false)}
+      />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.key} />
         ))}
       </Tabs>
       <br />
-      <Link to={"/admin/color/add"}>
-        <Button type="primary" className="btn-customer__add ">
-          Thêm màu sắc
-        </Button>
-      </Link>
+
+      <button
+        onClick={() => setShowColorModal(true)}
+        type="primary"
+        className="btn-customer__add "
+      >
+        Thêm màu sắc
+      </button>
+
       <br />
       <br />
       <div className="table__main">

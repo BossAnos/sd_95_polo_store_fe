@@ -12,39 +12,58 @@ import {
 } from "antd";
 import { toastService } from "../../../../service/common";
 import { Status_Order, Status_Order_Map } from "../../../common/StatusOrder";
+import OrderDetailModal from "../OrderDetail/OrderDetail";
 import { SelectSearch } from "../../../common/SelectSearch";
 import { LoadingBox } from "../../../common";
 import { Link } from "react-router-dom";
 import "../oder.css";
+const { TabPane } = Tabs;
 
 const tabs = [
   {
+    key: "all",
+    label: `Tất cả`,
+    status: null,
+  },
+  {
     key: 1,
     label: `Chờ xác nhận`,
+    status: 1,
   },
   {
     key: 2,
     label: `Đã xác nhận`,
+    status: 2,
   },
   {
     key: 3,
     label: `Chuẩn bị hàng`,
+    status: 3,
   },
   {
     key: 4,
     label: `Đang giao hàng`,
+    status: 4,
   },
   {
     key: 5,
     label: `Hoàn thành`,
+    status: 5,
   },
   {
     key: 6,
     label: `Đơn bị hoàn`,
+    status: 6,
   },
   {
     key: 7,
     label: `Đã Hủy`,
+    status: 7,
+  },
+  {
+    key: 8,
+    label: `Đơn giao lại`,
+    status: 8,
   },
 ];
 
@@ -75,7 +94,7 @@ const getUpdateAbleStatus = (status) => {
         },
       ];
     case 8:
-      return Status_Order.filter((status) => [5].includes(status.value));
+      return Status_Order.filter((status) => [5, 7].includes(status.value));
 
     default:
       return [];
@@ -85,9 +104,10 @@ const getUpdateAbleStatus = (status) => {
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
+
   const [statusCode, setStatusCode] = useState(1);
-  const [activeTab, setActiveTab] = useState(1);
-  const [currentTab, setCurrentTab] = useState(1);
+  const [activeTab, setActiveTab] = useState("all");
+  const [currentTab, setCurrentTab] = useState(0);
   const [filterForm] = Form.useForm();
   const LIMIT = 10;
   const [loading, setLoading] = useState(true);
@@ -98,6 +118,13 @@ const OrderList = () => {
 
   const [cancelModalOrderId, setCancelModalOrderId] = useState(null);
 
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOrderClick = (orderId) => {
+    setSelectedOrderId(orderId);
+    setModalOpen(true);
+  };
   const openCancelModal = (orderId) => {
     setCancelModalOrderId(orderId);
     setShowCancelModal(true);
@@ -120,13 +147,21 @@ const OrderList = () => {
     setPage(e);
   };
 
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
+
+  const getOrderLengthByStatus = (status) => {
+    if (status === null) {
+      return orders.length; // Độ dài của tất cả các đơn hàng
+    }
+    return orders.filter((order) => order.status === status).length;
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const selectedTab = tabs.find((tab) => tab.key === currentTab);
-        const orders = await getOrders({
-          statusCode: selectedTab.key,
-        });
+        const orders = await getOrders();
         setOrders(orders);
         console.log(orders);
         orders.forEach((order) => {
@@ -141,7 +176,7 @@ const OrderList = () => {
     };
 
     fetchOrders();
-  }, [currentTab]);
+  });
 
   async function getOrders(form) {
     try {
@@ -155,28 +190,10 @@ const OrderList = () => {
     }
   }
 
-  const filterOrder = async (form) => {
-    const selectedTab = tabs.find((tab) => tab.key === activeTab);
-    const orders = await getOrders({
-      ...form,
-      statusCode: selectedTab.key,
-    });
-    setOrders(orders);
-    setPage(1);
-  };
-
-  async function onSearchHandle(form) {
-    filterOrder({
-      ...form,
-      status: statusCode,
-    });
-  }
-
-  const toggleShowUpdateOrderForm = (order) => {
-    const showUpdateStatusForm = !order.showUpdateStatusForm;
-    order.showUpdateStatusForm = showUpdateStatusForm;
-    setOrders([...orders]);
-  };
+  const filterOrder =
+    activeTab === "all"
+      ? orders
+      : orders.filter((item) => item.status === parseInt(activeTab, 10));
 
   const updateOrderStatusHandle = (order, status, note, shipCost) => {
     order.isUpdating = true;
@@ -217,17 +234,29 @@ const OrderList = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: "12px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+      }}
+    >
       <Tabs
-        defaultActiveKey="1"
-        items={tabs}
-        onChange={orderStatusTabChangeHandle}
-        activeKey={currentTab}
-      />
+        style={{ marginLeft: "20px" }}
+        activeKey={activeTab}
+        onChange={handleTabChange}
+      >
+        {tabs.map((tab) => (
+          <TabPane
+            tab={`${tab.label} (${getOrderLengthByStatus(tab.status)})`}
+            key={tab.key}
+          />
+        ))}
+      </Tabs>
       <Form
         layout="inline"
         className="my-3"
-        onFinish={onSearchHandle}
+        // onFinish={onSearchHandle}
         form={filterForm}
       >
         <Form.Item name={"sodienthoai"}>
@@ -261,14 +290,15 @@ const OrderList = () => {
         <thead>
           <tr>
             <th>Khách hàng</th>
+
             <th>Thanh toán</th>
             <th>Hóa đơn</th>
-
             <th>Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {orders
+          {filterOrder
             .slice((page - 1) * LIMIT, (page - 1) * LIMIT + LIMIT)
             .map((order) => {
               const createDate = new Date(order.create_date);
@@ -277,6 +307,14 @@ const OrderList = () => {
               const year = createDate.getFullYear();
               const formattedDate = `${day}/${month}/${year}`;
               const formattedPrice = order.totalPrice.toLocaleString();
+              let totalRevenue = order.totalPrice + order.shipCost;
+              if (order.transactions.description === "Đã thanh toán") {
+                if (order.shipCost !== null) {
+                  totalRevenue += order.shipCost;
+                } else {
+                  totalRevenue = 0;
+                }
+              }
 
               return (
                 <Fragment key={order.id}>
@@ -304,11 +342,20 @@ const OrderList = () => {
                       <br />
                       {order.address}
                     </td>
-                    <td>{order.transactions.description}</td>
+                    <td>
+                      <div>
+                        {order.transactions.description}
+                        <br></br>
+                        Tổng thu:
+                        <span style={{ color: "red" }}>
+                          {totalRevenue.toLocaleString()} đ
+                        </span>
+                      </div>
+                    </td>
                     <td>
                       <div style={{ display: "flex" }}>
                         Tổng đơn hàng:
-                        <p style={{ color: "red" }}>{formattedPrice} VNĐ</p>
+                        <p style={{ color: "red" }}>{formattedPrice} đ</p>
                       </div>
                       Trọng lượng đơn hàng: {order.weight}g
                       <br />
@@ -316,7 +363,7 @@ const OrderList = () => {
                       <br />
                       {order.shipCost !== null && order.shipCost !== 0 && (
                         <>
-                          Phí ship: {order.shipCost.toLocaleString()} VNĐ
+                          Phí ship: {order.shipCost.toLocaleString()} đ
                           <br />
                         </>
                       )}
@@ -363,16 +410,7 @@ const OrderList = () => {
                                     }}
                                     className="btn btn-primary"
                                     disabled={order.isUpdating}
-                                    onClick={openStatus2Modal}
-                                  >
-                                    <p style={{ marginTop: "-5px" }}>
-                                      {option.label}
-                                    </p>
-                                  </button>
-                                ) : option.value === 5 ? (
-                                  <button
-                                    style={{ width: "150px" }}
-                                    className="btn btn-primary"
+                                    onClick={() => openStatus2Modal(order.id)}
                                   >
                                     <p style={{ marginTop: "-5px" }}>
                                       {option.label}
@@ -439,7 +477,10 @@ const OrderList = () => {
 
                                 {option.value === 2 && (
                                   <Modal
-                                    visible={showStatus2Modal}
+                                    visible={
+                                      showStatus2Modal &&
+                                      order.id === cancelModalOrderId
+                                    }
                                     onCancel={closeStatus2Modal}
                                     onOk={() => {
                                       updateOrderStatusHandle(
@@ -476,16 +517,31 @@ const OrderList = () => {
                         </div>
                       </div>
                     </td>
+                    <td className="action">
+                      <button
+                        className="btn"
+                        onClick={() => handleOrderClick(order.id)}
+                      >
+                        <i className="fa-regular fa-pen-to-square"></i>
+                      </button>
+                    </td>
                   </tr>
                 </Fragment>
               );
             })}
         </tbody>
       </table>
+      {isModalOpen && (
+        <OrderDetailModal
+          style={{ width: 700 }}
+          id={selectedOrderId}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
 
       <Pagination
         defaultCurrent={1}
-        total={orders.length}
+        total={filterOrder.length}
         pageSize={LIMIT}
         onChange={onPageChange}
       />

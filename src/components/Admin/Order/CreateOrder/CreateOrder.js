@@ -54,7 +54,7 @@ const CreateOrder = () => {
       products: [],
       shippingFee: 0,
       deliveryOption: "Tại quầy",
-      transaction: 2,
+      transaction: 3,
     };
 
     setSales([...sales, newSale]);
@@ -102,11 +102,7 @@ const CreateOrder = () => {
       totalPrice += product.price * product.quantity;
     });
 
-    if (sale.deliveryOption === "Đặt hàng") {
-      totalPrice += parseFloat(sale.shippingFee);
-    }
-
-    return totalPrice + shippingFee; // Cộng thêm giá trị phí ship vào tổng giá
+    return totalPrice;
   };
 
   const handleQuantityChange = (tabIndex, productIndex, event) => {
@@ -228,7 +224,7 @@ const CreateOrder = () => {
         updatedSales[0].products = [];
         updatedSales[0].shippingFee = 0;
         updatedSales[0].deliveryOption = "Tại quầy";
-        updatedSales[0].transaction = 2;
+        updatedSales[0].transaction = 3;
 
         setSales(updatedSales);
         setActiveTab(0);
