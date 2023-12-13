@@ -46,6 +46,8 @@ import { UpdateBrand } from "../components/Admin/Brand/UpdateBrand/UpdateBrand";
 import { AddCustomer } from "../components/Admin/Customer/AddCustomer/AddCustomer";
 import { DiscountList } from "../components/Admin/Discount/AddDiscountToProduct";
 import { AdminList } from "../components/Admin/AdminList/Admin";
+import { OrderDetailGetOne } from "../components/Admin/Order/OrderDetail/OrderDetail";
+import { ProductPage } from "../components/Admin/Discount/AddDiscountToProduct/test";
 
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -101,6 +103,10 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/brand/add",
     component: AddBrand,
+  }),
+  getAdminRoute({
+    path: "/admin/cc/cc",
+    component: ProductPage,
   }),
   getAdminRoute({
     path: "/admin/brand/update/:id",
@@ -171,6 +177,7 @@ const adminRoutes = [
     path: "/admin/product/update/:productId",
     component: AddProduct,
   }),
+
   getAdminRoute({
     path: "/admin/product/add",
     component: AddProduct,

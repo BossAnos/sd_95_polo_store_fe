@@ -2,11 +2,11 @@ import { Button, Form, Input } from "antd";
 import { brandService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddBrand = () => {
+const AddBrand = ({ onAddBrandFinish, open, onCancel }) => {
   const navigate = useNavigate();
   const addBrandlHandle = async (form) => {
     try {
-     brandService.createBrands(form);
+      brandService.createBrands(form);
       toastService.success("Thêm thương hiệu thành công");
       navigate("/admin/brand");
     } catch (error) {
@@ -37,7 +37,7 @@ const AddBrand = () => {
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
         <Button type="primary" htmlType="submit">
-          Thêm thương hiệu   
+          Thêm thương hiệu
         </Button>
       </Form.Item>
     </Form>
