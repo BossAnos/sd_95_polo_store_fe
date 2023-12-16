@@ -105,7 +105,7 @@ const adminRoutes = [
     component: AddBrand,
   }),
   getAdminRoute({
-    path: "/admin/cc/cc",
+    path: "/admin/discount/addDiscountToProduct",
     component: ProductPage,
   }),
   getAdminRoute({
