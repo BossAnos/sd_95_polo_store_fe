@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { colorService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form } from "antd";
+import { Button, Popconfirm, Tabs, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { AddColor } from "./AddColor/Addcolor";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,6 +24,7 @@ const tabs = [
 ];
 
 const ColorList = () => {
+  const [searchProductName, setSearchProductName] = useState("");
   const [color, setColor] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
   const [showColorModal, setShowColorModal] = useState(false);
@@ -36,20 +37,24 @@ const ColorList = () => {
       setColor(body.data);
     })();
   }, []);
-
+ 
   const handleTabChange = (key) => {
     setActiveTab(key);
   };
 
-  const filteredColors = color.filter(
-    (item) => item.status === parseInt(activeTab, 10)
-  );
+  const filteredColors = color.filter((item) => {
+    const statusMatch = item.status === parseInt(activeTab, 10);
+    const nameMatch = item.name.toLowerCase().includes(searchProductName.toLowerCase());
+    const descriptionMatch = item.description.toLowerCase().includes(searchProductName.toLowerCase());
+    const indexMatch = (item.index + 1).toString().includes(searchProductName);
+  
+    return statusMatch && (nameMatch || descriptionMatch || indexMatch);
+  });
   const handleDelete = async (id) => {
     const body = await colorService.changeStatus(id);
 
     toastService.info("Thay đổi trạng thái thành công ");
   };
-
 
   async function createColor(newColor) {
     const createdColor = await colorService.createColor(newColor);
@@ -76,7 +81,7 @@ const ColorList = () => {
         ))}
       </Tabs>
       <br />
-
+      <div style={{ display:"flex",marginLeft:"0px"}}>
       <button
         onClick={() => setShowColorModal(true)}
         type="primary"
@@ -84,7 +89,17 @@ const ColorList = () => {
       >
         Thêm màu sắc
       </button>
-
+        <p style={{fontWeight:"bolder",fontSize:"20px"}}>Tìm kiếm:</p>
+        <Input
+        style={{width:"300px",marginLeft:"30px"}}
+          placeholder="Search by product name..."
+          value={searchProductName}
+          onChange={(e) => setSearchProductName(e.target.value)}
+        />
+   
+    
+ 
+      </div>
       <br />
       <br />
       <div className="table__main">
@@ -122,7 +137,7 @@ const ColorList = () => {
                           </Link>
                         </div>
                         <div className="action">
-                        <Popconfirm
+                          <Popconfirm
                             title="Đổi trạng thái"
                             description="Bạn có chắc chắn muốn thay đổi trạng thái?"
                             onConfirm={() => handleDelete(color.id)}

@@ -6,6 +6,19 @@ const AddColor = ({ onColorFinish, open, onCancel }) => {
   const navigate = useNavigate();
   const [colorForm] = Form.useForm();
 
+  const validateInput = (rule, value, callback) => {
+    const regex = /^[a-zA-Z0-9\s]+$/;
+    const maxLength = 50;
+
+    if (value && value.length > maxLength) {
+      callback(`Không vượt quá ${maxLength} kí tự`);
+    } else if (value && !regex.test(value)) {
+      callback("Không chứa ký tự đặc biệt");
+    } else {
+      callback();
+    }
+  };
+
   const addColorlHandle = async (form) => {
     try {
       const res = colorService.createColor(form);
@@ -30,14 +43,20 @@ const AddColor = ({ onColorFinish, open, onCancel }) => {
         <Form.Item
           label="Tên"
           name="name"
-          rules={[{ required: true, message: "Tên không được trống" }]}
+          rules={[
+            { required: true, message: "Tên không được trống" },
+            { validator: validateInput },
+          ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Mô tả"
           name="description"
-          rules={[{ required: true, message: "Mô tả không được trống" }]}
+          rules={[
+            { required: true, message: "Mô tả không được trống" },
+            { validator: validateInput },
+          ]}
         >
           <Input />
         </Form.Item>
