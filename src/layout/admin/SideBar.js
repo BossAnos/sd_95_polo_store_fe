@@ -89,7 +89,7 @@ const menus = [
           {
             path: "/admin/discount/addDiscountToProduct",
             icon: <Icons.UserIcon className={submenuIconClasses} />,
-            name: "Thêm khuyến mại cho sản phẩm",
+            name: "Áp dụng khuyến mại",
           },
           {
             path: "/admin/Discount",
