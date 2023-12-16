@@ -77,7 +77,7 @@ const [form] = Form.useForm();
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4 }}>
-        <button className="btn btn-dark" htmlType="submit">
+        <button className="btn-capnhat" htmlType="submit">
           Cập nhật Thông tin
         </button>
       </Form.Item>

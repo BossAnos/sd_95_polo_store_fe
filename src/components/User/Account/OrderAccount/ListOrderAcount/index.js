@@ -3,7 +3,7 @@ import { orderService } from "../../../../../service/user";
 import { Button, Popconfirm, Tabs } from "antd";
 import { Link } from "react-router-dom";
 import { Status_Order, Status_Order_Map } from "../../../../common/StatusOrder";
-
+import"../../Account.css"
 const ListOrderAccount = () => {
   const [order, setOrder] = useState([]);
   useEffect(() => {
@@ -15,10 +15,10 @@ const ListOrderAccount = () => {
   }, []);
   return (
     <div>
-      <h1 style={{ marginLeft: "50px", fontWeight: "bolder" }}>
+      <h1 className="text-top" style={{ marginLeft: "50px", fontWeight: "bolder" }}>
         Đơn hàng của bạn
       </h1>
-      <p style={{ marginLeft: "50px" }}>
+      <p className="text-top2" style={{ marginLeft: "50px" }}>
         Kiểm tra trạng thái và thông tin liên quan đến đơn hàng của bạn. Bạn có
         thể huỷ đơn hoặc có thể đặt lại hàng
       </p>
@@ -67,7 +67,7 @@ const ListOrderAccount = () => {
                       >
                         <div className="action">
                           <Link to={`/order/${order.id}`}>
-                            <button className="btn-dark">Xem chi tiết</button>
+                            <button className="btn-xemchitiet">Xem chi tiết</button>
                           </Link>
                         </div>
                       </div>

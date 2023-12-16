@@ -103,9 +103,9 @@ const SizeList = () => {
                     >
                       <div className="action">
                         <Link to={`/admin/size/update/${size.id}`}>
-                          <Button type="primary" className="btn">
+                          <button className="btn">
                             <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
+                          </button>
                         </Link>
                       </div>
                       <div className="action">

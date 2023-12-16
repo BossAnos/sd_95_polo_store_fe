@@ -130,3 +130,52 @@
 .address-button-wrapper span {
   flex-grow: 1;
 }
+.btn-thanhtoan:hover {
+  background-color: dodgerblue;
+  border-radius: 5px;
+  border: none;
+}
+.cart-thanhcong {
+  width: 30%;
+  /* padding-top: 50px;
+  padding-left: 600px; */
+  border: 2px  solid black;
+  margin-left: 500px;
+  border-radius: 5px;
+
+
+}
+.icon-thanhtoanthanhcong{
+  background: url('../Cart/img/Sprites.96108a46\ \(1\).svg') no-repeat -1282px -1545px;
+	width: 70px;
+	height: 69px;
+  margin-left: 40%;
+  margin-top: 10%;
+}
+.text-thanhcong{
+  font-weight: bolder;
+  font-size: 25px;
+  margin-left: 20%;
+  margin-top: 5%;
+}
+.text-thongtin{
+  font-size: 20px;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+.text-thongtin3{
+  font-size: 20px;
+  margin-left: 10%;
+  margin-top: 5%;
+  margin-bottom: 10%;
+}
+.text-thongtin2{
+  font-size: 20px;
+  margin-left: 10%;
+  
+}
+.container-cart{
+  width: 100%;
+  height: 100%;
+}
+

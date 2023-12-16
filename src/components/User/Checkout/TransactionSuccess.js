@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import "./Checkout.css"
 
 const TransactionSuccess = () => {
   const location = useLocation();
@@ -46,21 +47,27 @@ const TransactionSuccess = () => {
   }
 
   return (
-    <div>
-      <h1>Thanh toán thành công!</h1>
-      <p>Thông tin thanh toán:</p>
-      <ul>
-        <li> Ngân hàng: {transactionData.vnp_BankCode}</li>
-        <li>Số giao dịch Ngân hàng: {transactionData.vnp_BankTranNo}</li>
+    <div className="container-cart">
+<div className="cart-thanhcong">
+      <div className="icon-thanhtoanthanhcong">
 
-        <li>Thông tin đơn hàng: ĐH{transactionData.vnp_OrderInfo}</li>
-        <li>Ngày thanh toán: {transactionData.vnp_PayDate}</li>
-        <li>Mã giao dịch: {transactionData.vnp_TxnRef}</li>
+      </div>
+      <p className="text-thanhcong">Thanh toán thành công!</p>
+      <p  className="text-thongtin">Thông tin thanh toán:</p>
+      <ul>
+        <li className="text-thongtin2"> Ngân hàng:{transactionData.vnp_BankCode}</li>
+        <li className="text-thongtin2">Số giao dịch Ngân hàng: {transactionData.vnp_BankTranNo}</li>
+
+        <li className="text-thongtin2">Thông tin đơn hàng: ĐH{transactionData.vnp_OrderInfo}</li>
+        <li className="text-thongtin2">Ngày thanh toán: {transactionData.vnp_PayDate}</li>
+        <li className="text-thongtin2">Mã giao dịch: {transactionData.vnp_TxnRef}</li>
       </ul>
-      <button className="btn btn-dark">
+      <button  className="text-thongtin3">
         <Link to={"/"}>Quay lại</Link>
       </button>
     </div>
+    </div>
+    
   );
 };
 

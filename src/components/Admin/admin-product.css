@@ -4,7 +4,7 @@
   
 }
 .btn-customer__add:hover {
-  background-color: #e5e7eb;
+
 }
 .table__main {
   margin-top: 1.1rem;
@@ -68,6 +68,7 @@ margin-right:70px;
   margin-right: 150px;
 }
 .btn{
-  width: 30px;
+  width: 40px;
+
  
 }

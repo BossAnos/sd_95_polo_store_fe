@@ -64,9 +64,9 @@ const AddSize = () => {
         <Input />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
-        <Button type="primary" htmlType="submit">
+        <button type="primary" htmlType="submit">
           Thêm size 
-        </Button>
+        </button>
       </Form.Item>
     </Form>
   );

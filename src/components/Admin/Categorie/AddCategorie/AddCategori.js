@@ -36,9 +36,9 @@ const AddCategory = () => {
         <Input />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 4 }}>
-        <Button type="primary" htmlType="submit">
+        <button type="primary" htmlType="submit">
           Thêm loại áo 
-        </Button>
+        </button>
       </Form.Item>
     </Form>
   );

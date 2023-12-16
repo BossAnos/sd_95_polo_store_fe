@@ -35,10 +35,10 @@ const AddressAcount = () => {
         onCancel={() => setShowAddAddressModal(false)}
         onAddSuccess={handleAddAddressSuccess} // Xử lý khi thêm địa chỉ thành công
       />
-      <h1 style={{ marginLeft: "50px", fontWeight: "bolder" }}>
+      <p className="text-top" style={{ marginLeft: "50px", fontWeight: "bolder" }}>
         ĐỊA CHỈ NHẬN HÀNG
-      </h1>
-      <p style={{ marginLeft: "50px" }}>
+      </p>
+      <p  className="text-top2"  style={{ marginLeft: "50px" }}>
         Lưu tất cả địa chỉ giao hàng của bạn (Nhà, văn phòng, nơi cư trú của gia
         đình, v.v ). Bạn sẽ không phải điền lại địa chỉ giao hàng mỗi khi đặt
         hàng
