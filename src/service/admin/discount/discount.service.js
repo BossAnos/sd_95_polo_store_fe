@@ -5,3 +5,7 @@ export const getAllDiscount = async (params) => {
     params,
   });
 };
+
+export const addDiscountToProduct = async (params) => {
+  return await adminClient.post("http://localhost:8080/admin/discount", params);
+};

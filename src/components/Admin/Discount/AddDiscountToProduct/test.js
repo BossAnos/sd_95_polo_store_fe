@@ -1,138 +1,286 @@
-import { useEffect, useState } from "react";
-import {
-  brandService,
-  categoryService,
-  discountService,
-  productService,
-} from "../../../../service/admin";
+import React, { useEffect, useState } from "react";
+import { discountService, productService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
+import { Tabs, Input, Checkbox } from "antd";
+
+const { TabPane } = Tabs;
 
 const ProductPage = () => {
   const [selectedDiscount, setSelectedDiscount] = useState(null);
   const [products, setProducts] = useState([]);
   const [discounts, setDiscounts] = useState([]);
+  const [searchProductName, setSearchProductName] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+  const [searchBrand, setSearchBrand] = useState("");
+  const [searchMaterial, setSearchMaterial] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(1);
+
+  const tabs = [
+    {
+      key: "1",
+      label: "Đang hoạt động",
+      status: 1,
+    },
+    {
+      key: "0",
+      label: "Đang được giảm giá",
+      status: 3,
+    },
+  ];
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
-        const products = await getProducts({});
-        const { data } = await discountService.getAllDiscount({});
-        setSelectedDiscount(selectedDiscount);
-        setProducts(products);
-        setDiscounts(data);
-        console.log(products);
-        console.log(discounts);
+        const { data: productsData } = await productService.getAllProducts({});
+        const { data: discountsData } = await discountService.getAllDiscount(
+          {}
+        );
+        setProducts(productsData);
+        setDiscounts(discountsData);
+        setSelectedDiscount(discountsData.length > 0 ? discountsData[0] : null);
       } catch (e) {
         toastService.error(e.apiMessage);
       }
-    })();
+    };
+
+    fetchData();
   }, []);
 
-  async function getProducts(form) {
-    const { data } = await productService.getAllProducts({});
-    return data;
-  }
-
-  const handleDiscountChange = (event) => {
-    const discountId = event.target.value;
+  const handleDiscountChange = (value) => {
+    const discountId = parseInt(value, 10);
     const selectedDiscount = discounts.find(
-      (discount) => discount.id === parseInt(discountId, 10)
+      (discount) => discount.id === discountId
     );
     setSelectedDiscount(selectedDiscount);
   };
 
-  const handleProductCheckboxChange = (event, productId) => {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      const updatedProducts = products.map((product) => {
-        if (product.id === productId) {
-          return { ...product, discount: selectedDiscount };
-        }
-        return product;
+  const handleProductCheckboxChange = (productId) => {
+    const updatedProducts = products.map((product) => ({
+      ...product,
+      discount:
+        product.id === productId
+          ? toggleDiscount(product.discount)
+          : product.discount,
+    }));
+    setProducts(updatedProducts);
+  };
+
+  const handleSelectAllProducts = () => {
+    const allSelected = products.every(
+      (product) => product.discount === selectedDiscount
+    );
+
+    const updatedProducts = products.map((product) => ({
+      ...product,
+      discount: allSelected ? null : selectedDiscount,
+    }));
+
+    setProducts(updatedProducts);
+  };
+
+  const toggleDiscount = (currentDiscount) => {
+    return currentDiscount === selectedDiscount ? null : selectedDiscount;
+  };
+
+  const filterProducts = () => {
+    return products.filter((product) => {
+      const nameMatch =
+        !searchProductName ||
+        product.name.toLowerCase().includes(searchProductName.toLowerCase());
+      const categoryMatch =
+        !searchCategory ||
+        product.nameCategory
+          .toLowerCase()
+          .includes(searchCategory.toLowerCase());
+      const brandMatch =
+        !searchBrand ||
+        product.nameBrand.toLowerCase().includes(searchBrand.toLowerCase());
+      const materialMatch =
+        !searchMaterial ||
+        product.nameMaterial
+          .toLowerCase()
+          .includes(searchMaterial.toLowerCase());
+
+      return nameMatch && categoryMatch && brandMatch && materialMatch;
+    });
+  };
+
+  const handleStatusButton = (productId) => {
+    // Implement the logic for handling the status button click
+    // You can toggle the status or perform any other action
+  };
+
+  const filteredProducts = filterProducts().filter(
+    (product) => product.status === selectedStatus
+  );
+
+  const handleAddDiscountToSelectedProducts = async () => {
+    const selectedProductIds = products
+      .filter((product) => product.discount === selectedDiscount)
+      .map((product) => product.id);
+
+    try {
+      // Call your backend API to add discounts to selected products
+      const response = await discountService.addDiscountToProduct({
+        idDiscount: selectedDiscount.id,
+        idProduct: selectedProductIds,
       });
-      setProducts(updatedProducts);
-    } else {
-      const updatedProducts = products.map((product) => {
-        if (product.id === productId) {
-          const { discount, ...updatedProduct } = product;
-          return updatedProduct;
-        }
-        return product;
-      });
-      setProducts(updatedProducts);
+
+      // Log the response or handle it as needed
+      console.log(response);
+      toastService.success("Áp dụng khuyến mại thành công");
+    } catch (error) {
+      // Handle errors
+      toastService.error(error.apiMessage);
     }
   };
 
   return (
-    <div>
-      <h1>Select Discount</h1>
-      <select onChange={handleDiscountChange}>
-        <option value="">Select a discount</option>
-        {discounts.map((discount) => (
-          <option key={discount.id} value={discount.id}>
-            {discount.name}
-            {discount.discount}
-          </option>
-        ))}
-      </select>
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: "12px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+      }}
+    >
+      <Tabs
+        activeKey={selectedStatus.toString()}
+        onChange={(key) => setSelectedStatus(parseInt(key, 10))}
+      >
+        {tabs.map((tab) => (
+          <TabPane tab={tab.label} key={tab.status.toString()}>
+            <div>
+              <select
+                onChange={(e) => handleDiscountChange(e.target.value)}
+                value={selectedDiscount ? selectedDiscount.id.toString() : ""}
+              >
+                {discounts.map((discount) => (
+                  <option key={discount.id} value={discount.id}>
+                    {discount.name} {discount.discount}
+                  </option>
+                ))}
+              </select>
 
-      {selectedDiscount && (
-        <div>
-          <h2>Discount Details</h2>
-          <div>
-            <label>Tên khuyến mại:</label>
-            <input type="text" value={selectedDiscount.name} disabled />
-          </div>
-          <div>
-            <label>Gía trị khuyến mại:</label>
-            <input type="text" value={selectedDiscount.discount} disabled />
-          </div>
-          <div>
-            <label>Mô tả:</label>
-            <input type="text" value={selectedDiscount.description} disabled />
-          </div>
-          <div>
-            <label>Ngày bắt đầu :</label>
-            <input type="text" value={selectedDiscount.startDate} disabled />
-          </div>
-          <div>
-            <label>Ngày kết thúc:</label>
-            <input type="text" value={selectedDiscount.endDate} disabled />
-          </div>
-        </div>
-      )}
+              {selectedDiscount && selectedDiscount.id !== discounts[0]?.id && (
+                <div>
+                  <div>
+                    <label>Tên khuyến mại:</label>
+                    <Input value={selectedDiscount.name} disabled />
+                  </div>
+                  <div>
+                    <label>Gía trị khuyến mại:</label>
+                    <Input value={selectedDiscount.discount} disabled />
+                  </div>
+                  <div>
+                    <label>Ngày bắt đầu:</label>
+                    <Input value={selectedDiscount.startDate} disabled />
+                  </div>
+                  <div>
+                    <label>Ngày kết thúc:</label>
+                    <Input value={selectedDiscount.endDate} disabled />
+                  </div>
+                </div>
+              )}
 
-      <h2>Product List</h2>
-      {products.length === 0 ? (
-        <p>No products available.</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Select</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td>{product.description}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={product.discount === selectedDiscount}
-                    onChange={(event) =>
-                      handleProductCheckboxChange(event, product.id)
-                    }
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ marginRight: "16px" }}>
+                  <label>Tên sản phẩm:</label>
+                  <Input
+                    placeholder="Search by product name..."
+                    value={searchProductName}
+                    onChange={(e) => setSearchProductName(e.target.value)}
                   />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+                </div>
+                <div style={{ marginRight: "16px" }}>
+                  <label>Loại áo:</label>
+                  <Input
+                    placeholder="Search by category..."
+                    value={searchCategory}
+                    onChange={(e) => setSearchCategory(e.target.value)}
+                  />
+                </div>
+                <div style={{ marginRight: "16px" }}>
+                  <label>Thương hiệu:</label>
+                  <Input
+                    placeholder="Search by brand..."
+                    value={searchBrand}
+                    onChange={(e) => setSearchBrand(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label>Chất liệu:</label>
+                  <Input
+                    placeholder="Search by material..."
+                    value={searchMaterial}
+                    onChange={(e) => setSearchMaterial(e.target.value)}
+                  />
+                </div>
+              </div>
+              <br></br>
+              <h1>Danh sách sản phẩm</h1>
+              {filteredProducts.length === 0 ? (
+                <p>No products match the search criteria.</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "5%" }}>
+                        <Checkbox
+                          checked={filteredProducts.every(
+                            (product) => product.discount === selectedDiscount
+                          )}
+                          onChange={handleSelectAllProducts}
+                        />
+                      </th>
+                      <th>Tên sản phẩm</th>
+                      <th>Chất liệu</th>
+                      <th>Thương hiệu</th>
+                      <th>Loại áo</th>
+                      <th>Description</th>
+                      {selectedStatus === 3 && <th>On/Off</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredProducts.map((product) => (
+                      <tr key={product.id}>
+                        <td>
+                          <Checkbox
+                            checked={product.discount === selectedDiscount}
+                            onChange={() =>
+                              handleProductCheckboxChange(product.id)
+                            }
+                          />
+                        </td>
+                        <td>{product.name}</td>
+                        <td>{product.nameMaterial}</td>
+                        <td>{product.nameBrand}</td>
+                        <td>{product.nameCategory}</td>
+                        <td>{product.description}</td>
+                        {selectedStatus === 3 && (
+                          <td>
+                            <button
+                              onClick={() => handleStatusButton(product.id)}
+                            >
+                              On/Off
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              {filteredProducts.length > 0 && (
+                <div>
+                  <button onClick={handleAddDiscountToSelectedProducts}>
+                    Áp dụng khuyến mại
+                  </button>
+                </div>
+              )}
+            </div>
+          </TabPane>
+        ))}
+      </Tabs>
     </div>
   );
 };
