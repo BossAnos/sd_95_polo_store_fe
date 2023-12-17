@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { brandService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
+import {
+  Button,
+  Tabs,
+  Form,
+  Input,
+  Switch,
+} from "antd";
 import { Link } from "react-router-dom";
 import { AddBrand } from "./AddBrand/AddBrand";
-import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
@@ -34,13 +39,12 @@ const BrandList = () => {
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const body = await brandService.getAllBrands();
-      console.log("All Brand:", body.data);
-      setBrand(body.data);
-    };
+  const fetchData = async () => {
+    const body = await brandService.getAllBrands();
+    setBrand(body.data);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -87,11 +91,10 @@ const BrandList = () => {
     );
   }
 
-  async function createBrand(newBrand) {
-    const createdBrand = await brandService.createBrands(newBrand);
-    setBrand((prevBrands) => [...prevBrands, createdBrand]);
+  const handleList = () => {
     setShowBrandModal(false);
-  }
+    fetchData();
+  };
 
   return (
     <div
@@ -103,7 +106,7 @@ const BrandList = () => {
     >
       <AddBrand
         open={showBrandModal}
-        onBrandFinish={createBrand}
+        onBrandFinish={handleList}
         onCancel={() => setShowBrandModal(false)}
       />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
@@ -135,7 +138,7 @@ const BrandList = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Tên thương hiệuc</th>
+              <th>Tên thương hiệu</th>
               <th>Mô tả</th>
               <th>Trạng thái</th>
               <th>Actions</th>
@@ -187,4 +190,3 @@ const BrandList = () => {
 };
 
 export { BrandList };
- 

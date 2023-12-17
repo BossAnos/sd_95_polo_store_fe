@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { colorService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
+import { Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddColor } from "./AddColor/Addcolor";
-import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
@@ -34,13 +33,12 @@ const ColorList = () => {
   const [showColorModal, setShowColorModal] = useState(false);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const body = await colorService.getAllColors();
-      console.log("All Color:", body.data);
-      setColor(body.data);
-    };
+  const fetchData = async () => {
+    const body = await colorService.getAllColors();
+    setColor(body.data);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -93,9 +91,8 @@ const ColorList = () => {
   }
 
   async function createColor(newColor) {
-    const createdColor = await colorService.createColor(newColor);
-    setColor((prevColors) => [...prevColors, createdColor]);
     setShowColorModal(false);
+    fetchData();
   }
 
   return (

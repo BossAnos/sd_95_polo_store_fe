@@ -1,9 +1,9 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Form, Input, Modal } from "antd";
 import { brandService } from "../../../../service/admin";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toastService } from "../../../../service/common";
 import XRegExp from "xregexp";
-const AddBrand = ({ onBrandFinish, open, onCancel }) => {
+const AddBrand = (props) => {
   const navigate = useNavigate();
   const [brandForm] = Form.useForm();
 
@@ -20,13 +20,13 @@ const AddBrand = ({ onBrandFinish, open, onCancel }) => {
     }
   };
 
+
   const addBrandlHandle = async (form) => {
     try {
-      const res = brandService.createBrands(form);
+      brandService.createBrands(form);
       brandForm.resetFields();
       toastService.success("Thêm thương hiệu thành công");
-      const data = res.data;
-      onBrandFinish(data);
+      props.onBrandFinish();
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -34,7 +34,7 @@ const AddBrand = ({ onBrandFinish, open, onCancel }) => {
   };
 
   return (
-    <Modal title="Thêm thương hiệu" open={open} footer={null} onCancel={onCancel}>
+    <Modal title="Thêm thương hiệu" open={props.open} footer={null} onCancel={props.onCancel}>
       <Form
         onFinish={addBrandlHandle}
         labelCol={{ span: 4 }}

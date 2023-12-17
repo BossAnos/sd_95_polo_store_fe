@@ -1,9 +1,9 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Form, Input, Modal } from "antd";
 import { materialService } from "../../../../service/admin";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toastService } from "../../../../service/common";
 import XRegExp from "xregexp";
-const AddMaterial = ({ onMateriaFinish, open, onCancel }) => {
+const AddMaterial = (props) => {
   const navigate = useNavigate();
   const [materiaForm] = Form.useForm();
 
@@ -22,11 +22,10 @@ const AddMaterial = ({ onMateriaFinish, open, onCancel }) => {
 
   const addMaterialHandle = async (form) => {
     try {
-      const res = materialService.createMaterial(form);
+      materialService.createMaterial(form);
       materiaForm.resetFields();
-      toastService.success("Thêm vật liệu thành công");
-      const data = res.data;
-      onMateriaFinish(data);
+      toastService.success("Thêm chất liệu thành công");
+      props.onMaterialFinish();
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -34,7 +33,7 @@ const AddMaterial = ({ onMateriaFinish, open, onCancel }) => {
   };
 
   return (
-    <Modal title="Thêm vật liệu" open={open} footer={null} onCancel={onCancel}>
+    <Modal title="Thêm chất liệu" open={props.open} footer={null} onCancel={props.onCancel}>
       <Form
         onFinish={addMaterialHandle}
         labelCol={{ span: 4 }}
@@ -63,7 +62,7 @@ const AddMaterial = ({ onMateriaFinish, open, onCancel }) => {
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 4 }}>
           <button type="primary" htmlType="submit">
-            Thêm thương hiệu
+            Thêm chất liệu
           </button>
         </Form.Item>
       </Form>

@@ -1,9 +1,9 @@
 import { Button, Form, Input, Modal } from "antd";
 import { categoryService } from "../../../../service/admin";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toastService } from "../../../../service/common";
 import XRegExp from "xregexp";
-const AddCategory = ({ onCategoryFinish, open, onCancel }) => {
+const AddCategory = (props) => {
   const navigate = useNavigate();
   const [categoryForm] = Form.useForm();
 
@@ -22,11 +22,10 @@ const AddCategory = ({ onCategoryFinish, open, onCancel }) => {
 
   const addCategorylHandle = async (form) => {
     try {
-      const res = categoryService.createCategory(form);
+      categoryService.createCategory(form);
       categoryForm.resetFields();
       toastService.success("Thêm loại áo thành công");
-      const data = res.data;
-      onCategoryFinish(data);
+      props.onCategoryFinish();
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -34,7 +33,7 @@ const AddCategory = ({ onCategoryFinish, open, onCancel }) => {
   };
 
   return (
-    <Modal title="Thêm loại áo" open={open} footer={null} onCancel={onCancel}>
+    <Modal title="Thêm loại áo" open={props.open} footer={null} onCancel={props.onCancel}>
       <Form
         onFinish={addCategorylHandle}
         labelCol={{ span: 4 }}
@@ -63,7 +62,7 @@ const AddCategory = ({ onCategoryFinish, open, onCancel }) => {
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 4 }}>
           <button type="primary" htmlType="submit">
-            Thêm thương hiệu
+            Thêm loại áo
           </button>
         </Form.Item>
       </Form>

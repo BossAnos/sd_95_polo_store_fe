@@ -34,13 +34,12 @@ const CategoryList = () => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const body = await categoryService.getAllCategory();
-      console.log("All Category:", body.data);
-      setCategory(body.data);
-    };
+  const fetchData = async () => {
+    const body = await categoryService.getAllCategory();
+    setCategory(body.data);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -87,10 +86,9 @@ const CategoryList = () => {
     );
   }
 
-  async function createCategory(newCategory) {
-    const createdBCategory = await categoryService.createCategory(newCategory);
-    setCategory((prevCategorys) => [...prevCategorys, createdBCategory]);
-    setShowCategoryModal(false);
+  const createCategory = () => {
+    setShowCategoryModal(!showCategoryModal);
+    fetchData();
   }
 
   return (
@@ -135,7 +133,7 @@ const CategoryList = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Tên thương hiệuc</th>
+              <th>Tên loại áo</th>
               <th>Mô tả</th>
               <th>Trạng thái</th>
               <th>Actions</th>

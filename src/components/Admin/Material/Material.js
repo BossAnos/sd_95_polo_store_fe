@@ -34,13 +34,13 @@ const MaterialList = () => {
   const [showMaterialModal, setShowMaterialModal] = useState(false);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const body = await materialService.getAllMaterial();
-      console.log("All Material:", body.data);
-      setMaterial(body.data);
-    };
+  const fetchData = async () => {
+    const body = await materialService.getAllMaterial();
+    console.log("All Material:", body.data);
+    setMaterial(body.data);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -87,10 +87,9 @@ const MaterialList = () => {
     );
   }
 
-  async function createMaterial(newMaterial) {
-    const createdMaterial = await materialService.createMaterial(newMaterial);
-    setMaterial((prevMaterials) => [...prevMaterials, createdMaterial]);
+  const handleList = () => {
     setShowMaterialModal(false);
+    fetchData();
   }
 
   return (
@@ -103,7 +102,7 @@ const MaterialList = () => {
     >
       <AddMaterial
         open={showMaterialModal}
-        onMaterialFinish={createMaterial}
+        onMaterialFinish={handleList}
         onCancel={() => setShowMaterialModal(false)}
       />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
@@ -118,7 +117,7 @@ const MaterialList = () => {
           type="primary"
           className="btn-customer__add "
         >
-          Thêm vật liệu
+          Thêm chất liệu
         </button>
         <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input
@@ -135,7 +134,7 @@ const MaterialList = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Tên vật liệu</th>
+              <th>Tên chất liệu</th>
               <th>Mô tả</th>
               <th>Trạng thái</th>
               <th>Actions</th>
