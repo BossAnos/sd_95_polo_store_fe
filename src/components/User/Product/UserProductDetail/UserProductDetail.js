@@ -4,7 +4,7 @@ import { toastService } from "../../../../service/common";
 import { productService } from "../../../../service/admin";
 import { LoadingPage } from "../../../common";
 import "./UserProductDetail.css";
-import { Carousel, Divider, Form, Input } from "antd";
+import { Carousel, Divider, Form, Input, notification } from "antd";
 import { cartService, userAuthService } from "../../../../service/user";
 import { useNavigateLoginPage } from "../../../../hook";
 
@@ -158,14 +158,12 @@ const UserProductDetail = () => {
       return;
     }
     if (quantity > productDetail.quantity) {
-      toastService.info("Please input quantity less than available");
+      toastService.info("Vui lòng nhập số lượng nhỏ hơn số lượng tồn");
       return;
     }
     const req = {
-   
-     productDetailId: productDetailId,
+      productDetailId: productDetailId,
       quantity: quantity,
-
     };
 
     try {
@@ -174,7 +172,10 @@ const UserProductDetail = () => {
       toastService.success("Thêm vào giỏ hàng thành công");
       console.log(res);
     } catch (error) {
-      toastService.error(error.apiMessage);
+      notification.error({
+        message: "Đã vượt quá số lượng tồn",
+        description: error.message, // Hoặc sử dụng mô tả lỗi khác tùy theo nhu cầu
+      });
     }
   };
 
@@ -288,45 +289,44 @@ const UserProductDetail = () => {
 
               <hr style={{ width: "400px" }}></hr>
               <br></br>
-              <p>Màu sắc :</p>
-              <ul className="color-variant">
-                {colors.map((color, index) => (
-                  <li
-                    onClick={() => setColor(color)}
-                    className={`color-item ${
-                      color.id === colorPicker?.id ? "active" : ""
-                    }`}
-                    style={{
-                      border: "1px solid lightgray",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      width: "30px",
-                      height: "30px",
-                      borderRadius: "50%",
-                    
-                      cursor: "pointer",
-                      width:"50px",
-                      height:"50px",
-                      border:"2px solid #c3bebd",
-                      backgroundColor: color.name,
-                      textDecoration:
-                        !isSizeAvailable(color.id, sizePicker?.id) ||
-                        !isColorAvailable(color.id, sizePicker?.id)
-                          ? "line-through"
-                          : "none",
-                      pointerEvents:
-                        !isSizeAvailable(color.id, sizePicker?.id) ||
-                        !isColorAvailable(color.id, sizePicker?.id)
-                          ? "none"
-                          : "auto",
-                    }}
-                    key={index}
-                  >
-                    {color.name}
-                  </li>
-                ))}
-              </ul>
+
+              <div
+                id="selectSize"
+                className="addeffect-section product-description border-product"
+              >
+                <p>Màu sắc :</p>
+                <div className="color-box">
+                  <ul className="color-variant">
+                    {colors.map((color, index) => (
+                      <li
+                        onClick={() => setColor(color)}
+                        className={`color-item ${
+                          color.id === colorPicker?.id ? "active" : ""
+                        }`}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "5px", // You can adjust the border radius as needed
+                          textDecoration:
+                            !isSizeAvailable(color.id, sizePicker?.id) ||
+                            !isColorAvailable(color.id, sizePicker?.id)
+                              ? "line-through"
+                              : "none",
+                          pointerEvents:
+                            !isSizeAvailable(color.id, sizePicker?.id) ||
+                            !isColorAvailable(color.id, sizePicker?.id)
+                              ? "none"
+                              : "auto",
+                          border: "2px solid #c3bebd",
+                        }}
+                        key={index}
+                      >
+                        {color.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
               <div
                 id="selectSize"
                 className="addeffect-section product-description border-product"
@@ -338,11 +338,12 @@ const UserProductDetail = () => {
                       <li
                         onClick={() => setSize(size)}
                         className={`size-item ${
-                          
                           size.id === sizePicker?.id ? "active" : ""
                         }`}
                         style={{
-                          
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "5px", // You can adjust the border radius as needed
                           textDecoration:
                             !isSizeAvailable(colorPicker?.id, size.id) ||
                             !isColorAvailable(colorPicker?.id, size.id)
@@ -358,10 +359,7 @@ const UserProductDetail = () => {
                             !isColorAvailable(colorPicker?.id, size.id)
                               ? "none"
                               : "auto",
-                              border:"2px solid #c3bebd",
-                              width:"50px",
-                      height:"50px",
-                           
+                          border: "2px solid #c3bebd",
                         }}
                         key={index}
                       >

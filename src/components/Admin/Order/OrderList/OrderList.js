@@ -121,6 +121,10 @@ const OrderList = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const [searchUsername, setSearchUsername] = useState("");
+  const [searchPhone, setSearchPhone] = useState("");
+  const [searchdAddress, setSearchAddress] = useState("");
+
   const handleOrderClick = (orderId) => {
     setSelectedOrderId(orderId);
     setModalOpen(true);
@@ -190,10 +194,30 @@ const OrderList = () => {
     }
   }
 
-  const filterOrder =
+  const filterOrders = () => {
+    return orders.filter((order) => {
+      const username =
+        !searchUsername ||
+        order.username.toLowerCase().includes(searchUsername.toLowerCase());
+      const phone =
+        !searchPhone ||
+        (order.phone &&
+          order.phone.toLowerCase().includes(searchPhone.toLowerCase()));
+      const address =
+        !searchdAddress ||
+        (order.address &&
+          order.address.toLowerCase().includes(searchdAddress.toLowerCase()));
+
+      return username && phone && address;
+    });
+  };
+
+  const filteredOrders =
     activeTab === "all"
-      ? orders
-      : orders.filter((item) => item.status === parseInt(activeTab, 10));
+      ? filterOrders()
+      : filterOrders().filter(
+          (item) => item.status === parseInt(activeTab, 10)
+        );
 
   const updateOrderStatusHandle = (order, status, note, shipCost) => {
     order.isUpdating = true;
@@ -253,24 +277,35 @@ const OrderList = () => {
           />
         ))}
       </Tabs>
-      <Form
-        layout="inline"
-        className="my-3"
-        // onFinish={onSearchHandle}
-        form={filterForm}
+      <div
+        style={{ display: "flex", alignItems: "center", marginLeft: "27px" }}
       >
-        <Form.Item name={"sodienthoai"}>
-          <Input placeholder={"Số điện thoại"} />
-        </Form.Item>
-        <Form.Item name={"ghichu"}>
-          <Input placeholder={"Ghi chú"} />
-        </Form.Item>
-        <Form.Item>
-          <Button htmlType="submit" type="primary">
-            Search
-          </Button>
-        </Form.Item>
-      </Form>
+        <div style={{ marginRight: "16px" }}>
+          <label>Tên khách hàng:</label>
+          <Input
+            placeholder="Search by product name..."
+            value={searchUsername}
+            onChange={(e) => setSearchUsername(e.target.value)}
+          />
+        </div>
+        <div style={{ marginRight: "16px" }}>
+          <label>Số điện thoại:</label>
+          <Input
+            placeholder="Search by category..."
+            value={searchPhone}
+            onChange={(e) => setSearchPhone(e.target.value)}
+          />
+        </div>
+        <div style={{ marginRight: "16px" }}>
+          <label>Địa chỉ :</label>
+          <Input
+            placeholder="Search by brand..."
+            value={searchdAddress}
+            onChange={(e) => setSearchAddress(e.target.value)}
+          />
+        </div>
+      </div>
+      <br></br>
 
       <table className="table">
         <thead style={{}}>
@@ -298,7 +333,7 @@ const OrderList = () => {
           </tr>
         </thead>
         <tbody>
-          {filterOrder
+          {filteredOrders
             .slice((page - 1) * LIMIT, (page - 1) * LIMIT + LIMIT)
             .map((order) => {
               const createDate = new Date(order.create_date);
@@ -541,7 +576,7 @@ const OrderList = () => {
 
       <Pagination
         defaultCurrent={1}
-        total={filterOrder.length}
+        total={filteredOrders.length}
         pageSize={LIMIT}
         onChange={onPageChange}
       />

@@ -77,14 +77,19 @@ const ColorList = () => {
 
   async function toggleStatus(id, currentStatus) {
     const newStatus = currentStatus === 1 ? 0 : 1;
-    await colorService.changeStatus(id, newStatus);
+    try {
+      // Make the request to change the status using the colorService
+      await colorService.changeStatus(id);
 
-    // Update the local state with the new status
-    setColor((prevColors) =>
-      prevColors.map((color) =>
-        color.id === id ? { ...color, status: newStatus } : color
-      )
-    );
+      // Update the local state with the new status
+      setColor((prevColors) =>
+        prevColors.map((color) =>
+          color.id === id ? { ...color, status: newStatus } : color
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling status:", error);
+    }
   }
 
   async function createColor(newColor) {

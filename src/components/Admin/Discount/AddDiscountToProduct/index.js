@@ -1,333 +1,123 @@
+// DiscountManagement.js
 import React, { useEffect, useState } from "react";
-import {
-  brandService,
-  categoryService,
-  materialService,
-  productService,
-} from "../../../../service/admin";
-import { Image, Select, Checkbox, Button } from "antd";
-import { toastService } from "../../../../service/common";
-import { selectSearchDataUtil } from "../../../../utils";
-import { LoadingBox, LoadingPage } from "../../../common";
+import { discountService } from "../../../../service/admin";
+import { Switch } from "antd";
+import moment from "moment";
+import AddDiscountModal from "../AddDiscount/AddDiscountModal";
 
-const DiscountList = () => {
-  const [products, setProducts] = useState([]);
-  const [categoryMap, setCategoryMap] = useState({});
-  const [brandMap, setBrandMap] = useState({});
-  const [materialMap, setMaterialMap] = useState({});
-  const [page, setPage] = useState(1);
-  const [categoryOptions, setCategoryOptions] = useState([]);
-  const [brandOptions, setBrandOptions] = useState([]);
-  const [materialOptions, setMaterialOptions] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [selectedMaterial, setSelectedMaterial] = useState(null);
-  const [LIMIT] = useState(10);
-  const [activeTab, setActiveTab] = useState("all");
-  const [keyword, setKeyword] = useState("");
+const DiscountManagement = () => {
+  const [discounts, setDiscounts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [startIndex, setStartIndex] = useState(0);
-  const [selectedProducts, setSelectedProducts] = useState([]); // Trạng thái để lưu trữ sản phẩm đã chọn
-  const [searchCriteria, setSearchCriteria] = useState({
-    keyword: "",
-    selectedCategory: null,
-    selectedBrand: null,
-    selectedMaterial: null,
-  });
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
-        const products = await getProducts(searchCriteria);
-        const categoryRes = await categoryService.getAllCategory();
-        const brandRes = await brandService.getAllBrands();
-        const materialRes = await materialService.getAllMaterial();
-        const categoryMap = categoryRes.data.reduce((acrr, pre) => {
-          acrr = {
-            ...acrr,
-            [pre.id]: pre.name,
-          };
-          return acrr;
-        }, {});
-        const brandMap = brandRes.data.reduce((acrr, pre) => {
-          acrr = {
-            ...acrr,
-            [pre.id]: pre.name,
-          };
-          return acrr;
-        }, {});
-        const materialMap = materialRes.data.reduce((acrr, pre) => {
-          acrr = {
-            ...acrr,
-            [pre.id]: pre.name,
-          };
-          return acrr;
-        }, {});
-        setCategoryOptions(
-          selectSearchDataUtil.transformSearchSelectData(
-            categoryRes.data,
-            "id",
-            "name"
-          )
-        );
-        setBrandOptions(
-          selectSearchDataUtil.transformSearchSelectData(
-            brandRes.data,
-            "id",
-            "name"
-          )
-        );
-        setMaterialOptions(
-          selectSearchDataUtil.transformSearchSelectData(
-            materialRes.data,
-            "id",
-            "name"
-          )
-        );
-
-        setProducts(products);
-        setCategoryMap(categoryMap);
-        setBrandMap(brandMap);
-        setMaterialMap(materialMap);
+        const response = await discountService.getDiscount({});
+        setDiscounts(response.data);
         setLoading(false);
-      } catch (e) {
-        toastService.error(e.apiMessage);
+      } catch (error) {
+        console.error("Error fetching discounts:", error);
       }
-    })();
-  }, [searchCriteria]);
+    };
 
-  async function getProducts(form) {
-    setLoading(true);
-    const { data } = await productService.getAllProducts({
-      ...form,
-      name: keyword,
-    });
-    setLoading(false);
-    return data;
-  }
+    fetchData();
+  }, []);
 
-  const handleCheckboxChange = (productId) => {
-    // Tìm sản phẩm trong danh sách sản phẩm đã chọn
-    const selectedProductIndex = selectedProducts.findIndex(
-      (p) => p === productId
-    );
+  const formatDateTime = (dateTime) => {
+    return moment(dateTime).format("DD/MM/YYYY HH:mm:ss");
+  };
 
-    if (selectedProductIndex > -1) {
-      // Nếu sản phẩm đã được chọn trước đó, hãy loại bỏ nó khỏi danh sách đã chọn
-      setSelectedProducts((prevSelectedProducts) =>
-        prevSelectedProducts.filter((p) => p !== productId)
+  const handleSwitchChange = async (discountId, isChecked) => {
+    try {
+      // Gọi API hoặc thực hiện các hành động cần thiết để cập nhật status trên server
+      // await discountService.updateDiscountStatus(discountId, isChecked ? 1 : 0);
+
+      // Cập nhật trạng thái ngay trong local state (giả sử API thành công)
+      const updatedDiscounts = discounts.map((discount) =>
+        discount.id === discountId
+          ? { ...discount, status: isChecked ? 1 : 0 }
+          : discount
       );
-    } else {
-      // Nếu sản phẩm chưa được chọn trước đó, hãy thêm nó vào danh sách đã chọn
-      setSelectedProducts((prevSelectedProducts) => [
-        ...prevSelectedProducts,
-        productId,
-      ]);
+      setDiscounts(updatedDiscounts);
+    } catch (error) {
+      console.error("Error updating discount status:", error);
     }
   };
 
-  const handleCheckboxAllChange = () => {
-    if (selectedProducts.length === products.length) {
-      // Nếu tất cả sản phẩm đã được chọn, hãy loại bỏ tất cả khỏi danh sách đã chọn
-      setSelectedProducts([]);
-    } else {
-      // Nếu không có sản phẩm nào được chọn hoặc chỉ có một số sản phẩm được chọn, hãy thêm tất cả vào danh sách đã chọn
-      setSelectedProducts(products.map((product) => product.id));
+  const handleAddDiscount = async (formData) => {
+    // Gọi API hoặc thực hiện các hành động cần thiết để thêm khuyến mại
+    // Sau đó cập nhật local state và đóng modal
+    try {
+      // const result = await discountService.addDiscount(formData);
+      // const newDiscount = result.data;
+      // setDiscounts([...discounts, newDiscount]);
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error("Error adding discount:", error);
     }
-  };
-
-  const handleSearch = () => {
-    setSearchCriteria({
-      keyword,
-      selectedCategory,
-      selectedBrand,
-      selectedMaterial,
-    });
   };
 
   return (
-    <>
-      {loading ? (
-        <LoadingPage />
-      ) : (
-        <>
-          <div className="row mt-3">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col-4">
-                      <Select
-                        placeholder="Loại khuyến mại"
-                        options={[
-                          { value: "percentage", label: "Phần trăm giảm" },
-                          // Add other discount types if needed
-                        ]}
-                        value={searchCriteria.discountType}
-                        onChange={(value) =>
-                          setSearchCriteria({
-                            ...searchCriteria,
-                            discountType: value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="col-3">
-                      <input
-                        type="date"
-                        className="form-control"
-                        placeholder="Ngày bắt đầu"
-                        value={searchCriteria.startDate}
-                        onChange={(e) =>
-                          setSearchCriteria({
-                            ...searchCriteria,
-                            startDate: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="col-3">
-                      <input
-                        type="date"
-                        className="form-control"
-                        placeholder="Ngày kết thúc"
-                        value={searchCriteria.endDate}
-                        onChange={(e) =>
-                          setSearchCriteria({
-                            ...searchCriteria,
-                            endDate: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="col-2">
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Phần trăm giảm"
-                        value={searchCriteria.discountPercentage}
-                        onChange={(e) =>
-                          setSearchCriteria({
-                            ...searchCriteria,
-                            discountPercentage: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-body">
-                  <div className="mb-2">
-                    <div className="row">
-                      <div className="col-12 d-flex justify-content-between">
-                        <div className="row">
-                          <div className="col-4">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Tìm kiếm theo tên"
-                              value={keyword}
-                              onChange={(e) => setKeyword(e.target.value)}
-                            />
-                          </div>
-                          <div className="col-3">
-                            <Select
-                              placeholder="Danh mục"
-                              options={categoryOptions}
-                              value={selectedCategory}
-                              onChange={(value) => setSelectedCategory(value)}
-                            />
-                          </div>
-                          <div className="col-3">
-                            <Select
-                              placeholder="Nhãn hiệu"
-                              options={brandOptions}
-                              value={selectedBrand}
-                              onChange={(value) => setSelectedBrand(value)}
-                            />
-                          </div>
-                          <div className="col-2">
-                            <Select
-                              placeholder="Chất liệu"
-                              options={materialOptions}
-                              value={selectedMaterial}
-                              onChange={(value) => setSelectedMaterial(value)}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-2">
-                    <div className="row">
-                      <div className="col-12">
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th style={{ width: "10px" }}>
-                                <div className="form-check">
-                                  <Checkbox
-                                    checked={
-                                      selectedProducts.length ===
-                                      products.length
-                                    }
-                                    onChange={handleCheckboxAllChange}
-                                  />
-                                </div>
-                              </th>
-                              <th>STT</th>
-                              <th>Tên sản phẩm</th>
-                              <th>Hình ảnh</th>
-                              <th>Thao tác</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {products.map((product, index) => (
-                              <tr key={product.id}>
-                                <td>
-                                  <div className="form-check">
-                                    <Checkbox
-                                      checked={selectedProducts.includes(
-                                        product.id
-                                      )}
-                                      onChange={() =>
-                                        handleCheckboxChange(product.id)
-                                      }
-                                    />
-                                  </div>
-                                </td>
-                                <td>{index + 1}</td>
-                                <td>{product.name}</td>
-                                <td>
-                                  <Image
-                                    src={product.image}
-                                    alt={product.name}
-                                    style={{ width: "50px", height: "50px" }}
-                                  />
-                                </td>
-                                <td>{/* Additional actions if needed */}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Add the search form here */}
-        </>
-      )}
-    </>
+    <div>
+      <button type="primary" onClick={() => setIsModalVisible(true)}>
+        Thêm khuyến mại
+      </button>
+      <h1>Quản lý khuyến mại</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên khuyến mại</th>
+            <th>Giảm giá</th>
+            <th>Mô tả</th>
+            <th>Bắt đầu</th>
+            <th>Kết thúc</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          {discounts.map((discount, index) => {
+            const isChecked = discount.status === 1;
+
+            return (
+              discount.id !== 1 && (
+                <tr key={discount.id}>
+                  <td>{index + 1}</td>
+                  <td>{discount.name}</td>
+                  <td>{discount.discount}</td>
+                  <td>{discount.description}</td>
+                  <td>{formatDateTime(discount.startDate)}</td>
+                  <td>{formatDateTime(discount.endDate)}</td>
+                  <td>
+                    <Switch
+                      checked={isChecked}
+                      onChange={(checked) =>
+                        handleSwitchChange(discount.id, checked)
+                      }
+                      style={{
+                        backgroundColor: isChecked ? "green" : "red", // Màu nền
+                        borderColor: isChecked ? "green" : "red", // Màu viền
+                        color: isChecked ? "white" : "black",
+                        width: "30px",
+                      }}
+                    />
+                  </td>
+                </tr>
+              )
+            );
+          })}
+        </tbody>
+      </table>
+      <AddDiscountModal
+        visible={isModalVisible}
+        onOk={handleAddDiscount}
+        onCancel={() => {
+          setIsModalVisible(false);
+        }}
+      />
+    </div>
   );
 };
 
-export { DiscountList };
+export { DiscountManagement };
