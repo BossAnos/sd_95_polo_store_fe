@@ -128,12 +128,14 @@ const OrderDetailModal = ({ id, onClose }) => {
             <div>Số điện thoại: {order.phone}</div>
             <div>
               Ngày đặt hàng:{" "}
-              {order.createAt && format(new Date(order.createAt), "dd/MM/yyyy")}
+              {order.createDate &&
+                format(new Date(order.createDate), "dd/MM/yyyy")}
             </div>
             <div>
               Tổng cộng: {order.totalPrice && order.totalPrice.toLocaleString()}{" "}
               VNĐ
             </div>
+            {order.note && <div>Ghi chú: {order.note}</div>}
           </div>
         </div>
       </div>

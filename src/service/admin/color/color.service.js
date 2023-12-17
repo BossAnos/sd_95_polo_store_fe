@@ -18,10 +18,7 @@ const deleteColor = async (id) => {
 };
 
 export const createColor = async (form) => {
-  return await adminClient.post(
-    "http://localhost:8080/admin/color/add",
-    form
-  );
+  return await adminClient.post("http://localhost:8080/admin/color/add", form);
 };
 
 const changeStatus = async (id) => {
@@ -30,4 +27,4 @@ const changeStatus = async (id) => {
   );
 };
 
-export { getAllColors, deleteColor, getOne ,changeStatus};
+export { getAllColors, deleteColor, getOne, changeStatus };

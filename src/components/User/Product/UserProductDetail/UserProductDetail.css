@@ -177,6 +177,7 @@ del {
 .color-variant {
   display: flex;
   gap: 10px;
+  text-align: center;
 }
 
 .product-right .active {
@@ -209,16 +210,20 @@ del {
   color: black;
   text-decoration: line-through;
 }
-.btn-solid{
-width: 180px;
-
+.btn-solid {
+  width: 180px;
 }
-.size-item{
+.size-item {
   padding-top: 12px;
 }
-.size-box{
-margin-left: 3px;
-
+.size-box {
+  margin-left: 3px;
 }
 
+.color-item {
+  padding-top: 12px;
+}
 
+.color-box {
+  margin-left: 3px;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { discountService, productService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
-import { Tabs, Input, Checkbox } from "antd";
+import { Tabs, Input, Checkbox, Switch } from "antd";
 
 const { TabPane } = Tabs;
 
@@ -105,11 +105,24 @@ const ProductPage = () => {
     });
   };
 
-  const handleStatusButton = (productId) => {
-    // Implement the logic for handling the status button click
-    // You can toggle the status or perform any other action
-  };
+  const handleStatusButton = async (productId) => {
+    try {
+      const updatedProducts = products.map((product) =>
+        product.id === productId
+          ? {
+              ...product,
+              status: product.status === 3 ? 1 : 3,
+            }
+          : product
+      );
+      setProducts(updatedProducts);
 
+      // Gọi API hoặc thực hiện các hành động cần thiết để cập nhật status trên server
+      // await productService.updateProductStatus(productId, updatedStatus);
+    } catch (error) {
+      toastService.error(error.apiMessage);
+    }
+  };
   const filteredProducts = filterProducts().filter(
     (product) => product.status === selectedStatus
   );
@@ -236,7 +249,7 @@ const ProductPage = () => {
                       <th>Chất liệu</th>
                       <th>Thương hiệu</th>
                       <th>Loại áo</th>
-                      <th>Description</th>
+
                       {selectedStatus === 3 && <th>On/Off</th>}
                     </tr>
                   </thead>
@@ -255,14 +268,17 @@ const ProductPage = () => {
                         <td>{product.nameMaterial}</td>
                         <td>{product.nameBrand}</td>
                         <td>{product.nameCategory}</td>
-                        <td>{product.description}</td>
+
                         {selectedStatus === 3 && (
                           <td>
-                            <button
-                              onClick={() => handleStatusButton(product.id)}
-                            >
-                              On/Off
-                            </button>
+                            <Switch
+                              style={{
+                                backgroundColor: "#52c41a",
+                                width: "30px",
+                              }}
+                              checked={product.status === 3}
+                              onChange={() => handleStatusButton(product.id)}
+                            />
                           </td>
                         )}
                       </tr>

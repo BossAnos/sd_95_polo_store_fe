@@ -44,7 +44,7 @@ import { UpdateCategory } from "../components/Admin/Categorie/UpdateCategory/Upd
 import { UpdateSize } from "../components/Admin/Size/UpdateSize/UpdateSize";
 import { UpdateBrand } from "../components/Admin/Brand/UpdateBrand/UpdateBrand";
 import { AddCustomer } from "../components/Admin/Customer/AddCustomer/AddCustomer";
-import { DiscountList } from "../components/Admin/Discount/AddDiscountToProduct";
+import { DiscountManagement } from "../components/Admin/Discount/AddDiscountToProduct";
 import { AdminList } from "../components/Admin/AdminList/Admin";
 import { OrderDetailGetOne } from "../components/Admin/Order/OrderDetail/OrderDetail";
 import { ProductPage } from "../components/Admin/Discount/AddDiscountToProduct/test";
@@ -167,7 +167,7 @@ const adminRoutes = [
   }),
   getAdminRoute({
     path: "/admin/discount",
-    component: DiscountList,
+    component: DiscountManagement,
   }),
   getAdminRoute({
     path: "/admin/manger",

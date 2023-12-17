@@ -37,7 +37,7 @@ const tabs = [
   {
     key: "1",
     label: "Đang hoạt động",
-    status: 1,
+    status: [1, 3],
   },
   {
     key: "0",
@@ -138,12 +138,19 @@ const ProductList = () => {
 
   async function getProducts(form) {
     setLoading(true);
-    const { data } = await productService.getAllProducts({
-      ...form,
-      name: keyword, // Bao gồm tham số từ khóa
-    });
-    setLoading(false);
-    return data;
+    try {
+      const { data } = await productService.getAllProducts({
+        ...form,
+        name: keyword,
+      });
+      console.log("API Response:", data); // In ra response của API
+      setLoading(false);
+      return data;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setLoading(false);
+      throw error;
+    }
   }
 
   const handleTabChange = (key) => {
@@ -153,7 +160,15 @@ const ProductList = () => {
   const filteredProducts =
     activeTab === "all"
       ? products
-      : products.filter((item) => item.status === parseInt(activeTab, 10));
+      : products.filter((item) => {
+          if (activeTab === "1") {
+            // Hiển thị sản phẩm có status là 1 hoặc 3
+            return [1, 3].includes(item.status);
+          } else {
+            // Hiển thị sản phẩm có status bằng giá trị của activeTab
+            return item.status === parseInt(activeTab, 10);
+          }
+        });
 
   const handleDelete = async (productId) => {
     try {
@@ -257,7 +272,7 @@ const ProductList = () => {
             <tr>
               <th>STT</th>
               <th>Tên</th>
-              <th >Ảnh</th>
+              <th>Ảnh</th>
               <th>Danh mục</th>
               <th>Thương hiệu</th>
               <th>Chất Liệu</th>
@@ -272,12 +287,11 @@ const ProductList = () => {
                   <tr key={p.id}>
                     <td>{startIndex + index + 1}</td>
 
-                    <td style={{ whiteSpace:"nowrap"}}>{p.name}</td>
+                    <td style={{ whiteSpace: "nowrap" }}>{p.name}</td>
                     <td
                       style={{
                         display: "flex",
                         justifyContent: "center",
-                        
                       }}
                     >
                       <Image src={p.image} width={80} height={100}></Image>
