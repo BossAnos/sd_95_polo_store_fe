@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { categoryService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs } from "antd";
+import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
-import "../admin-product.css"
+import { AddCategory } from "./AddCategorie/AddCategori";
+import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
+import "../admin-product.css";
 
 const { TabPane } = Tabs;
 
 const tabs = [
-
+  {
+    key: "all",
+    label: "Tất cả",
+    status: null,
+  },
   {
     key: "1",
     label: "Đang hoạt động",
     status: 1,
   },
-
   {
     key: "0",
     label: "Ngừng hoạt động",
@@ -22,32 +27,71 @@ const tabs = [
   },
 ];
 
-const handleDelete = async (id) => {
-  const body = await categoryService.changeStatus(id);
-
-  toastService.info("Thay đổi trạng thái thành công ");
-};
-
-
 const CategoryList = () => {
+  const [searchProductName, setSearchProductName] = useState("");
   const [category, setCategory] = useState([]);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("all");
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       const body = await categoryService.getAllCategory();
-      console.log("All Category:", body.data); // Add this line to check the data received
+      console.log("All Category:", body.data);
       setCategory(body.data);
-    })();
+    };
+
+    fetchData();
   }, []);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
   };
 
-  const filteredCategoryys = category.filter(
-    (item) => item.status === parseInt(activeTab, 10)
-  );
+  const filteredCategorys = category.filter((item) => {
+    const statusMatch =
+      activeTab === "all" || item.status === parseInt(activeTab, 10);
+
+    const nameMatch =
+      item.name &&
+      item.name.toLowerCase().includes(searchProductName?.toLowerCase() || "");
+
+    const descriptionMatch =
+      item.description &&
+      item.description
+        .toLowerCase()
+        .includes(searchProductName?.toLowerCase() || "");
+
+    const indexMatch = (item.index + 1)
+      .toString()
+      .includes(searchProductName?.toString() || "");
+
+    return statusMatch && (nameMatch || descriptionMatch || indexMatch);
+  });
+
+  const handleDelete = async (id) => {
+    const body = await categoryService.changeStatus(id);
+
+    toastService.info("Thay đổi trạng thái thành công ");
+  };
+
+  async function toggleStatus(id, currentStatus) {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    await categoryService.changeStatus(id, newStatus);
+
+    // Update the local state with the new status
+    setCategory((prevCategorys) =>
+      prevCategorys.map((category) =>
+        category.id === id ? { ...category, status: newStatus } : category
+      )
+    );
+  }
+
+  async function createCategory(newCategory) {
+    const createdBCategory = await categoryService.createCategory(newCategory);
+    setCategory((prevCategorys) => [...prevCategorys, createdBCategory]);
+    setShowCategoryModal(false);
+  }
 
   return (
     <div
@@ -57,39 +101,67 @@ const CategoryList = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <AddCategory
+        open={showCategoryModal}
+        onCategoryFinish={createCategory}
+        onCancel={() => setShowCategoryModal(false)}
+      />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.key} />
         ))}
       </Tabs>
       <br />
-      <Link to={"/admin/category/add"}>
-        <Button type="primary" className="btn-customer__add ">Thêm loại áo</Button>
-      </Link>
+      <div style={{ display: "flex", marginLeft: "0px" }}>
+        <button
+          onClick={() => setShowCategoryModal(true)}
+          type="primary"
+          className="btn-customer__add "
+        >
+          Thêm loại áo 
+        </button>
+        <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
+        <Input
+          style={{ width: "300px", marginLeft: "30px" }}
+          placeholder="Search by product name..."
+          value={searchProductName}
+          onChange={(e) => setSearchProductName(e.target.value)}
+        />
+      </div>
       <br />
       <br />
       <div className="table__main">
-      <table>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Tên loại áo</th>
-            <th>Mô tả</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCategoryys.length === 0 ? (
+        <table>
+          <thead>
             <tr>
-              <td colSpan="4">Không có giá trị.</td>
+              <th>STT</th>
+              <th>Tên thương hiệuc</th>
+              <th>Mô tả</th>
+              <th>Trạng thái</th>
+              <th>Actions</th>
             </tr>
-          ) : (
-            filteredCategoryys.map((category, index) => {
-              return (
+          </thead>
+          <tbody>
+            {filteredCategorys.length === 0 ? (
+              <tr>
+                <td colSpan="5">Không có giá trị.</td>
+              </tr>
+            ) : (
+              filteredCategorys.map((category, index) => (
                 <tr key={category.id}>
-                  <td style={{paddingLeft:"60px"}}>{index + 1}</td>
+                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
                   <td>{category.name}</td>
                   <td>{category.description}</td>
+                  <td>
+                    <Switch
+                      checked={category.status === 1}
+                      onChange={() => toggleStatus(category.id, category.status)}
+                      style={{
+                        backgroundColor: category.status === 1 ? "green" : "red",
+                        width: "30px",
+                      }}
+                    />
+                  </td>
                   <td>
                     <div
                       className="actions"
@@ -102,30 +174,17 @@ const CategoryList = () => {
                           </Button>
                         </Link>
                       </div>
-                      <div className="action">
-                      <Popconfirm
-                            title="Đổi trạng thái"
-                            description="Bạn có chắc chắn muốn thay đổi trạng thái?"
-                            onConfirm={() => handleDelete(category.id)}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <button className="btn">
-                              <i className="fa-sharp fa-solid fa-trash"></i>
-                            </button>
-                          </Popconfirm>
-                      </div>
                     </div>
                   </td>
                 </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-};                                                   
+};
 
 export { CategoryList };
+ 

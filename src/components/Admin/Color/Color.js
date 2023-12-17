@@ -169,7 +169,7 @@ const ColorList = () => {
                     >
                       <div className="action">
                         <Link to={`/admin/color/update/${color.id}`}>
-                          <Button type="primary" className="btn">
+                          <Button type="primary" className="btn"   onClick={() => setShowColorModal(true)}>
                             <i className="fa-regular fa-pen-to-square"></i>
                           </Button>
                         </Link>

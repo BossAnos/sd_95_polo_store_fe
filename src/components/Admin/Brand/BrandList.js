@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { brandService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs } from "antd";
+import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
+import { AddBrand } from "./AddBrand/AddBrand";
+import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
@@ -9,11 +11,15 @@ const { TabPane } = Tabs;
 
 const tabs = [
   {
+    key: "all",
+    label: "Tất cả",
+    status: null,
+  },
+  {
     key: "1",
     label: "Đang hoạt động",
     status: 1,
   },
-
   {
     key: "0",
     label: "Ngừng hoạt động",
@@ -22,16 +28,46 @@ const tabs = [
 ];
 
 const BrandList = () => {
+  const [searchProductName, setSearchProductName] = useState("");
   const [brand, setBrand] = useState([]);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("all");
+  const [showBrandModal, setShowBrandModal] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       const body = await brandService.getAllBrands();
-      console.log("All Brands:", body.data); // Add this line to check the data received
+      console.log("All Brand:", body.data);
       setBrand(body.data);
-    })();
+    };
+
+    fetchData();
   }, []);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
+
+  const filteredBrands = brand.filter((item) => {
+    const statusMatch =
+      activeTab === "all" || item.status === parseInt(activeTab, 10);
+
+    const nameMatch =
+      item.name &&
+      item.name.toLowerCase().includes(searchProductName?.toLowerCase() || "");
+
+    const descriptionMatch =
+      item.description &&
+      item.description
+        .toLowerCase()
+        .includes(searchProductName?.toLowerCase() || "");
+
+    const indexMatch = (item.index + 1)
+      .toString()
+      .includes(searchProductName?.toString() || "");
+
+    return statusMatch && (nameMatch || descriptionMatch || indexMatch);
+  });
 
   const handleDelete = async (id) => {
     const body = await brandService.changeStatus(id);
@@ -39,13 +75,23 @@ const BrandList = () => {
     toastService.info("Thay đổi trạng thái thành công ");
   };
 
-  const handleTabChange = (key) => {
-    setActiveTab(key);
-  };
+  async function toggleStatus(id, currentStatus) {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    await brandService.changeStatus(id, newStatus);
 
-  const filteredBrands = brand.filter(
-    (item) => item.status === parseInt(activeTab, 10)
-  );
+    // Update the local state with the new status
+    setBrand((prevBrands) =>
+      prevBrands.map((brand) =>
+        brand.id === id ? { ...brand, status: newStatus } : brand
+      )
+    );
+  }
+
+  async function createBrand(newBrand) {
+    const createdBrand = await brandService.createBrands(newBrand);
+    setBrand((prevBrands) => [...prevBrands, createdBrand]);
+    setShowBrandModal(false);
+  }
 
   return (
     <div
@@ -55,17 +101,33 @@ const BrandList = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <AddBrand
+        open={showBrandModal}
+        onBrandFinish={createBrand}
+        onCancel={() => setShowBrandModal(false)}
+      />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.key} />
         ))}
       </Tabs>
       <br />
-      <Link to={"/admin/brand/add"}>
-        <Button type="primary" className="btn-customer__add ">
+      <div style={{ display: "flex", marginLeft: "0px" }}>
+        <button
+          onClick={() => setShowBrandModal(true)}
+          type="primary"
+          className="btn-customer__add "
+        >
           Thêm thương hiệu
-        </Button>
-      </Link>
+        </button>
+        <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
+        <Input
+          style={{ width: "300px", marginLeft: "30px" }}
+          placeholder="Search by product name..."
+          value={searchProductName}
+          onChange={(e) => setSearchProductName(e.target.value)}
+        />
+      </div>
       <br />
       <br />
       <div className="table__main">
@@ -73,53 +135,49 @@ const BrandList = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Tên thương hiệu</th>
+              <th>Tên thương hiệuc</th>
               <th>Mô tả</th>
+              <th>Trạng thái</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredBrands.length === 0 ? (
               <tr>
-                <td colSpan="4">Không có giá trị.</td>
+                <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredBrands.map((brand, index) => {
-                return (
-                  <tr key={brand.id}>
-                    <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
-                    <td>{brand.name}</td>
-                    <td>{brand.description}</td>
-                    <td>
-                      <div
-                        className="actions"
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <div className="action">
-                          <Link to={`/admin/brand/update/${brand.id}`}>
-                            <Button type="primary" className="btn">
-                              <i className="fa-regular fa-pen-to-square"></i>
-                            </Button>
-                          </Link>
-                        </div>
-                        <div className="action">
-                          <Popconfirm
-                            title="Đổi trạng thái"
-                            description="Bạn có chắc chắn muốn thay đổi trạng thái?"
-                            onConfirm={() => handleDelete(brand.id)}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <button className="btn">
-                              <i className="fa-sharp fa-solid fa-trash"></i>
-                            </button>
-                          </Popconfirm>
-                        </div>
+              filteredBrands.map((brand, index) => (
+                <tr key={brand.id}>
+                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
+                  <td>{brand.name}</td>
+                  <td>{brand.description}</td>
+                  <td>
+                    <Switch
+                      checked={brand.status === 1}
+                      onChange={() => toggleStatus(brand.id, brand.status)}
+                      style={{
+                        backgroundColor: brand.status === 1 ? "green" : "red",
+                        width: "30px",
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <div
+                      className="actions"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <div className="action">
+                        <Link to={`/admin/brand/update/${brand.id}`}>
+                          <Button type="primary" className="btn">
+                            <i className="fa-regular fa-pen-to-square"></i>
+                          </Button>
+                        </Link>
                       </div>
-                    </td>
-                  </tr>
-                );
-              })
+                    </div>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
@@ -129,3 +187,4 @@ const BrandList = () => {
 };
 
 export { BrandList };
+ 

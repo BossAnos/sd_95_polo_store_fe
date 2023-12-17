@@ -44,7 +44,8 @@
     "tailwind-merge": "^2.0.0",
     "theme-change": "^2.5.0",
     "util": "^0.12.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xregexp": "^5.1.1"
   },
   "scripts": {
     "start": "react-app-rewired start",

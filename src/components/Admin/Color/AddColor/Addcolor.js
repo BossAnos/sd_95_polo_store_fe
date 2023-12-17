@@ -2,12 +2,13 @@ import { Button, Form, Input, Modal } from "antd";
 import { colorService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
+import XRegExp from "xregexp";
 const AddColor = ({ onColorFinish, open, onCancel }) => {
   const navigate = useNavigate();
   const [colorForm] = Form.useForm();
 
   const validateInput = (rule, value, callback) => {
-    const regex = /^[a-zA-Z0-9\s]+$/;
+    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
     const maxLength = 50;
 
     if (value && value.length > maxLength) {
