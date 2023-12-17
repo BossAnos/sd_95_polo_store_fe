@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { colorService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form, Input } from "antd";
+import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddColor } from "./AddColor/Addcolor";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,11 +11,15 @@ const { TabPane } = Tabs;
 
 const tabs = [
   {
+    key: "all",
+    label: "Tất cả",
+    status: null,
+  },
+  {
     key: "1",
     label: "Đang hoạt động",
     status: 1,
   },
-
   {
     key: "0",
     label: "Ngừng hoạt động",
@@ -26,35 +30,62 @@ const tabs = [
 const ColorList = () => {
   const [searchProductName, setSearchProductName] = useState("");
   const [color, setColor] = useState([]);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("all");
   const [showColorModal, setShowColorModal] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       const body = await colorService.getAllColors();
       console.log("All Color:", body.data);
       setColor(body.data);
-    })();
+    };
+
+    fetchData();
   }, []);
- 
+
   const handleTabChange = (key) => {
     setActiveTab(key);
   };
 
   const filteredColors = color.filter((item) => {
-    const statusMatch = item.status === parseInt(activeTab, 10);
-    const nameMatch = item.name.toLowerCase().includes(searchProductName.toLowerCase());
-    const descriptionMatch = item.description.toLowerCase().includes(searchProductName.toLowerCase());
-    const indexMatch = (item.index + 1).toString().includes(searchProductName);
-  
+    const statusMatch =
+      activeTab === "all" || item.status === parseInt(activeTab, 10);
+
+    const nameMatch =
+      item.name &&
+      item.name.toLowerCase().includes(searchProductName?.toLowerCase() || "");
+
+    const descriptionMatch =
+      item.description &&
+      item.description
+        .toLowerCase()
+        .includes(searchProductName?.toLowerCase() || "");
+
+    const indexMatch = (item.index + 1)
+      .toString()
+      .includes(searchProductName?.toString() || "");
+
     return statusMatch && (nameMatch || descriptionMatch || indexMatch);
   });
+
   const handleDelete = async (id) => {
     const body = await colorService.changeStatus(id);
 
     toastService.info("Thay đổi trạng thái thành công ");
   };
+
+  async function toggleStatus(id, currentStatus) {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    await colorService.changeStatus(id, newStatus);
+
+    // Update the local state with the new status
+    setColor((prevColors) =>
+      prevColors.map((color) =>
+        color.id === id ? { ...color, status: newStatus } : color
+      )
+    );
+  }
 
   async function createColor(newColor) {
     const createdColor = await colorService.createColor(newColor);
@@ -81,24 +112,21 @@ const ColorList = () => {
         ))}
       </Tabs>
       <br />
-      <div style={{ display:"flex",marginLeft:"0px"}}>
-      <button
-        onClick={() => setShowColorModal(true)}
-        type="primary"
-        className="btn-customer__add "
-      >
-        Thêm màu sắc
-      </button>
-        <p style={{fontWeight:"bolder",fontSize:"20px"}}>Tìm kiếm:</p>
+      <div style={{ display: "flex", marginLeft: "0px" }}>
+        <button
+          onClick={() => setShowColorModal(true)}
+          type="primary"
+          className="btn-customer__add "
+        >
+          Thêm màu sắc
+        </button>
+        <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input
-        style={{width:"300px",marginLeft:"30px"}}
+          style={{ width: "300px", marginLeft: "30px" }}
           placeholder="Search by product name..."
           value={searchProductName}
           onChange={(e) => setSearchProductName(e.target.value)}
         />
-   
-    
- 
       </div>
       <br />
       <br />
@@ -109,51 +137,47 @@ const ColorList = () => {
               <th>STT</th>
               <th>Tên màu sắc</th>
               <th>Mô tả</th>
+              <th>Trạng thái</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredColors.length === 0 ? (
               <tr>
-                <td colSpan="4">Không có giá trị.</td>
+                <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredColors.map((color, index) => {
-                return (
-                  <tr key={color.id}>
-                    <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
-                    <td>{color.name}</td>
-                    <td>{color.description}</td>
-                    <td>
-                      <div
-                        className="actions"
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <div className="action">
-                          <Link to={`/admin/color/update/${color.id}`}>
-                            <Button type="primary" className="btn">
-                              <i className="fa-regular fa-pen-to-square"></i>
-                            </Button>
-                          </Link>
-                        </div>
-                        <div className="action">
-                          <Popconfirm
-                            title="Đổi trạng thái"
-                            description="Bạn có chắc chắn muốn thay đổi trạng thái?"
-                            onConfirm={() => handleDelete(color.id)}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <button className="btn">
-                              <i className="fa-sharp fa-solid fa-trash"></i>
-                            </button>
-                          </Popconfirm>
-                        </div>
+              filteredColors.map((color, index) => (
+                <tr key={color.id}>
+                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
+                  <td>{color.name}</td>
+                  <td>{color.description}</td>
+                  <td>
+                    <Switch
+                      checked={color.status === 1}
+                      onChange={() => toggleStatus(color.id, color.status)}
+                      style={{
+                        backgroundColor: color.status === 1 ? "green" : "red",
+                        width: "30px",
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <div
+                      className="actions"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <div className="action">
+                        <Link to={`/admin/color/update/${color.id}`}>
+                          <Button type="primary" className="btn">
+                            <i className="fa-regular fa-pen-to-square"></i>
+                          </Button>
+                        </Link>
                       </div>
-                    </td>
-                  </tr>
-                );
-              })
+                    </div>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
