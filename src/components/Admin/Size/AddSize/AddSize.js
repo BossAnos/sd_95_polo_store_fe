@@ -1,14 +1,32 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { sizeService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddSize = () => {
+import XRegExp from "xregexp";
+const AddSize = ({ onSizeFinish, open, onCancel }) => {
   const navigate = useNavigate();
+  const [sizeForm] = Form.useForm();
+
+  const validateInput = (rule, value, callback) => {
+    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const maxLength = 50;
+
+    if (value && value.length > maxLength) {
+      callback(`Không vượt quá ${maxLength} kí tự`);
+    } else if (value && !regex.test(value)) {
+      callback("Không chứa ký tự đặc biệt");
+    } else {
+      callback();
+    }
+  };
+
   const addSizelHandle = async (form) => {
     try {
-      sizeService.createSize(form);
+      const res = sizeService.createSize(form);
+      sizeForm.resetFields();
       toastService.success("Thêm size thành công");
-      navigate("/admin/size");
+      const data = res.data;
+      onSizeFinish(data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -16,6 +34,7 @@ const AddSize = () => {
   };
 
   return (
+    <Modal title="Thêm size" open={open} footer={null} onCancel={onCancel}>
     <Form
       onFinish={addSizelHandle}
       labelCol={{ span: 4 }}
@@ -69,6 +88,8 @@ const AddSize = () => {
         </button>
       </Form.Item>
     </Form>
+
+    </Modal>
   );
 };
 
