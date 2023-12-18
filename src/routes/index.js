@@ -47,6 +47,7 @@ import { AddCustomer } from "../components/Admin/Customer/AddCustomer/AddCustome
 import { DiscountManagement } from "../components/Admin/Discount/AddDiscountToProduct";
 import { AdminList } from "../components/Admin/AdminList/Admin";
 import { OrderDetailGetOne } from "../components/Admin/Order/OrderDetail/OrderDetail";
+import { SignUp } from "../components/User/Register/Register";
 import { ProductPage } from "../components/Admin/Discount/AddDiscountToProduct/test";
 
 const NoGuard = ({ children }) => {
@@ -186,6 +187,7 @@ const adminRoutes = [
   getAdminRoute({ path: "/admin/orders/create", component: CreateOrder }),
 
   getUserRoute({ path: "/", component: HomePage }),
+  getUserRoute({ path: "/signup", component: SignUp }),
   getMessageUrl({ path: "/success", component: TransactionSuccess }),
   getUserRoute({ path: "/login", component: UserLoginPage }),
   getUserRoute({ path: "/products/:productId", component: UserProductDetail }),
