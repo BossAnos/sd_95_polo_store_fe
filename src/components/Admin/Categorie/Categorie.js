@@ -33,6 +33,7 @@ const CategoryList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [form] = Form.useForm();
+  const [refreshList, setRefreshList] = useState(false);
 
   const fetchData = async () => {
     const body = await categoryService.getAllCategory();
@@ -41,7 +42,7 @@ const CategoryList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshList]);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -86,8 +87,9 @@ const CategoryList = () => {
     );
   }
 
-  const createCategory = () => {
-    setShowCategoryModal(!showCategoryModal);
+  const handleList = () => {
+    setShowCategoryModal(false);
+    setRefreshList(prevState => !prevState);
     fetchData();
   }
 
@@ -101,7 +103,7 @@ const CategoryList = () => {
     >
       <AddCategory
         open={showCategoryModal}
-        onCategoryFinish={createCategory}
+        onCategoryFinish={handleList}
         onCancel={() => setShowCategoryModal(false)}
       />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>

@@ -38,6 +38,7 @@ const BrandList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [form] = Form.useForm();
+  const [refreshList, setRefreshList] = useState(false);
 
   const fetchData = async () => {
     const body = await brandService.getAllBrands();
@@ -46,7 +47,7 @@ const BrandList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshList]);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -93,6 +94,7 @@ const BrandList = () => {
 
   const handleList = () => {
     setShowBrandModal(false);
+    setRefreshList(prevState => !prevState);
     fetchData();
   };
 

@@ -32,6 +32,7 @@ const ColorList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showColorModal, setShowColorModal] = useState(false);
   const [form] = Form.useForm();
+  const [refreshList, setRefreshList] = useState(false);
 
   const fetchData = async () => {
     const body = await colorService.getAllColors();
@@ -40,7 +41,7 @@ const ColorList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshList]);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -90,8 +91,9 @@ const ColorList = () => {
     }
   }
 
-  async function createColor(newColor) {
+  const createColor = () => {
     setShowColorModal(false);
+    setRefreshList(prevState => !prevState);
     fetchData();
   }
 

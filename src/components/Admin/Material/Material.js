@@ -33,16 +33,16 @@ const MaterialList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showMaterialModal, setShowMaterialModal] = useState(false);
   const [form] = Form.useForm();
+  const [refreshList, setRefreshList] = useState(false);
 
   const fetchData = async () => {
     const body = await materialService.getAllMaterial();
-    console.log("All Material:", body.data);
     setMaterial(body.data);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshList]);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -75,7 +75,7 @@ const MaterialList = () => {
     toastService.info("Thay đổi trạng thái thành công ");
   };
 
-  async function toggleStatus(id, currentStatus) {
+  const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 1 ? 0 : 1;
     await materialService.changeStatus(id, newStatus);
 
@@ -89,6 +89,7 @@ const MaterialList = () => {
 
   const handleList = () => {
     setShowMaterialModal(false);
+    setRefreshList(prevState => !prevState);
     fetchData();
   }
 
