@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import { sizeService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs } from "antd";
+import { Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
-import "../admin-product.css"
+import { AddSize } from "./AddSize/AddSize";
 import { toastService } from "../../../service/common";
+import "../admin-product.css";
 
 const { TabPane } = Tabs;
 
-const handleDelete = async (id) => {
-  const body = await sizeService.changeStatus(id);
-
-  toastService.info("Thay đổi trạng thái thành công ");
-};
 const tabs = [
-
+  {
+    key: "all",
+    label: "Tất cả",
+    status: null,
+  },
   {
     key: "1",
     label: "Đang hoạt động",
     status: 1,
   },
-
   {
     key: "0",
     label: "Ngừng hoạt động",
@@ -28,24 +27,73 @@ const tabs = [
 ];
 
 const SizeList = () => {
+  const [searchProductName, setSearchProductName] = useState("");
   const [size, setSize] = useState([]);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("all");
+  const [showSizeModal, setShowSizeModal] = useState(false);
+  const [form] = Form.useForm();
+
+  const fetchData = async () => {
+    const body = await sizeService.getAllSizes();
+    setSize(body.data);
+  };
 
   useEffect(() => {
-    (async () => {
-      const body = await sizeService.getAllSizes();
-      console.log("All Sizes:", body.data); // Add this line to check the data received
-      setSize(body.data);
-    })();
+    fetchData();
   }, []);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
   };
 
-  const filteredSizes = size.filter(
-    (item) => item.status === parseInt(activeTab, 10)
-  );
+  const filteredSizes = size.filter((item) => {
+    const statusMatch =
+      activeTab === "all" || item.status === parseInt(activeTab, 10);
+
+    const nameMatch =
+      item.name &&
+      item.name.toLowerCase().includes(searchProductName?.toLowerCase() || "");
+
+    const descriptionMatch =
+      item.description &&
+      item.description
+        .toLowerCase()
+        .includes(searchProductName?.toLowerCase() || "");
+
+    const indexMatch = (item.index + 1)
+      .toString()
+      .includes(searchProductName?.toString() || "");
+
+    return statusMatch && (nameMatch || descriptionMatch || indexMatch);
+  });
+
+  const handleDelete = async (id) => {
+    const body = await sizeService.changeStatus(id);
+
+    toastService.info("Thay đổi trạng thái thành công ");
+  };
+
+  async function toggleStatus(id, currentStatus) {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    try {
+      // Make the request to change the status using the colorService
+      await sizeService.changeStatus(id);
+
+      // Update the local state with the new status
+      setSize((prevSizes) =>
+        prevSizes.map((size) =>
+          size.id === id ? { ...size, status: newStatus } : size
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling status:", error);
+    }
+  }
+
+  async function createSize(newSize) {
+    setShowSizeModal(false);
+    fetchData();
+  }
 
   return (
     <div
@@ -55,21 +103,39 @@ const SizeList = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <AddSize
+        open={showSizeModal}
+        onSizeFinish={createSize}
+        onCancel={() => setShowSizeModal(false)}
+      />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.key} />
         ))}
       </Tabs>
       <br />
-      <Link to={"/admin/size/add"}>
-        <Button type="primary" className="btn-customer__add ">Thêm Size</Button>
-      </Link>
+      <div style={{ display: "flex", marginLeft: "0px" }}>
+        <button
+          onClick={() => setShowSizeModal(true)}
+          type="primary"
+          className="btn-customer__add "
+        >
+          Thêm size
+        </button>
+        <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
+        <Input
+          style={{ width: "300px", marginLeft: "30px" }}
+          placeholder="Search by product name..."
+          value={searchProductName}
+          onChange={(e) => setSearchProductName(e.target.value)}
+        />
+      </div>
       <br />
       <br />
       <div className="table__main">
-      <table>
-        <thead>
-          <tr>
+        <table>
+          <thead>
+            <tr>
             <th>STT</th>
             <th>Tên Size</th>
             <th>Mô tả</th>
@@ -77,19 +143,19 @@ const SizeList = () => {
             <th>shirtwidth</th>
             <th>sleevelenght</th>
             <th>shoulderlength</th>
+            <th>Trạng thái</th>
             <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredSizes.length === 0 ? (
-            <tr>
-              <td colSpan="4">Không có giá trị.</td>
             </tr>
-          ) : (
-            filteredSizes.map((size, index) => {
-              return (
+          </thead>
+          <tbody>
+            {filteredSizes.length === 0 ? (
+              <tr>
+                <td colSpan="5">Không có giá trị.</td>
+              </tr>
+            ) : (
+              filteredSizes.map((size, index) => (
                 <tr key={size.id}>
-                  <td style={{paddingLeft:"60px"}}>{index + 1}</td>
+                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
                   <td>{size.name}</td>
                   <td>{size.description}</td>
                   <td>{size.shirtlength}</td>
@@ -97,41 +163,37 @@ const SizeList = () => {
                   <td>{size.sleevelenght}</td>
                   <td>{size.shoulderlength}</td>
                   <td>
+                    <Switch
+                      checked={size.status === 1}
+                      onChange={() => toggleStatus(size.id, size.status)}
+                      style={{
+                        backgroundColor: size.status === 1 ? "green" : "red",
+                        width: "30px",
+                      }}
+                    />
+                  </td>
+                  <td>
                     <div
                       className="actions"
                       style={{ display: "flex", alignItems: "center" }}
                     >
                       <div className="action">
                         <Link to={`/admin/size/update/${size.id}`}>
-                          <button className="btn">
+                          <Button type="primary" className="btn"   onClick={() => setShowSizeModal(true)}>
                             <i className="fa-regular fa-pen-to-square"></i>
-                          </button>
+                          </Button>
                         </Link>
-                      </div>
-                      <div className="action">
-                      <Popconfirm
-                            title="Đổi trạng thái"
-                            description="Bạn có chắc chắn muốn thay đổi trạng thái?"
-                            onConfirm={() => handleDelete(size.id)}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <button className="btn">
-                              <i className="fa-sharp fa-solid fa-trash"></i>
-                            </button>
-                          </Popconfirm>
                       </div>
                     </div>
                   </td>
                 </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-};                                                   
+};
 
 export { SizeList };
