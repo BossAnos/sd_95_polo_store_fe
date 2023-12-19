@@ -208,12 +208,9 @@ const ProductPage = () => {
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.status.toString()}>
             <div>
-
               <h1>Chọn khuyến mại để áp dụng </h1>{" "}
               <select
-              <select 
-              style={{fontWeight:"bolder",marginLeft:"50px"}}
-
+                style={{ fontWeight: "bolder", marginLeft: "50px" }}
                 onChange={(e) => handleDiscountChange(e.target.value)}
                 value={selectedDiscount ? selectedDiscount.id.toString() : ""}
               >
@@ -278,36 +275,38 @@ const ProductPage = () => {
               )}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ marginRight: "16px" }}>
-                  <label  style={{fontWeight:"bolder",marginLeft:"50px"}}>Tên sản phẩm:</label>
+                  <label style={{ fontWeight: "bolder", marginLeft: "50px" }}>
+                    Tên sản phẩm:
+                  </label>
                   <Input
-                  style={{width:"200px",marginLeft:"50px"}}
+                    style={{ width: "200px", marginLeft: "50px" }}
                     placeholder="Search by product name..."
                     value={searchProductName}
                     onChange={(e) => setSearchProductName(e.target.value)}
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{fontWeight:"bolder"}}>Loại áo:</label>
+                  <label style={{ fontWeight: "bolder" }}>Loại áo:</label>
                   <Input
-                    style={{width:"200px"}}
+                    style={{ width: "200px" }}
                     placeholder="Search by category..."
                     value={searchCategory}
                     onChange={(e) => setSearchCategory(e.target.value)}
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{fontWeight:"bolder"}}>Thương hiệu:</label>
+                  <label style={{ fontWeight: "bolder" }}>Thương hiệu:</label>
                   <Input
-                    style={{width:"200px"}}
+                    style={{ width: "200px" }}
                     placeholder="Search by brand..."
                     value={searchBrand}
                     onChange={(e) => setSearchBrand(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label style={{fontWeight:"bolder"}}>Chất liệu:</label>
+                  <label style={{ fontWeight: "bolder" }}>Chất liệu:</label>
                   <Input
-                    style={{width:"200px"}}
+                    style={{ width: "200px" }}
                     placeholder="Search by material..."
                     value={searchMaterial}
                     onChange={(e) => setSearchMaterial(e.target.value)}
@@ -315,7 +314,6 @@ const ProductPage = () => {
                 </div>
               </div>
               <br></br>
-
               {filteredProducts.length > 0 && (
                 <div style={{}}>
                   <button onClick={handleAddDiscountToSelectedProducts}>
@@ -325,9 +323,9 @@ const ProductPage = () => {
               )}
               <br></br>
               <h1>Danh sách sản phẩm</h1>
-
-              <h1 style={{fontWeight:"bolder",marginLeft:"50px"}}>Danh sách sản phẩm</h1>
-
+              <h1 style={{ fontWeight: "bolder", marginLeft: "50px" }}>
+                Danh sách sản phẩm
+              </h1>
               {filteredProducts.length === 0 ? (
                 <p>Không tìm thấy sản phẩm nào.</p>
               ) : (
