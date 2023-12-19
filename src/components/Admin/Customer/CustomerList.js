@@ -24,9 +24,10 @@ const CustomerList = () => {
     >
       <br></br>
       <Link to={"/admin/customer/add"}>
-        <Button type="primary" className="btn-customer__add">
+        <button type="primary" className="btn-customer__add">
           Thêm khách hàng 
-        </Button>
+          <i className="fas fa-plus" style={{paddingLeft:"10px"}}></i>
+        </button>
       </Link>
       <br></br>
       <br></br>

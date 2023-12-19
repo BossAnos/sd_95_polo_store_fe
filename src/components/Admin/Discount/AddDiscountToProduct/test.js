@@ -208,9 +208,11 @@ const ProductPage = () => {
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.status.toString()}>
             <div>
-              <h1>Chọn khuyến mại để áp dụng </h1>{" "}
+              <div style={{display:"flex"}}>
+              <h1  style={{ fontWeight: "bolder", marginLeft: "50px" }}>Chọn khuyến mại để áp dụng: </h1>{" "}
+             
               <select
-                style={{ fontWeight: "bolder", marginLeft: "50px" }}
+                style={{ fontWeight: "bolder", marginLeft: "50px" ,marginTop:"-10px"}}
                 onChange={(e) => handleDiscountChange(e.target.value)}
                 value={selectedDiscount ? selectedDiscount.id.toString() : ""}
               >
@@ -220,6 +222,7 @@ const ProductPage = () => {
                   </option>
                 ))}
               </select>
+
               <button
                 style={{ width: "50px" }}
                 type="primary"
@@ -229,6 +232,9 @@ const ProductPage = () => {
                   <i className="fas fa-plus"></i>
                 </a>
               </button>
+              </div>
+             
+             
               {selectedDiscount && selectedDiscount.id !== discounts[0]?.id && (
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <div style={{ display: "flex", marginBottom: "8px" }}>
@@ -347,15 +353,16 @@ const ProductPage = () => {
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ width: "5%" }}>
+                      <th style={{ width: "10px" }}>
                         <Checkbox
+                     
                           checked={filteredProducts.every(
                             (product) => product.discount === selectedDiscount
                           )}
                           onChange={handleSelectAllProducts}
                         />
                       </th>
-                      <th>Tên sản phẩm</th>
+                      <th >Tên sản phẩm</th>
                       <th>Chất liệu</th>
                       <th>Thương hiệu</th>
                       <th>Loại áo</th>

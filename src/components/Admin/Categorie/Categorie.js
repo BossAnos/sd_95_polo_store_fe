@@ -140,6 +140,7 @@ const CategoryList = () => {
           className="btn-customer__add "
         >
           Thêm loại áo
+          <i className="fas fa-plus" style={{paddingLeft:"10px"}}></i>
         </button>
         <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input

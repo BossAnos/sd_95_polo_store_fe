@@ -105,25 +105,19 @@ const ColorList = () => {
       // Update the local state with the new status
       setColor((prevColors) =>
         prevColors.map((color) =>
-color.id === id ? { ...color, status: newStatus } : color
+          color.id === id ? { ...color, status: newStatus } : color
         )
       );
     } catch (error) {
       console.error("Error toggling status:", error);
     }
-  
   }
 
   const createColor = () => {
     setShowColorModal(false);
     setRefreshList((prevState) => !prevState);
     fetchData();
-
-
   };
-
-
-
 
   return (
     <div
@@ -151,6 +145,9 @@ color.id === id ? { ...color, status: newStatus } : color
           className="btn-customer__add "
         >
           Thêm màu sắc
+         
+            <i className="fas fa-plus" style={{paddingLeft:"10px"}}></i>
+        
         </button>
         <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input
@@ -204,7 +201,7 @@ color.id === id ? { ...color, status: newStatus } : color
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         <div className="action">
-                        <Link to={`/admin/color/update/${color.id}`}>
+                          <Link to={`/admin/color/update/${color.id}`}>
                             <button
                               type="primary"
                               className="btn"
@@ -234,4 +231,3 @@ color.id === id ? { ...color, status: newStatus } : color
 };
 
 export { ColorList };
-                                                                                                                    
