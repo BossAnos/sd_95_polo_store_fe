@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { brandService } from "../../../service/admin";
-import {
-  Button,
-  Tabs,
-  Form,
-  Input,
-  Switch,
-} from "antd";
+import { Pagination, Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddBrand } from "./AddBrand/AddBrand";
 import { toastService } from "../../../service/common";
@@ -38,6 +32,10 @@ const BrandList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showBrandModal, setShowBrandModal] = useState(false);
   const [form] = Form.useForm();
+  const [refreshList, setRefreshList] = useState(false);
+  const [page, setPage] = useState(1);
+  const LIMIT = 5;
+  const [startIndex, setStartIndex] = useState(0);
 
   const fetchData = async () => {
     const body = await brandService.getAllBrands();
@@ -46,7 +44,26 @@ const BrandList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshList]);
+
+  const filteredProducts =
+    activeTab === "all"
+      ? brand
+      : brand.filter((item) => {
+          if (activeTab === "1") {
+            // Hiển thị sản phẩm có status là 1 hoặc 3
+            return [1, 3].includes(item.status);
+          } else {
+            // Hiển thị sản phẩm có status bằng giá trị của activeTab
+            return item.status === parseInt(activeTab, 10);
+          }
+        });
+
+  const onPageChange = async (page) => {
+    setPage(page);
+    const newStartIndex = (page - 1) * LIMIT;
+    setStartIndex(newStartIndex);
+  };
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -93,6 +110,7 @@ const BrandList = () => {
 
   const handleList = () => {
     setShowBrandModal(false);
+    setRefreshList((prevState) => !prevState);
     fetchData();
   };
 
@@ -150,41 +168,52 @@ const BrandList = () => {
                 <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredBrands.map((brand, index) => (
-                <tr key={brand.id}>
-                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
-                  <td>{brand.name}</td>
-                  <td>{brand.description}</td>
-                  <td>
-                    <Switch
-                      checked={brand.status === 1}
-                      onChange={() => toggleStatus(brand.id, brand.status)}
-                      style={{
-                        backgroundColor: brand.status === 1 ? "green" : "red",
-                        width: "30px",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <div
-                      className="actions"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <div className="action">
-                        <Link to={`/admin/brand/update/${brand.id}`}>
-                          <Button type="primary" className="btn">
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
-                        </Link>
+              filteredBrands
+                .slice((page - 1) * LIMIT, page * LIMIT)
+                .map((brand, index) => (
+                  <tr key={brand.id}>
+                    <td style={{ paddingLeft: "60px" }}>
+                      {startIndex + index + 1}
+                    </td>
+                    <td>{brand.name}</td>
+                    <td>{brand.description}</td>
+                    <td>
+                      <Switch
+                        checked={brand.status === 1}
+                        onChange={() => toggleStatus(brand.id, brand.status)}
+                        style={{
+                          backgroundColor: brand.status === 1 ? "green" : "red",
+                          width: "30px",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <div
+                        className="actions"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <div className="action">
+                          <Link to={`/admin/brand/update/${brand.id}`}>
+                            <Button type="primary" className="btn">
+                              <i className="fa-regular fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                  </tr>
+                ))
             )}
           </tbody>
         </table>
       </div>
+      <Pagination
+        current={page}
+        total={filteredProducts.length}
+        pageSize={LIMIT}
+        onChange={onPageChange}
+        style={{ textAlign: "center" }}
+      />
     </div>
   );
 };

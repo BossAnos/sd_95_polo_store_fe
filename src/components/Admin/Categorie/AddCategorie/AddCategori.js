@@ -24,8 +24,8 @@ const AddCategory = (props) => {
     try {
       categoryService.createCategory(form);
       categoryForm.resetFields();
-      toastService.success("Thêm loại áo thành công");
       props.onCategoryFinish();
+      toastService.success("Thêm loại áo thành công");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);

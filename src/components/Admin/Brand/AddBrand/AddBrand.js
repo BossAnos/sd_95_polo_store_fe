@@ -25,8 +25,8 @@ const AddBrand = (props) => {
     try {
       brandService.createBrands(form);
       brandForm.resetFields();
-      toastService.success("Thêm thương hiệu thành công");
       props.onBrandFinish();
+      toastService.success("Thêm thương hiệu thành công");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);

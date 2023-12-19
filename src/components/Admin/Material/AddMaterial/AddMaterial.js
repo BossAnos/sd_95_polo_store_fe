@@ -24,8 +24,8 @@ const AddMaterial = (props) => {
     try {
       materialService.createMaterial(form);
       materiaForm.resetFields();
-      toastService.success("Thêm chất liệu thành công");
       props.onMaterialFinish();
+      toastService.success("Thêm chất liệu thành công");
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
