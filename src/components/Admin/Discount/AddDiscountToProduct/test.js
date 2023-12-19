@@ -275,9 +275,7 @@ const ProductPage = () => {
               )}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{ fontWeight: "bolder", marginLeft: "50px" }}>
-                    Tên sản phẩm:
-                  </label>
+
                   <Input
                     style={{ width: "200px", marginLeft: "50px" }}
                     placeholder="Search by product name..."
@@ -286,8 +284,7 @@ const ProductPage = () => {
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{ fontWeight: "bolder" }}>Loại áo:</label>
-                  <Input
+   <Input
                     style={{ width: "200px" }}
                     placeholder="Search by category..."
                     value={searchCategory}
@@ -295,7 +292,7 @@ const ProductPage = () => {
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{ fontWeight: "bolder" }}>Thương hiệu:</label>
+
                   <Input
                     style={{ width: "200px" }}
                     placeholder="Search by brand..."
@@ -304,7 +301,7 @@ const ProductPage = () => {
                   />
                 </div>
                 <div>
-                  <label style={{ fontWeight: "bolder" }}>Chất liệu:</label>
+
                   <Input
                     style={{ width: "200px" }}
                     placeholder="Search by material..."
@@ -314,6 +311,7 @@ const ProductPage = () => {
                 </div>
               </div>
               <br></br>
+
               {filteredProducts.length > 0 && (
                 <div style={{}}>
                   <button onClick={handleAddDiscountToSelectedProducts}>
@@ -326,6 +324,7 @@ const ProductPage = () => {
               <h1 style={{ fontWeight: "bolder", marginLeft: "50px" }}>
                 Danh sách sản phẩm
               </h1>
+
               {filteredProducts.length === 0 ? (
                 <p>Không tìm thấy sản phẩm nào.</p>
               ) : (
@@ -381,8 +380,7 @@ const ProductPage = () => {
                   </tbody>
                 </table>
               )}
-              <br></br>
-              <br></br>
+
             </div>
           </TabPane>
         ))}

@@ -76,9 +76,9 @@ const CustomerList = () => {
                     >
                       <div className="action">
                         <Link to={`/admin/customer/update/${customer.id}`}>
-                          <Button type="primary" className="btn">
+                          <button type="primary" className="btn">
                             <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
+                          </button>
                         </Link>
                       </div>
                       <div className="action">
