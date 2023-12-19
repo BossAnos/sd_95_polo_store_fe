@@ -15,3 +15,10 @@ export const getDiscount = async (params) => {
 export const addDiscountToProduct = async (params) => {
   return await adminClient.post("http://localhost:8080/admin/discount", params);
 };
+
+export const createDiscount = async (Form) => {
+  return await adminClient.post(
+    "http://localhost:8080/admin/discount/addDiscount",
+    Form
+  );
+};
