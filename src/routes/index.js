@@ -49,6 +49,7 @@ import { AdminList } from "../components/Admin/AdminList/Admin";
 import { OrderDetailGetOne } from "../components/Admin/Order/OrderDetail/OrderDetail";
 import { SignUp } from "../components/User/Register/Register";
 import { ProductPage } from "../components/Admin/Discount/AddDiscountToProduct/test";
+import { RoleList } from "../components/Admin/AdminList/Role";
 
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -132,6 +133,11 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/size/add",
     component: AddSize,
+  }),
+
+  getAdminRoute({
+    path: "/admin/role",
+    component: RoleList,
   }),
   getAdminRoute({
     path: "/admin/size/update/:id",

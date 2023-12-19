@@ -1,7 +1,7 @@
 // DiscountManagement.js
 import React, { useEffect, useState } from "react";
 import { discountService } from "../../../../service/admin";
-import { Switch } from "antd";
+import { Switch, notification } from "antd";
 import moment from "moment";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
 
@@ -9,6 +9,7 @@ const DiscountManagement = () => {
   const [discounts, setDiscounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +41,10 @@ const DiscountManagement = () => {
           : discount
       );
       setDiscounts(updatedDiscounts);
+      notification.success({
+        message: "Success",
+        description: "Trạng thái khuyến mại đã được cập nhật",
+      });
     } catch (error) {
       console.error("Error updating discount status:", error);
     }
@@ -50,9 +55,12 @@ const DiscountManagement = () => {
     // Sau đó cập nhật local state và đóng modal
     try {
       // const result = await discountService.addDiscount(formData);
-      // const newDiscount = result.data;
-      // setDiscounts([...discounts, newDiscount]);
+      setDiscounts([...discounts, formData]);
       setIsModalVisible(false);
+      notification.success({
+        message: "Success",
+        description: "Khuyến mại đã được thêm mới",
+      });
     } catch (error) {
       console.error("Error adding discount:", error);
     }
@@ -85,7 +93,7 @@ const DiscountManagement = () => {
                 <tr key={discount.id}>
                   <td>{index + 1}</td>
                   <td>{discount.name}</td>
-                  <td>{discount.discount}</td>
+                  <td>{(discount.discount * 100).toFixed(2)}%</td>
                   <td>{discount.description}</td>
                   <td>{formatDateTime(discount.startDate)}</td>
                   <td>{formatDateTime(discount.endDate)}</td>

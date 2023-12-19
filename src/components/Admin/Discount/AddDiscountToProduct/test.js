@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { discountService, productService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
-import { Tabs, Input, Checkbox, Switch } from "antd";
-
+import { Tabs, Input, Checkbox, Switch, notification } from "antd";
+import AddDiscountModal from "../AddDiscount/AddDiscountModal";
 const { TabPane } = Tabs;
 
 const ProductPage = () => {
@@ -14,7 +14,8 @@ const ProductPage = () => {
   const [searchBrand, setSearchBrand] = useState("");
   const [searchMaterial, setSearchMaterial] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(1);
-
+  const [isProductsSelected, setIsProductsSelected] = useState(false); // Thêm state mới
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const tabs = [
     {
       key: "1",
@@ -63,6 +64,11 @@ const ProductPage = () => {
           : product.discount,
     }));
     setProducts(updatedProducts);
+
+    const anyProductSelected = updatedProducts.some(
+      (product) => product.discount === selectedDiscount
+    );
+    setIsProductsSelected(anyProductSelected);
   };
 
   const handleSelectAllProducts = () => {
@@ -128,26 +134,58 @@ const ProductPage = () => {
   );
 
   const handleAddDiscountToSelectedProducts = async () => {
+    if (!isProductsSelected) {
+      notification.warning({
+        message: "Cảnh báo",
+        description:
+          "Vui lòng chọn ít nhất một sản phẩm trước khi áp dụng khuyến mại",
+      });
+      return;
+    }
+
     const selectedProductIds = products
       .filter((product) => product.discount === selectedDiscount)
       .map((product) => product.id);
 
     try {
-      // Call your backend API to add discounts to selected products
       const response = await discountService.addDiscountToProduct({
         idDiscount: selectedDiscount.id,
         idProduct: selectedProductIds,
       });
 
-      // Log the response or handle it as needed
       console.log(response);
+
+      // Step 3: Update the products and selected status based on the new status (3)
+      const updatedProducts = products.map((product) =>
+        selectedProductIds.includes(product.id)
+          ? { ...product, discount: selectedDiscount, status: 3 }
+          : product
+      );
+
+      setProducts(updatedProducts);
+      setSelectedStatus(3); // Update the selected status to the new status (3)
+
       toastService.success("Áp dụng khuyến mại thành công");
     } catch (error) {
-      // Handle errors
       toastService.error(error.apiMessage);
     }
   };
 
+  const handleAddDiscount = async (formData) => {
+    // Gọi API hoặc thực hiện các hành động cần thiết để thêm khuyến mại
+    // Sau đó cập nhật local state và đóng modal
+    try {
+      // const result = await discountService.addDiscount(formData);
+      setDiscounts([...discounts, formData]);
+      setIsModalVisible(false);
+      notification.success({
+        message: "Success",
+        description: "Khuyến mại đã được thêm mới",
+      });
+    } catch (error) {
+      console.error("Error adding discount:", error);
+    }
+  };
   return (
     <div
       style={{
@@ -156,6 +194,13 @@ const ProductPage = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <AddDiscountModal
+        visible={isModalVisible}
+        onOk={handleAddDiscount}
+        onCancel={() => {
+          setIsModalVisible(false);
+        }}
+      />
       <Tabs
         activeKey={selectedStatus.toString()}
         onChange={(key) => setSelectedStatus(parseInt(key, 10))}
@@ -163,38 +208,70 @@ const ProductPage = () => {
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.status.toString()}>
             <div>
+              <h1>Chọn khuyến mại để áp dụng </h1>{" "}
               <select
                 onChange={(e) => handleDiscountChange(e.target.value)}
                 value={selectedDiscount ? selectedDiscount.id.toString() : ""}
               >
                 {discounts.map((discount) => (
                   <option key={discount.id} value={discount.id}>
-                    {discount.name} {discount.discount}
+                    {discount.name}
                   </option>
                 ))}
               </select>
-
+              <button
+                style={{ width: "50px" }}
+                type="primary"
+                onClick={() => setIsModalVisible(true)}
+              >
+                <a>
+                  <i className="fas fa-plus"></i>
+                </a>
+              </button>
               {selectedDiscount && selectedDiscount.id !== discounts[0]?.id && (
-                <div>
-                  <div>
-                    <label>Tên khuyến mại:</label>
-                    <Input value={selectedDiscount.name} disabled />
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <div style={{ display: "flex", marginBottom: "8px" }}>
+                    <div style={{ flex: 1, marginRight: "8px" }}>
+                      <label>Tên khuyến mại:</label>
+                      <Input
+                        value={selectedDiscount.name}
+                        disabled
+                        style={{ fontWeight: "bold" }}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label>Gía trị khuyến mại:</label>
+                      <Input
+                        value={
+                          parseFloat(
+                            selectedDiscount.discount * 100
+                          ).toString() + "%"
+                        }
+                        disabled
+                        style={{ fontWeight: "bold" }}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Gía trị khuyến mại:</label>
-                    <Input value={selectedDiscount.discount} disabled />
-                  </div>
-                  <div>
-                    <label>Ngày bắt đầu:</label>
-                    <Input value={selectedDiscount.startDate} disabled />
-                  </div>
-                  <div>
-                    <label>Ngày kết thúc:</label>
-                    <Input value={selectedDiscount.endDate} disabled />
+                  <div style={{ display: "flex" }}>
+                    <div style={{ flex: 1, marginRight: "8px" }}>
+                      <label>Ngày bắt đầu:</label>
+                      <Input
+                        value={selectedDiscount.startDate}
+                        disabled
+                        style={{ fontWeight: "bold" }}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label>Ngày kết thúc:</label>
+                      <Input
+                        value={selectedDiscount.endDate}
+                        disabled
+                        style={{ fontWeight: "bold" }}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
-
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ marginRight: "16px" }}>
                   <label>Tên sản phẩm:</label>
@@ -230,9 +307,17 @@ const ProductPage = () => {
                 </div>
               </div>
               <br></br>
+              {filteredProducts.length > 0 && (
+                <div style={{}}>
+                  <button onClick={handleAddDiscountToSelectedProducts}>
+                    Áp dụng khuyến mại
+                  </button>
+                </div>
+              )}
+              <br></br>
               <h1>Danh sách sản phẩm</h1>
               {filteredProducts.length === 0 ? (
-                <p>No products match the search criteria.</p>
+                <p>Không tìm thấy sản phẩm nào.</p>
               ) : (
                 <table>
                   <thead>
@@ -286,13 +371,8 @@ const ProductPage = () => {
                   </tbody>
                 </table>
               )}
-              {filteredProducts.length > 0 && (
-                <div>
-                  <button onClick={handleAddDiscountToSelectedProducts}>
-                    Áp dụng khuyến mại
-                  </button>
-                </div>
-              )}
+              <br></br>
+              <br></br>
             </div>
           </TabPane>
         ))}
