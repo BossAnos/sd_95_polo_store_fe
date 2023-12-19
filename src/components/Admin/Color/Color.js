@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { colorService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
+import { Pagination, Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddColor } from "./AddColor/Addcolor";
-import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
@@ -33,16 +32,38 @@ const ColorList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showColorModal, setShowColorModal] = useState(false);
   const [form] = Form.useForm();
+  const [refreshList, setRefreshList] = useState(false);
+  const [page, setPage] = useState(1);
+  const LIMIT = 5;
+  const [startIndex, setStartIndex] = useState(0);
+
+  const fetchData = async () => {
+    const body = await colorService.getAllColors();
+    setColor(body.data);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const body = await colorService.getAllColors();
-      console.log("All Color:", body.data);
-      setColor(body.data);
-    };
-
     fetchData();
-  }, []);
+  }, [refreshList]);
+
+  const filteredProducts =
+    activeTab === "all"
+      ? color
+      : color.filter((item) => {
+          if (activeTab === "1") {
+            // Hiển thị sản phẩm có status là 1 hoặc 3
+            return [1, 3].includes(item.status);
+          } else {
+            // Hiển thị sản phẩm có status bằng giá trị của activeTab
+            return item.status === parseInt(activeTab, 10);
+          }
+        });
+
+  const onPageChange = async (page) => {
+    setPage(page);
+    const newStartIndex = (page - 1) * LIMIT;
+    setStartIndex(newStartIndex);
+  };
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -92,11 +113,11 @@ const ColorList = () => {
     }
   }
 
-  async function createColor(newColor) {
-    const createdColor = await colorService.createColor(newColor);
-    setColor((prevColors) => [...prevColors, createdColor]);
+  const createColor = () => {
     setShowColorModal(false);
-  }
+    setRefreshList((prevState) => !prevState);
+    fetchData();
+
 
   return (
     <div
@@ -152,41 +173,56 @@ const ColorList = () => {
                 <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredColors.map((color, index) => (
-                <tr key={color.id}>
-                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
-                  <td>{color.name}</td>
-                  <td>{color.description}</td>
-                  <td>
-                    <Switch
-                      checked={color.status === 1}
-                      onChange={() => toggleStatus(color.id, color.status)}
-                      style={{
-                        backgroundColor: color.status === 1 ? "green" : "red",
-                        width: "30px",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <div
-                      className="actions"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <div className="action">
-                        <Link to={`/admin/color/update/${color.id}`}>
-                          <Button type="primary" className="btn">
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
-                        </Link>
+              filteredColors
+                .slice((page - 1) * LIMIT, page * LIMIT)
+                .map((color, index) => (
+                  <tr key={color.id}>
+                    <td style={{ paddingLeft: "60px" }}>
+                      {startIndex + index + 1}
+                    </td>
+                    <td>{color.name}</td>
+                    <td>{color.description}</td>
+                    <td>
+                      <Switch
+                        checked={color.status === 1}
+                        onChange={() => toggleStatus(color.id, color.status)}
+                        style={{
+                          backgroundColor: color.status === 1 ? "green" : "red",
+                          width: "30px",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <div
+                        className="actions"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <div className="action">
+                          <Link to={`/admin/color/update/${color.id}`}>
+                            <Button
+                              type="primary"
+                              className="btn"
+                              onClick={() => setShowColorModal(true)}
+                            >
+                              <i className="fa-regular fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                  </tr>
+                ))
             )}
           </tbody>
         </table>
       </div>
+      <Pagination
+        current={page}
+        total={filteredProducts.length}
+        pageSize={LIMIT}
+        onChange={onPageChange}
+        style={{ textAlign: "center" }}
+      />
     </div>
   );
 };

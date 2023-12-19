@@ -2,12 +2,13 @@ import { Button, Form, Input, Modal } from "antd";
 import { colorService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
-const AddColor = ({ onColorFinish, open, onCancel }) => {
+import XRegExp from "xregexp";
+const AddColor = (props) => {
   const navigate = useNavigate();
   const [colorForm] = Form.useForm();
 
   const validateInput = (rule, value, callback) => {
-    const regex = /^[a-zA-Z0-9\s]+$/;
+    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
     const maxLength = 50;
 
     if (value && value.length > maxLength) {
@@ -21,11 +22,10 @@ const AddColor = ({ onColorFinish, open, onCancel }) => {
 
   const addColorlHandle = async (form) => {
     try {
-      const res = colorService.createColor(form);
+      colorService.createColor(form);
       colorForm.resetFields();
+      props.onColorFinish();
       toastService.success("Thêm màu sắc thành công");
-      const data = res.data;
-      onColorFinish(data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -33,7 +33,7 @@ const AddColor = ({ onColorFinish, open, onCancel }) => {
   };
 
   return (
-    <Modal title="Thêm màu sắc" open={open} footer={null} onCancel={onCancel}>
+    <Modal title="Thêm màu sắc" open={props.open} footer={null} onCancel={props.onCancel}>
       <Form
         onFinish={addColorlHandle}
         labelCol={{ span: 4 }}
