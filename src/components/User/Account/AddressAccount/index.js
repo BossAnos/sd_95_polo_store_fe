@@ -69,9 +69,9 @@ const AddressAcount = () => {
                       >
                         <div className="action">
                           <Link to={`/admin/brand/update/${address.id}`}>
-                            <Button type="primary" className="btn">
+                            <button type="primary" className="btn">
                               <i className="fa-regular fa-pen-to-square"></i>
-                            </Button>
+                            </button>
                           </Link>
                         </div>
                         <div className="action">

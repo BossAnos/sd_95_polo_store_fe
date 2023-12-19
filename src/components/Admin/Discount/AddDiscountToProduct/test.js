@@ -198,7 +198,7 @@ const ProductPage = () => {
 
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ marginRight: "16px" }}>
-                  <label  style={{fontWeight:"bolder",marginLeft:"50px"}}>Tên sản phẩm:</label>
+                  <label  style={{fontWeight:"bolder",marginLeft:"50px",marginTop:"20px"}}>Tên sản phẩm:</label>
                   <Input
                   style={{width:"200px",marginLeft:"50px"}}
                     placeholder="Search by product name..."
@@ -207,7 +207,7 @@ const ProductPage = () => {
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{fontWeight:"bolder"}}>Loại áo:</label>
+                  <label style={{fontWeight:"bolder",marginTop:"20px"}}>Loại áo:</label>
                   <Input
                     style={{width:"200px"}}
                     placeholder="Search by category..."
@@ -216,7 +216,7 @@ const ProductPage = () => {
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-                  <label style={{fontWeight:"bolder"}}>Thương hiệu:</label>
+                  <label style={{fontWeight:"bolder",marginTop:"20px"}}>Thương hiệu:</label>
                   <Input
                     style={{width:"200px"}}
                     placeholder="Search by brand..."
@@ -225,7 +225,7 @@ const ProductPage = () => {
                   />
                 </div>
                 <div>
-                  <label style={{fontWeight:"bolder"}}>Chất liệu:</label>
+                  <label style={{fontWeight:"bolder",marginTop:"20px"}}>Chất liệu:</label>
                   <Input
                     style={{width:"200px"}}
                     placeholder="Search by material..."
@@ -235,7 +235,7 @@ const ProductPage = () => {
                 </div>
               </div>
               <br></br>
-              <h1 style={{fontWeight:"bolder",marginLeft:"50px"}}>Danh sách sản phẩm</h1>
+              <h1 style={{fontWeight:"bolder",marginLeft:"50px",marginTop:"20px"}}>Danh sách sản phẩm</h1>
               {filteredProducts.length === 0 ? (
                 <p>No products match the search criteria.</p>
               ) : (
@@ -293,7 +293,7 @@ const ProductPage = () => {
               )}
               {filteredProducts.length > 0 && (
                 <div>
-                  <button onClick={handleAddDiscountToSelectedProducts}>
+                  <button onClick={handleAddDiscountToSelectedProducts} style={{marginLeft:"50px",marginBottom:"20px"}}>
                     Áp dụng khuyến mại
                   </button>
                 </div>

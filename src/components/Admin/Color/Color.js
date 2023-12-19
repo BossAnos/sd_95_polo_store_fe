@@ -111,6 +111,7 @@ const ColorList = () => {
     } catch (error) {
       console.error("Error toggling status:", error);
     }
+  
   }
 
   const createColor = () => {
@@ -118,7 +119,7 @@ const ColorList = () => {
     setRefreshList((prevState) => !prevState);
     fetchData();
 
-
+  };
   return (
     <div
       style={{
@@ -199,13 +200,13 @@ const ColorList = () => {
                       >
                         <div className="action">
                           <Link to={`/admin/color/update/${color.id}`}>
-                            <Button
+                            <button
                               type="primary"
                               className="btn"
                               onClick={() => setShowColorModal(true)}
                             >
                               <i className="fa-regular fa-pen-to-square"></i>
-                            </Button>
+                            </button>
                           </Link>
                         </div>
                       </div>

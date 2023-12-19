@@ -205,13 +205,13 @@ const SizeList = () => {
                       >
                         <div className="action">
                           <Link to={`/admin/size/update/${size.id}`}>
-                            <Button
+                            <button
                               type="primary"
                               className="btn"
                               onClick={() => setShowSizeModal(true)}
                             >
                               <i className="fa-regular fa-pen-to-square"></i>
-                            </Button>
+                            </button>
                           </Link>
                         </div>
                       </div>

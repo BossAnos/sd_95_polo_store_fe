@@ -75,3 +75,15 @@ margin-right:70px;
 .ant-tabs-nav-wrap{
   margin-left: 50px;
 }
+.ant-btn.css-dev-only-do-not-override-3mqfnx.ant-btn-primary{
+background-color: black;
+
+}
+.ant-btn.css-dev-only-do-not-override-3mqfnx.ant-btn-default{
+color: white;
+background-color: black;
+}
+.ant-btn.css-dev-only-do-not-override-3mqfnx.ant-btn-default:hover{
+  color: white;
+background-color:#1677ff;
+  }

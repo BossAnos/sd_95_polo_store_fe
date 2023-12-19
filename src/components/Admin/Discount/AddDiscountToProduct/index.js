@@ -4,6 +4,7 @@ import { discountService } from "../../../../service/admin";
 import { Switch } from "antd";
 import moment from "moment";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
+import "../../admin-product.css"
 
 const DiscountManagement = () => {
   const [discounts, setDiscounts] = useState([]);
@@ -63,7 +64,7 @@ const DiscountManagement = () => {
       <button type="primary" onClick={() => setIsModalVisible(true)}>
         Thêm khuyến mại
       </button>
-      <h1>Quản lý khuyến mại</h1>
+      <h1 style={{fontWeight:"bolder",marginTop:"20px"}}>Quản lý khuyến mại</h1>
       <table>
         <thead>
           <tr>
@@ -110,6 +111,7 @@ const DiscountManagement = () => {
         </tbody>
       </table>
       <AddDiscountModal
+    
         visible={isModalVisible}
         onOk={handleAddDiscount}
         onCancel={() => {
