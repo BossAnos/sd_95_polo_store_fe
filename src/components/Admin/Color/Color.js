@@ -93,6 +93,7 @@ const ColorList = () => {
   async function createColor(newColor) {
     setShowColorModal(false);
     fetchData();
+    
   }
 
   return (

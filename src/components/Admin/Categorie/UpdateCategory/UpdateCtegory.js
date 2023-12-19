@@ -4,13 +4,25 @@ import { toastService } from "../../../../service/common";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
+import XRegExp from "xregexp";
 const UpdateCategory= () => {
   const { id } = useParams();
   console.log(id);
   const navigate = useNavigate();
   const [category, setCategory] = useState({});
   const [form] = Form.useForm();
+  const validateInput = (rule, value, callback) => {
+    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const maxLength = 50;
 
+    if (value && value.length > maxLength) {
+      callback(`Không vượt quá ${maxLength} kí tự`);
+    } else if (value && !regex.test(value)) {
+      callback("Không chứa ký tự đặc biệt");
+    } else {
+      callback();
+    }
+  };
   useEffect(() => {
     (async () => {
       const body = await categoryService.getOne(id);
@@ -49,14 +61,16 @@ const UpdateCategory= () => {
       <Form.Item
         label="Name"
         name="name"
-        rules={[{ required: true, message: "Tên loại áo  không được trống" }]}
+        rules={[  { required: true, message: "Tên không được trống" },
+        { validator: validateInput },]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         label="Mô tả"
         name="description"
-        rules={[{ required: true, message: "Mô tả loại áo  không được trống" }]}
+        rules={[   { required: true, message: "Mô tả không được trống" },
+        { validator: validateInput },]}
       >
         <Input />
       </Form.Item>
