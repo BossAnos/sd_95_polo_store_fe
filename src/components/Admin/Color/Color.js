@@ -117,7 +117,7 @@ const ColorList = () => {
     setShowColorModal(false);
     setRefreshList((prevState) => !prevState);
     fetchData();
-
+  };
 
   return (
     <div
