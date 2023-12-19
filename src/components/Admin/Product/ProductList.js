@@ -254,7 +254,7 @@ const ProductList = () => {
           <button className="">Thêm sản phẩm</button>
         </Link>
       </Form>
-      <span>Tổng số sản phẩm: {filteredProducts.length}</span>
+      <p style={{fontWeight:"bolder",marginLeft:"50px"}}>Tổng số sản phẩm: {filteredProducts.length}</p>
       {loading && (
         <div
           style={{

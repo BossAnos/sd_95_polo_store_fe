@@ -1,16 +1,30 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input,Modal } from "antd";
 import { colorService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
+import XRegExp from "xregexp";
 const UpdateColor = () => {
   const { id } = useParams();
   console.log(id);
   const navigate = useNavigate();
+  const [colorForm] = Form.useForm();
   const [color, setColor] = useState({});
   const [form] = Form.useForm();
 
+  const validateInput = (rule, value, callback) => {
+    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const maxLength = 50;
+
+    if (value && value.length > maxLength) {
+      callback(`Không vượt quá ${maxLength} kí tự`);
+    } else if (value && !regex.test(value)) {
+      callback("Không chứa ký tự đặc biệt");
+    } else {
+      callback();
+    }
+  };
   useEffect(() => {
     (async () => {
       const body = await colorService.getOne(id);
@@ -29,8 +43,8 @@ const UpdateColor = () => {
         name: form.name,
         description: form.description
       };
-      colorService.createColor(formData);
-      console.log(formData);
+      const res = colorService.createColor(formData);
+      colorForm.resetFields();
       toastService.success("Cập nhật màu sắc thành công");
       navigate("/admin/color");
     } catch (error) {
@@ -40,6 +54,7 @@ const UpdateColor = () => {
   };
 
   return (
+ 
     <Form
       form={form}
       onFinish={updateHandle}
@@ -49,14 +64,16 @@ const UpdateColor = () => {
       <Form.Item
         label="Name"
         name="name"
-        rules={[{ required: true, message: "Tên màu sắc không được trống" }]}
+        rules={[  { required: true, message: "Tên không được trống" },
+        { validator: validateInput },]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         label="Mô tả"
         name="description"
-        rules={[{ required: true, message: "Mô tả màu sắc không được trống" }]}
+        rules={[   { required: true, message: "Mô tả không được trống" },
+        { validator: validateInput },]}
       >
         <Input />
       </Form.Item>
@@ -67,6 +84,7 @@ const UpdateColor = () => {
         </button>
       </Form.Item>
     </Form>
+
   );
 };
 

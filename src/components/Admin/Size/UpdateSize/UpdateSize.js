@@ -4,13 +4,25 @@ import { toastService } from "../../../../service/common";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
+import XRegExp from "xregexp";
 const UpdateSize = () => {
   const { id } = useParams();
   console.log(id);
   const navigate = useNavigate();
   const [size, setSize] = useState({});
   const [form] = Form.useForm();
+  const validateInput = (rule, value, callback) => {
+    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const maxLength = 50;
 
+    if (value && value.length > maxLength) {
+      callback(`Không vượt quá ${maxLength} kí tự`);
+    } else if (value && !regex.test(value)) {
+      callback("Không chứa ký tự đặc biệt");
+    } else {
+      callback();
+    }
+  };
   useEffect(() => {
     (async () => {
       const body = await sizeService.getOne(id);
@@ -54,14 +66,16 @@ const UpdateSize = () => {
       <Form.Item
         label="Name"
         name="name"
-        rules={[{ required: true, message: "Tên size không được trống" }]}
+        rules={[  { required: true, message: "Tên không được trống" },
+        { validator: validateInput },]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         label="Mô tả"
         name="description"
-        rules={[{ required: true, message: "Mô tả size không được trống" }]}
+        rules={[   { required: true, message: "Mô tả không được trống" },
+        { validator: validateInput },]}
       >
         <Input />
       </Form.Item>
