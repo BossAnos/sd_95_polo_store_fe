@@ -119,7 +119,6 @@ const ColorList = () => {
     setRefreshList((prevState) => !prevState);
     fetchData();
 
-  };
   return (
     <div
       style={{

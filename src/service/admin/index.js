@@ -12,6 +12,7 @@ import * as orderService from "./order/order.service";
 import * as productDetailService from "./productDetail/productDetail";
 import * as adminService from "./admin/admin.service";
 import * as orderDetailService from "./orderDetail/orderDetail";
+import * as roleService from "./role/role.service";
 export {
   adminAuthService,
   colorService,
@@ -27,4 +28,5 @@ export {
   productDetailService,
   adminService,
   orderDetailService,
+  roleService,
 };
