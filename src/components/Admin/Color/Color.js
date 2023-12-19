@@ -105,7 +105,7 @@ const ColorList = () => {
       // Update the local state with the new status
       setColor((prevColors) =>
         prevColors.map((color) =>
-          color.id === id ? { ...color, status: newStatus } : color
+color.id === id ? { ...color, status: newStatus } : color
         )
       );
     } catch (error) {
@@ -118,6 +118,12 @@ const ColorList = () => {
     setShowColorModal(false);
     setRefreshList((prevState) => !prevState);
     fetchData();
+
+
+  };
+
+
+
 
   return (
     <div
@@ -198,7 +204,7 @@ const ColorList = () => {
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         <div className="action">
-                          <Link to={`/admin/color/update/${color.id}`}>
+                        <Link to={`/admin/color/update/${color.id}`}>
                             <button
                               type="primary"
                               className="btn"
@@ -228,3 +234,4 @@ const ColorList = () => {
 };
 
 export { ColorList };
+                                                                                                                    

@@ -275,6 +275,15 @@ const ProductPage = () => {
               )}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ marginRight: "16px" }}>
+                  <label
+                    style={{
+                      fontWeight: "bolder",
+                      marginLeft: "50px",
+                      marginTop: "20px",
+                    }}
+                  >
+                    Tên sản phẩm:
+                  </label>
 
                   <Input
                     style={{ width: "200px", marginLeft: "50px" }}
@@ -284,7 +293,11 @@ const ProductPage = () => {
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
-   <Input
+                  <label style={{ fontWeight: "bolder", marginTop: "20px" }}>
+                    Loại áo:
+                  </label>
+
+                  <Input
                     style={{ width: "200px" }}
                     placeholder="Search by category..."
                     value={searchCategory}
@@ -292,6 +305,9 @@ const ProductPage = () => {
                   />
                 </div>
                 <div style={{ marginRight: "16px" }}>
+                  <label style={{ fontWeight: "bolder", marginTop: "20px" }}>
+                    Thương hiệu:
+                  </label>
 
                   <Input
                     style={{ width: "200px" }}
@@ -301,6 +317,9 @@ const ProductPage = () => {
                   />
                 </div>
                 <div>
+                  <label style={{ fontWeight: "bolder", marginTop: "20px" }}>
+                    Chất liệu:
+                  </label>
 
                   <Input
                     style={{ width: "200px" }}
@@ -311,20 +330,17 @@ const ProductPage = () => {
                 </div>
               </div>
               <br></br>
-
-              {filteredProducts.length > 0 && (
-                <div style={{}}>
-                  <button onClick={handleAddDiscountToSelectedProducts}>
-                    Áp dụng khuyến mại
-                  </button>
-                </div>
-              )}
-              <br></br>
-              <h1>Danh sách sản phẩm</h1>
-              <h1 style={{ fontWeight: "bolder", marginLeft: "50px" }}>
+              <h1
+                style={{
+                  fontWeight: "bolder",
+                  marginLeft: "50px",
+                  marginTop: "20px",
+                }}
+              >
                 Danh sách sản phẩm
               </h1>
-
+            
+              <br></br>
               {filteredProducts.length === 0 ? (
                 <p>Không tìm thấy sản phẩm nào.</p>
               ) : (
@@ -380,7 +396,15 @@ const ProductPage = () => {
                   </tbody>
                 </table>
               )}
-
+              {filteredProducts.length > 0 && (
+                <div style={{}}>
+                  <button onClick={handleAddDiscountToSelectedProducts}   style={{ marginLeft: "50px", marginTop: "20px" }}>
+                    Áp dụng khuyến mại
+                  </button>
+                </div>
+              )}
+              <br></br>
+              <br></br>
             </div>
           </TabPane>
         ))}
