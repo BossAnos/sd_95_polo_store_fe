@@ -139,10 +139,10 @@ const SizeList = () => {
             <th>STT</th>
             <th>Tên Size</th>
             <th>Mô tả</th>
-            <th>shirtlength</th>
-            <th>shirtwidth</th>
-            <th>sleevelenght</th>
-            <th>shoulderlength</th>
+            <th>Chiều dài áo</th>
+             <th>Độ rộng áo</th>
+             <th>Chiều dài tay áo</th>
+             <th>Chiều dài vai</th>
             <th>Trạng thái</th>
             <th>Actions</th>
             </tr>
