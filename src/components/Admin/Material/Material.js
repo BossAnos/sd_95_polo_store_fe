@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { materialService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
+import { Pagination, Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddMaterial } from "./AddMaterial/AddMaterial";
-import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
@@ -34,6 +33,9 @@ const MaterialList = () => {
   const [showMaterialModal, setShowMaterialModal] = useState(false);
   const [form] = Form.useForm();
   const [refreshList, setRefreshList] = useState(false);
+  const [page, setPage] = useState(1);
+  const LIMIT = 5;
+  const [startIndex, setStartIndex] = useState(0);
 
   const fetchData = async () => {
     const body = await materialService.getAllMaterial();
@@ -43,6 +45,25 @@ const MaterialList = () => {
   useEffect(() => {
     fetchData();
   }, [refreshList]);
+
+  const filteredProducts =
+  activeTab === "all"
+    ? material
+    : material.filter((item) => {
+        if (activeTab === "1") {
+          // Hiển thị sản phẩm có status là 1 hoặc 3
+          return [1, 3].includes(item.status);
+        } else {
+          // Hiển thị sản phẩm có status bằng giá trị của activeTab
+          return item.status === parseInt(activeTab, 10);
+        }
+      });
+
+const onPageChange = async (page) => {
+  setPage(page);
+  const newStartIndex = (page - 1) * LIMIT;
+  setStartIndex(newStartIndex);
+};
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -147,9 +168,11 @@ const MaterialList = () => {
                 <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredMaterials.map((material, index) => (
+              filteredMaterials
+              .slice((page - 1) * LIMIT, page * LIMIT)
+              .map((material, index) => (
                 <tr key={material.id}>
-                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
+                  <td style={{ paddingLeft: "60px" }}>{startIndex+index + 1}</td>
                   <td>{material.name}</td>
                   <td>{material.description}</td>
                   <td>
@@ -182,6 +205,13 @@ const MaterialList = () => {
           </tbody>
         </table>
       </div>
+      <Pagination
+        current={page}
+        total={filteredProducts.length}
+        pageSize={LIMIT}
+        onChange={onPageChange}
+        style={{ textAlign: "center" }}
+      />
     </div>
   );
 };

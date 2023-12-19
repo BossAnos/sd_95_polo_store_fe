@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { categoryService } from "../../../service/admin";
-import { Button, Popconfirm, Tabs, Form, Input, Switch } from "antd";
+import { Pagination, Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddCategory } from "./AddCategorie/AddCategori";
-import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../service/common";
 import "../admin-product.css";
 
@@ -34,6 +33,9 @@ const CategoryList = () => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [form] = Form.useForm();
   const [refreshList, setRefreshList] = useState(false);
+  const [page, setPage] = useState(1);
+  const LIMIT = 5;
+  const [startIndex, setStartIndex] = useState(0);
 
   const fetchData = async () => {
     const body = await categoryService.getAllCategory();
@@ -43,6 +45,25 @@ const CategoryList = () => {
   useEffect(() => {
     fetchData();
   }, [refreshList]);
+
+  const filteredProducts =
+    activeTab === "all"
+      ? category
+      : category.filter((item) => {
+          if (activeTab === "1") {
+            // Hiển thị sản phẩm có status là 1 hoặc 3
+            return [1, 3].includes(item.status);
+          } else {
+            // Hiển thị sản phẩm có status bằng giá trị của activeTab
+            return item.status === parseInt(activeTab, 10);
+          }
+        });
+
+  const onPageChange = async (page) => {
+    setPage(page);
+    const newStartIndex = (page - 1) * LIMIT;
+    setStartIndex(newStartIndex);
+  };
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -89,9 +110,9 @@ const CategoryList = () => {
 
   const handleList = () => {
     setShowCategoryModal(false);
-    setRefreshList(prevState => !prevState);
+    setRefreshList((prevState) => !prevState);
     fetchData();
-  }
+  };
 
   return (
     <div
@@ -118,7 +139,7 @@ const CategoryList = () => {
           type="primary"
           className="btn-customer__add "
         >
-          Thêm loại áo 
+          Thêm loại áo
         </button>
         <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input
@@ -147,44 +168,57 @@ const CategoryList = () => {
                 <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredCategorys.map((category, index) => (
-                <tr key={category.id}>
-                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
-                  <td>{category.name}</td>
-                  <td>{category.description}</td>
-                  <td>
-                    <Switch
-                      checked={category.status === 1}
-                      onChange={() => toggleStatus(category.id, category.status)}
-                      style={{
-                        backgroundColor: category.status === 1 ? "green" : "red",
-                        width: "30px",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <div
-                      className="actions"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <div className="action">
-                        <Link to={`/admin/category/update/${category.id}`}>
-                          <Button type="primary" className="btn">
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
-                        </Link>
+              filteredCategorys
+                .slice((page - 1) * LIMIT, page * LIMIT)
+                .map((category, index) => (
+                  <tr key={category.id}>
+                    <td style={{ paddingLeft: "60px" }}>
+                      {startIndex + index + 1}
+                    </td>
+                    <td>{category.name}</td>
+                    <td>{category.description}</td>
+                    <td>
+                      <Switch
+                        checked={category.status === 1}
+                        onChange={() =>
+                          toggleStatus(category.id, category.status)
+                        }
+                        style={{
+                          backgroundColor:
+                            category.status === 1 ? "green" : "red",
+                          width: "30px",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <div
+                        className="actions"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <div className="action">
+                          <Link to={`/admin/category/update/${category.id}`}>
+                            <Button type="primary" className="btn">
+                              <i className="fa-regular fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                  </tr>
+                ))
             )}
           </tbody>
         </table>
       </div>
+      <Pagination
+        current={page}
+        total={filteredProducts.length}
+        pageSize={LIMIT}
+        onChange={onPageChange}
+        style={{ textAlign: "center" }}
+      />
     </div>
   );
 };
 
 export { CategoryList };
- 

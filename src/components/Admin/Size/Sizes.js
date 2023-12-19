@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { sizeService } from "../../../service/admin";
-import { Button, Tabs, Form, Input, Switch } from "antd";
+import { Pagination, Button, Tabs, Form, Input, Switch } from "antd";
 import { Link } from "react-router-dom";
 import { AddSize } from "./AddSize/AddSize";
 import { toastService } from "../../../service/common";
@@ -32,6 +32,9 @@ const SizeList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [showSizeModal, setShowSizeModal] = useState(false);
   const [form] = Form.useForm();
+  const [page, setPage] = useState(1);
+  const LIMIT = 5;
+  const [startIndex, setStartIndex] = useState(0);
 
   const fetchData = async () => {
     const body = await sizeService.getAllSizes();
@@ -41,6 +44,25 @@ const SizeList = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredProducts =
+    activeTab === "all"
+      ? size
+      : size.filter((item) => {
+          if (activeTab === "1") {
+            // Hiển thị sản phẩm có status là 1 hoặc 3
+            return [1, 3].includes(item.status);
+          } else {
+            // Hiển thị sản phẩm có status bằng giá trị của activeTab
+            return item.status === parseInt(activeTab, 10);
+          }
+        });
+
+  const onPageChange = async (page) => {
+    setPage(page);
+    const newStartIndex = (page - 1) * LIMIT;
+    setStartIndex(newStartIndex);
+  };
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -136,15 +158,15 @@ const SizeList = () => {
         <table>
           <thead>
             <tr>
-            <th>STT</th>
-            <th>Tên Size</th>
-            <th>Mô tả</th>
-            <th>Chiều dài áo</th>
-             <th>Độ rộng áo</th>
-             <th>Chiều dài tay áo</th>
-             <th>Chiều dài vai</th>
-            <th>Trạng thái</th>
-            <th>Actions</th>
+              <th>STT</th>
+              <th>Tên Size</th>
+              <th>Mô tả</th>
+              <th>Chiều dài áo</th>
+              <th>Độ rộng áo</th>
+              <th>Chiều dài tay áo</th>
+              <th>Chiều dài vai</th>
+              <th>Trạng thái</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -153,45 +175,60 @@ const SizeList = () => {
                 <td colSpan="5">Không có giá trị.</td>
               </tr>
             ) : (
-              filteredSizes.map((size, index) => (
-                <tr key={size.id}>
-                  <td style={{ paddingLeft: "60px" }}>{index + 1}</td>
-                  <td>{size.name}</td>
-                  <td>{size.description}</td>
-                  <td>{size.shirtlength}</td>
-                  <td>{size.shirtwidth}</td>
-                  <td>{size.sleevelenght}</td>
-                  <td>{size.shoulderlength}</td>
-                  <td>
-                    <Switch
-                      checked={size.status === 1}
-                      onChange={() => toggleStatus(size.id, size.status)}
-                      style={{
-                        backgroundColor: size.status === 1 ? "green" : "red",
-                        width: "30px",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <div
-                      className="actions"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <div className="action">
-                        <Link to={`/admin/size/update/${size.id}`}>
-                          <Button type="primary" className="btn"   onClick={() => setShowSizeModal(true)}>
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
-                        </Link>
+              filteredSizes
+                .slice((page - 1) * LIMIT, page * LIMIT)
+                .map((size, index) => (
+                  <tr key={size.id}>
+                    <td style={{ paddingLeft: "60px" }}>
+                      {startIndex + index + 1}
+                    </td>
+                    <td>{size.name}</td>
+                    <td>{size.description}</td>
+                    <td>{size.shirtlength}</td>
+                    <td>{size.shirtwidth}</td>
+                    <td>{size.sleevelenght}</td>
+                    <td>{size.shoulderlength}</td>
+                    <td>
+                      <Switch
+                        checked={size.status === 1}
+                        onChange={() => toggleStatus(size.id, size.status)}
+                        style={{
+                          backgroundColor: size.status === 1 ? "green" : "red",
+                          width: "30px",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <div
+                        className="actions"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <div className="action">
+                          <Link to={`/admin/size/update/${size.id}`}>
+                            <Button
+                              type="primary"
+                              className="btn"
+                              onClick={() => setShowSizeModal(true)}
+                            >
+                              <i className="fa-regular fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                  </tr>
+                ))
             )}
           </tbody>
         </table>
       </div>
+      <Pagination
+        current={page}
+        total={filteredProducts.length}
+        pageSize={LIMIT}
+        onChange={onPageChange}
+        style={{ textAlign: "center" }}
+      />
     </div>
   );
 };
