@@ -3,7 +3,7 @@ import { sizeService } from "../../../../service/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastService } from "../../../../service/common";
 import XRegExp from "xregexp";
-const AddSize = ({ onSizeFinish, open, onCancel }) => {
+const AddSize = (props) => {
   const navigate = useNavigate();
   const [sizeForm] = Form.useForm();
 
@@ -30,11 +30,10 @@ const AddSize = ({ onSizeFinish, open, onCancel }) => {
 
   const addSizelHandle = async (form) => {
     try {
-      const res = sizeService.createSize(form);
+      sizeService.createSize(form);
       sizeForm.resetFields();
+      props.onSizeFinish();
       toastService.success("Thêm size thành công");
-      const data = res.data;
-      onSizeFinish(data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
@@ -42,7 +41,7 @@ const AddSize = ({ onSizeFinish, open, onCancel }) => {
   };
 
   return (
-    <Modal title="Thêm size" visible={open} footer={null} onCancel={onCancel}>
+    <Modal title="Thêm size" open={props.open} footer={null} onCancel={props.onCancel}>
       <Form
         form={sizeForm}
         onFinish={addSizelHandle}
@@ -91,7 +90,7 @@ const AddSize = ({ onSizeFinish, open, onCancel }) => {
         </Form.Item>
         <Form.Item
           label="Chiều dài tay áo"
-          name="sleevelength"
+          name="sleevelenght"
           rules={[
             { required: true, message: "Chiều dài tay áo không được trống" },
             { validator: validateNumber },
