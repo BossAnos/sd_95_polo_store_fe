@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AppApiError } from "../../common/error/AppApiError";
 import { SERVER_URL } from "../../../constant";
+import socket from "../../../WebSocketService";
 
 const instance = axios.create({
   baseURL: SERVER_URL,
@@ -63,4 +64,9 @@ const deleteCall = async (url, config) => {
   }
 };
 
-export { post, get, put, patch, deleteCall };
+socket.on("dataUpdate", (updatedData) => {
+  // You can update the local state or trigger any other actions here
+  console.log("Real-time update received:", updatedData);
+});
+
+export { post, get, put, patch, deleteCall, socket };

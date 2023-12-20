@@ -10,12 +10,11 @@ export const getProducts = async () => {
   return await userClient.get(`http://localhost:8080/cart/${id}`);
 };
 
-export const changeQuantity = async (cartDetailId, quantity) => {
+export const changeQuantity = async (cartDetailId, params) => {
   return await userClient.put(
     `http://localhost:8080/cart/updateQuantity/${cartDetailId}`,
-    {
-      quantity,
-    }
+
+    params
   );
 };
 

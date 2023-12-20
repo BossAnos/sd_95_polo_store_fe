@@ -7,6 +7,8 @@ import {
   orderService,
   transactionService,
 } from "../../../service/user";
+
+import { productDetailService } from "../../../service/admin";
 import { toastService } from "../../../service/common";
 import { useNavigate } from "react-router-dom";
 import { LoadingPage } from "../../common/LoadingPage";
@@ -21,6 +23,7 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+  const [detail, setDetail] = useState([]);
 
   const handleAddAddressClick = () => {
     setIsAddAddressModalOpen(true);
@@ -37,8 +40,21 @@ const Checkout = () => {
         const userInfo = userAuthService.getAuthInfo();
         form.setFieldValue("username", userInfo?.name || "");
         form.setFieldValue("phone", userInfo?.phone || "");
-
+        console.log(res.data.cartDetailResponses);
         setLoading(false);
+      } catch (error) {
+        toastService.error(error.apiMessage);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await productDetailService.getAllProductDetail();
+        setDetail(res.data);
+        setLoading(false);
+        console.log(res);
       } catch (error) {
         toastService.error(error.apiMessage);
       }
@@ -57,11 +73,37 @@ const Checkout = () => {
     setIsAddAddressModalOpen(false);
   };
 
+  const getAvailableQuantity = (product) => {
+    const productDetail = detail.find(
+      (detailItem) => detailItem.productDetailId === product.productDetailId
+    );
+    return productDetail ? productDetail.quantity : 0;
+  };
+
   const addOrderSubmitHandle = async () => {
     const userInfo = userAuthService.getAuthInfo();
     try {
       await form.validateFields();
     } catch (error) {
+      return;
+    }
+
+    console.log(selectedAddress); // Add this line
+    if (!selectedAddress) {
+      toastService.error("Vui lòng chọn địa chỉ giao hàng.");
+      return;
+    }
+    const invalidProducts = checkOutProducts.filter((p) => {
+      return p.quantity > getAvailableQuantity(p);
+    });
+
+    if (invalidProducts.length > 0) {
+      const invalidProductNames = invalidProducts
+        .map((ip) => ip.nameProduct)
+        .join(", ");
+      const errorMessage = `Rất tiếc! Sản phẩm ${invalidProductNames} có số lượng vượt quá số lượng tồn kho. Vui lòng giảm số lượng và thử lại.`;
+
+      toastService.error(errorMessage);
       return;
     }
     try {
