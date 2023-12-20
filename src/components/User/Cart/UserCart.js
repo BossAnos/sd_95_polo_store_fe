@@ -2,6 +2,7 @@ import { Button, Checkbox, Input, Popconfirm } from "antd";
 import "./UserCart.css";
 import { useEffect, useState } from "react";
 import { cartService } from "../../../service/user";
+import { productDetailService } from "../../../service/admin";
 import { toastService } from "../../../service/common";
 import { Link, useNavigate } from "react-router-dom";
 import { DebounceInput, EmptyPage, LoadingPage } from "../../common";
@@ -10,22 +11,66 @@ import "../../Admin/admin-product.css";
 
 const UserCart = () => {
   const [products, setProducts] = useState([]);
+  const [detail, setDetail] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
+    try {
+      const socket = new WebSocket("ws://localhost:3001");
+
+      socket.onopen = () => {
+        console.log("WebSocket connection opened");
+      };
+
+      socket.onmessage = (event) => {
+        const updatedData = JSON.parse(event.data);
+        console.log("Received data:", updatedData);
+        setProducts(updatedData.products);
+        setDetail(updatedData.detail);
+      };
+
+      socket.onclose = () => {
+        console.log("WebSocket connection closed");
+      };
+
+      return () => {
+        // Cleanup: close WebSocket connection when the component unmounts
+        socket.close();
+      };
+    } catch (error) {
+      console.error("WebSocket connection error:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Fetch initial data from the server
+    const fetchData = async () => {
       try {
         const res = await cartService.getProducts();
         setProducts(
-          res.data.cartDetailResponses.map((p) => {
-            return {
-              ...p,
-              checked: p.cc === 1 ? true : false,
-            };
-          })
+          res.data.cartDetailResponses.map((p) => ({
+            ...p,
+            checked: p.cc === 1 ? true : false,
+          }))
         );
         setLoading(false);
+        console.log(res);
+      } catch (error) {
+        toastService.error(error.apiMessage);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await productDetailService.getAllProductDetail();
+        setDetail(res.data);
+        setLoading(false);
+        console.log(res);
       } catch (error) {
         toastService.error(error.apiMessage);
       }
@@ -75,7 +120,12 @@ const UserCart = () => {
       if (!newQuantity || newQuantity == 0) {
         return;
       }
-      await cartService.changeQuantity(product.cartDetailId, newQuantity);
+
+      const params = {
+        quantity: +newQuantity, // Ensure the value is a number
+        idProductDetail: product.productDetailId, // Assuming this is the correct key
+      };
+      await cartService.changeQuantity(product.cartDetailId, params);
       setProducts((pre) => {
         return pre.map((p) => {
           if (p.cartDetailId === product.cartDetailId) {
@@ -88,7 +138,13 @@ const UserCart = () => {
         });
       });
     } catch (error) {
-      toastService.error(error.apiMessage);
+      if (error.response && error.response.status === 400) {
+        // Handle specific error message from the backend
+        toastService.error("Invalid quantity. Please enter a valid quantity.");
+      } else {
+        // Handle other generic errors
+        toastService.error("Số lượng tồn của sản phẩm không đủ");
+      }
     }
   };
 
@@ -105,15 +161,34 @@ const UserCart = () => {
     }
   };
 
+  const getAvailableQuantity = (product) => {
+    const productDetail = detail.find(
+      (detailItem) => detailItem.productDetailId === product.productDetailId
+    );
+    return productDetail ? productDetail.quantity : 0;
+  };
+
   const checkOutClickHandle = async () => {
     if (!products?.some((p) => p.checked)) {
-      toastService.info("Please choose at least one product");
+      toastService.info("Vui lòng chọn sản phẩm để thanh toán");
       return;
     }
 
+    // Check product quantities before navigating to checkout
+    const invalidProducts = products.filter((p) => {
+      return p.checked && p.quantity > getAvailableQuantity(p);
+    });
+
+    if (invalidProducts.length > 0) {
+      const productNames = invalidProducts.map((p) => p.nameProduct).join(", ");
+      toastService.error(
+        `Số lượng sản phẩm ${productNames} vượt quá số lượng tồn. Vui lòng giảm số lượng.`
+      );
+      return;
+    }
+    // If all quantities are valid, navigate to checkout
     navigate("/checkout");
   };
-
   const checkAllProduct = async (e) => {
     if (e.target.checked) {
       for (let product of products) {
@@ -162,7 +237,7 @@ const UserCart = () => {
                   </th>
                   <th>Tên sản phẩm</th>
                   <th style={{ paddingLeft: "90px" }}>Số lượng</th>
-                  <th style={{ paddingLeft: "100px" }}>Tổng giá</th>
+                  <th style={{ paddingLeft: "100px" }}>Đơn giá</th>
                   <th style={{ paddingLeft: "80px" }}>action</th>
                 </tr>
               </thead>
@@ -262,10 +337,10 @@ const UserCart = () => {
               <table className="table cart-table ">
                 <tfoot>
                   <tr>
-                    <td style={{ paddingRight: "220px" }}>total price :</td>
+                    <td style={{ paddingRight: "180px" }}>Tổng giá:</td>
                     <td>
-                      <h3 style={{ paddingRight: "160px" }}>
-                        {getTotalPrice().toLocaleString()}
+                      <h3 style={{ paddingRight: "10px", display: "flex" }}>
+                        {getTotalPrice().toLocaleString()} VNĐ
                       </h3>
                     </td>
                   </tr>

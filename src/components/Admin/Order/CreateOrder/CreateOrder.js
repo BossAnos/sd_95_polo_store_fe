@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Modal, Table, Button, Input, Image, Form, Select } from "antd";
+import {
+  Modal,
+  Table,
+  Button,
+  Input,
+  Image,
+  Form,
+  Select,
+  notification,
+} from "antd";
 import "react-tabs/style/react-tabs.css";
 import { orderService, adminAuthService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
@@ -104,11 +113,26 @@ const CreateOrder = () => {
 
     return totalPrice;
   };
-
   const handleQuantityChange = (tabIndex, productIndex, event) => {
     const updatedSales = [...sales];
-    updatedSales[tabIndex].products[productIndex].quantity = event.target.value;
-    setSales(updatedSales);
+    const newQuantity = event.target.value;
+    const productDetailId =
+      updatedSales[tabIndex].products[productIndex].productDetailId;
+
+    console.log("New Quantity:", newQuantity);
+
+    if (isQuantityValid(productDetailId, newQuantity)) {
+      console.log("Quantity is valid. Updating...");
+      updatedSales[tabIndex].products[productIndex].quantity = newQuantity;
+      setSales(updatedSales);
+    } else {
+      console.log("Quantity is NOT valid.");
+      // Display an error message or take appropriate action when the quantity is invalid.
+      notification.error({
+        message: "Lỗi",
+        description: "Số lượng không hợp lệ.",
+      });
+    }
   };
 
   const handleAddProduct = (tabIndex) => {
@@ -116,6 +140,24 @@ const CreateOrder = () => {
     setModalVisible(true);
   };
 
+  const isQuantityValid = (productDetailId, newQuantity) => {
+    console.log("Product ID:", productDetailId);
+    console.log("New Quantity:", newQuantity);
+
+    // Find the product in the products array based on productDetailId
+    const product = products.find(
+      (product) => product.productDetailId === productDetailId
+    );
+
+    // Check if the product is found and has the quantity property
+    if (!product || !product.hasOwnProperty("quantity")) {
+      console.error("Invalid product object or missing quantity property");
+      return false;
+    }
+
+    console.log("Quantity in Stock:", product.quantity);
+    return newQuantity >= 0 && newQuantity <= product.quantity;
+  };
   const handleRemoveProduct = (tabIndex, productIndex) => {
     const updatedSales = [...sales];
     updatedSales[tabIndex].products.splice(productIndex, 1);

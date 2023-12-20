@@ -15,7 +15,9 @@ import {
   Popconfirm,
   Tabs,
   Select,
+  Switch,
   Space,
+  notification,
 } from "antd";
 import { toastService } from "../../../service/common";
 import { Link } from "react-router-dom";
@@ -136,10 +138,38 @@ const ProductList = () => {
     })();
   }, []);
 
+  const handleSwitchChange = async (productId) => {
+    try {
+      setLoading(true);
+      const updatedStatus =
+        products.find((p) => p.id === productId).status === 1 ? 0 : 1;
+
+      // Call your API to update the product status based on your logic
+      // await productService.updateProductStatus(productId, {
+      //   status: updatedStatus,
+      // });
+
+      // Update the local state to reflect the changes
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.id === productId ? { ...p, status: updatedStatus } : p
+        )
+      );
+
+      notification.success({
+        message: "Success",
+        description: `Thay đổi trạng thái thành công`,
+      });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   async function getProducts(form) {
     setLoading(true);
     try {
-      const { data } = await productService.getAllProducts({
+      const { data } = await productService.getAllProductsForAdmin({
         ...form,
         name: keyword,
       });
@@ -254,7 +284,9 @@ const ProductList = () => {
           <button className="">Thêm sản phẩm</button>
         </Link>
       </Form>
-      <p style={{fontWeight:"bolder",marginLeft:"50px"}}>Tổng số sản phẩm: {filteredProducts.length}</p>
+      <p style={{ fontWeight: "bolder", marginLeft: "50px" }}>
+        Tổng số sản phẩm: {filteredProducts.length}
+      </p>
       {loading && (
         <div
           style={{
@@ -276,6 +308,7 @@ const ProductList = () => {
               <th>Danh mục</th>
               <th>Thương hiệu</th>
               <th>Chất Liệu</th>
+              <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -299,7 +332,19 @@ const ProductList = () => {
                     <td>{categoryMap[p.categoryId]}</td>
                     <td>{brandMap[p.brandId]}</td>
                     <td>{materialMap[p.materialId]}</td>
-                    {/* <td>{p.price_core}</td> */}
+                    <td>
+                      <Switch
+                        checked={p.status === 1 || p.status === 3}
+                        onChange={() => handleSwitchChange(p.id)}
+                        style={{
+                          width: "30px",
+                          backgroundColor:
+                            p.status === 1 || p.status === 3
+                              ? "#4CAF50"
+                              : "#FF0000",
+                        }}
+                      />
+                    </td>
                     <td>
                       <div
                         className="actions"
@@ -311,18 +356,6 @@ const ProductList = () => {
                               <i className="fa-regular fa-pen-to-square"></i>
                             </button>
                           </Link>
-                        </div>
-                        <div className="action">
-                          <Popconfirm
-                            title="Xoá khách hàng"
-                            description="Bạn có chắc chắn muốn xoá khách hàng này?"
-                            okText="Xoá"
-                            cancelText="Huỷ"
-                          >
-                            <button className="btn">
-                              <i className="fa-sharp fa-solid fa-trash"></i>
-                            </button>
-                          </Popconfirm>
                         </div>
                       </div>
                     </td>
