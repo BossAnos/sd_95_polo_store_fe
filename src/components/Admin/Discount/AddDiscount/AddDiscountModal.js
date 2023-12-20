@@ -38,6 +38,7 @@ const AddDiscountModal = ({ visible, onOk, onCancel }) => {
             discount: formattedDiscount,
           });
           onOk(response.data);
+          createDiscountFinishHandle(response.data);
           formRef.current.resetFields();
         } catch (error) {
           message.error("Error creating discount");
@@ -50,6 +51,14 @@ const AddDiscountModal = ({ visible, onOk, onCancel }) => {
   const handleCancel = () => {
     formRef.current.resetFields();
     onCancel();
+  };
+
+  const createDiscountFinishHandle = async (newDiscount) => {
+    // Call the parent component's handler to update the material options
+    visible.onCreateMaterialFinish(newDiscount);
+
+    // Close the modal or perform any other necessary actions
+    visible.onMaterialFinish();
   };
 
   return (

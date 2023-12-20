@@ -114,6 +114,7 @@ const ProductPage = () => {
 
   const handleStatusButton = async (productId) => {
     try {
+      // Map through products to update the status locally
       const updatedProducts = products.map((product) =>
         product.id === productId
           ? {
@@ -124,10 +125,19 @@ const ProductPage = () => {
       );
       setProducts(updatedProducts);
 
-      // Gọi API hoặc thực hiện các hành động cần thiết để cập nhật status trên server
-      // await productService.updateProductStatus(productId, updatedStatus);
+      // Find the updated status for the specific product
+      const updatedStatus = updatedProducts.find(
+        (product) => product.id === productId
+      )?.status;
+
+      // Uncomment the following line to make an API call to update the status on the server
+      await productService.changeStautsDiscount(productId); // Assuming changeStautsDiscount makes the API call
+
+      toastService.success("Cập nhật trạng thái thành công");
     } catch (error) {
-      toastService.error(error.apiMessage);
+      // Handle API error
+      console.error("Error updating product status:", error);
+      toastService.error("Cập nhật trạng thái không thành công");
     }
   };
   const filteredProducts = filterProducts().filter(

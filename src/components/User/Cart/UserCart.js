@@ -72,19 +72,19 @@ const UserCart = () => {
       }, 0);
   };
 
-  // const handleDelete = async (product) => {
-  //   try {
-  //     await cartService.reduce(product.cartDetailId, 0);
-  //     setProducts((pre) => {
-  //       const newProducts = pre.filter(
-  //         (p) => p.cartDetailId !== product.cartDetailId
-  //       );
-  //       return newProducts;
-  //     });
-  //   } catch (error) {
-  //     toastService.error(error.apiMessage);
-  //   }
-  // };
+  const handleDelete = async (product) => {
+    try {
+      await cartService.deleteCart(product.cartDetailId);
+      setProducts((pre) => {
+        const newProducts = pre.filter(
+          (p) => p.cartDetailId !== product.cartDetailId
+        );
+        return newProducts;
+      });
+    } catch (error) {
+      toastService.error(error.apiMessage);
+    }
+  };
 
   const quantityChangeHandle = async (product, e) => {
     try {
@@ -288,8 +288,8 @@ const UserCart = () => {
                       <td>
                         <Popconfirm
                           title="Xóa đơn hàng"
-                          description="Bạn có chắc chắn muốn xóa đơn hàng này?"
-                          // onConfirm={() => handleDelete(p)}
+                          description="Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?"
+                          onConfirm={() => handleDelete(p)}
                           // onCancel={cancel}
                           okText="Có"
                           cancelText="Không"

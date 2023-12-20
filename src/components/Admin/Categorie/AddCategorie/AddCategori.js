@@ -22,18 +22,32 @@ const AddCategory = (props) => {
 
   const addCategorylHandle = async (form) => {
     try {
-      categoryService.createCategory(form);
+      const newCategory = await categoryService.createCategory(form);
       categoryForm.resetFields();
       props.onCategoryFinish();
       toastService.success("Thêm loại áo thành công");
+      createCategoryFinishHandle(newCategory.data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
     }
   };
 
+  const createCategoryFinishHandle = async (newCategory) => {
+    // Call the parent component's handler to update the material options
+    props.onCreateCategoryFinish(newCategory);
+
+    // Close the modal or perform any other necessary actions
+    props.onCategoryFinish();
+  };
+
   return (
-    <Modal title="Thêm loại áo" open={props.open} footer={null} onCancel={props.onCancel}>
+    <Modal
+      title="Thêm loại áo"
+      open={props.open}
+      footer={null}
+      onCancel={props.onCancel}
+    >
       <Form
         onFinish={addCategorylHandle}
         labelCol={{ span: 4 }}
@@ -70,4 +84,4 @@ const AddCategory = (props) => {
   );
 };
 
-export { AddCategory};
+export { AddCategory };

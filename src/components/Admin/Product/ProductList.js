@@ -141,13 +141,12 @@ const ProductList = () => {
   const handleSwitchChange = async (productId) => {
     try {
       setLoading(true);
+      const currentProduct = products.find((p) => p.id === productId);
       const updatedStatus =
-        products.find((p) => p.id === productId).status === 1 ? 0 : 1;
+        currentProduct.status === 1 || currentProduct.status === 3 ? 0 : 1;
 
       // Call your API to update the product status based on your logic
-      // await productService.updateProductStatus(productId, {
-      //   status: updatedStatus,
-      // });
+      await productService.changeStatus(productId);
 
       // Update the local state to reflect the changes
       setProducts((prevProducts) =>

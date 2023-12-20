@@ -5,6 +5,11 @@ const getAllBrands = async () => {
   return res;
 };
 
+const getAllBrandsByStatus = async () => {
+  const res = await adminClient.get("http://localhost:8080/admin/brand/getAll");
+  return res;
+};
+
 const changeStatus = async (id) => {
   const res = await adminClient.put(
     `http://localhost:8080/admin/brand/changeStatus/${id}`
@@ -12,14 +17,11 @@ const changeStatus = async (id) => {
 };
 
 export const createBrands = async (form) => {
-  return await adminClient.post(
-    "http://localhost:8080/admin/brand/add",
-    form
-  );
+  return await adminClient.post("http://localhost:8080/admin/brand/add", form);
 };
 
 const getOne = async (id) => {
   const res = await adminClient.get(`http://localhost:8080/admin/brand/${id}`);
   return res;
 };
-export { getAllBrands, changeStatus ,getOne};
+export { getAllBrands, changeStatus, getOne, getAllBrandsByStatus };

@@ -20,21 +20,34 @@ const AddBrand = (props) => {
     }
   };
 
-
   const addBrandlHandle = async (form) => {
     try {
-      brandService.createBrands(form);
+      const newBrand = await brandService.createBrands(form);
       brandForm.resetFields();
       props.onBrandFinish();
       toastService.success("Thêm thương hiệu thành công");
+      createBrandFinishHandle(newBrand.data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
     }
   };
 
+  const createBrandFinishHandle = async (newBrand) => {
+    // Call the parent component's handler to update the material options
+    props.onCreateBrandFinish(newBrand);
+
+    // Close the modal or perform any other necessary actions
+    props.onBrandFinish();
+  };
+
   return (
-    <Modal title="Thêm thương hiệu" open={props.open} footer={null} onCancel={props.onCancel}>
+    <Modal
+      title="Thêm thương hiệu"
+      open={props.open}
+      footer={null}
+      onCancel={props.onCancel}
+    >
       <Form
         onFinish={addBrandlHandle}
         labelCol={{ span: 4 }}

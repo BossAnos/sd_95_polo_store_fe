@@ -5,6 +5,13 @@ const getAllMaterial = async () => {
   return res;
 };
 
+const getAllMaterialByStatus = async () => {
+  const res = await adminClient.get(
+    "http://localhost:8080/admin/material/getAll"
+  );
+  return res;
+};
+
 export const createMaterial = async (form) => {
   return await adminClient.post(
     "http://localhost:8080/admin/material/add",
@@ -12,7 +19,9 @@ export const createMaterial = async (form) => {
   );
 };
 const getOne = async (id) => {
-  const res = await adminClient.get(`http://localhost:8080/admin/material/${id}`);
+  const res = await adminClient.get(
+    `http://localhost:8080/admin/material/${id}`
+  );
   return res;
 };
 const changeStatus = async (id) => {
@@ -21,4 +30,4 @@ const changeStatus = async (id) => {
   );
 };
 
-export { getAllMaterial , getOne,changeStatus};
+export { getAllMaterial, getOne, changeStatus, getAllMaterialByStatus };

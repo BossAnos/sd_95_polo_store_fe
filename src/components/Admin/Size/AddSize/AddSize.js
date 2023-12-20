@@ -30,18 +30,32 @@ const AddSize = (props) => {
 
   const addSizelHandle = async (form) => {
     try {
-      sizeService.createSize(form);
+      const newSize = await sizeService.createSize(form);
       sizeForm.resetFields();
       props.onSizeFinish();
       toastService.success("Thêm size thành công");
+      createSizeFinishHandle(newSize.data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
     }
   };
 
+  const createSizeFinishHandle = async (newSize) => {
+    // Call the parent component's handler to update the material options
+    props.onCreateSizeFinish(newSize);
+
+    // Close the modal or perform any other necessary actions
+    props.onSizeFinish();
+  };
+
   return (
-    <Modal title="Thêm size" open={props.open} footer={null} onCancel={props.onCancel}>
+    <Modal
+      title="Thêm size"
+      open={props.open}
+      footer={null}
+      onCancel={props.onCancel}
+    >
       <Form
         form={sizeForm}
         onFinish={addSizelHandle}

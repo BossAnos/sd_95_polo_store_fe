@@ -18,22 +18,37 @@ const AddMaterial = (props) => {
     } else {
       callback();
     }
-  };  
+  };
 
   const addMaterialHandle = async (form) => {
     try {
-      materialService.createMaterial(form);
+      const newMaterial = await materialService.createMaterial(form); // Fix: assign the result to newMaterial
       materiaForm.resetFields();
       props.onMaterialFinish();
       toastService.success("Thêm chất liệu thành công");
+      createMaterialFinishHandle(newMaterial.data);
+      console.log(newMaterial.data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
     }
   };
 
+  const createMaterialFinishHandle = async (newMaterial) => {
+    // Call the parent component's handler to update the material options
+    props.onCreateMaterialFinish(newMaterial);
+
+    // Close the modal or perform any other necessary actions
+    props.onMaterialFinish();
+  };
+
   return (
-    <Modal title="Thêm chất liệu" open={props.open} footer={null} onCancel={props.onCancel}>
+    <Modal
+      title="Thêm chất liệu"
+      open={props.open}
+      footer={null}
+      onCancel={props.onCancel}
+    >
       <Form
         onFinish={addMaterialHandle}
         labelCol={{ span: 4 }}

@@ -40,6 +40,12 @@ import { fileService, toastService } from "../../../../service/common";
 import { v4 as uuid } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 // import { AddDiscountModal } from "../../../common/Modal";
+import { AddMaterial } from "../../Material/AddMaterial/AddMaterial";
+import { AddBrand } from "../../Brand/AddBrand/AddBrand";
+import { AddSize } from "../../Size/AddSize/AddSize";
+import { AddCategory } from "../../Categorie/AddCategorie/AddCategori";
+import { AddColor } from "../../Color/AddColor/Addcolor";
+import AddDiscountModal from "../../Discount/AddDiscount/AddDiscountModal";
 
 const { Title } = Typography;
 
@@ -55,6 +61,8 @@ const AddProduct = () => {
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showAddBrandModal, setShowAddBrandModal] = useState(false);
   const [showMaterialModal, setShowAddMaterialModal] = useState(false);
+  const [showSizeModal, setShowAddSizeModal] = useState(false);
+  const [showColorModal, setShowAddColorModal] = useState(false);
   const [showAddDiscountModal, setShowAddDiscountModal] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [fields, setFields] = useState([]);
@@ -71,11 +79,11 @@ const AddProduct = () => {
   useEffect(() => {
     (async () => {
       try {
-        const categoryRes = await categoryService.getAllCategory();
-        const brandRes = await brandService.getAllBrands();
-        const materialRes = await materialService.getAllMaterial();
-        const sizeRes = await sizeService.getAllSizes();
-        const colorRes = await colorService.getAllColors();
+        const categoryRes = await categoryService.getAllCategoryByStatus();
+        const brandRes = await brandService.getAllBrandsByStatus();
+        const materialRes = await materialService.getAllMaterialByStatus();
+        const sizeRes = await sizeService.getAllSizeByStatus();
+        const colorRes = await colorService.getAllColorsByStatus();
         const discountRes = await discountService.getAllDiscount({
           status: "1",
         });
@@ -214,7 +222,9 @@ const AddProduct = () => {
       .map((productDetail) => {
         const form_id = productDetail.form_id;
         const image = images[form_id];
-        const names = image.map((item) => ({ name: item.previewUrl }));
+        const names = Array.isArray(image)
+          ? image.map((item) => ({ name: item.previewUrl }))
+          : [];
         console.log(image);
         console.log(names);
         if (!image) {
@@ -264,33 +274,43 @@ const AddProduct = () => {
     form.setFieldValue("brand_id", newBrand.id);
   }
 
-  async function createMaterialFinishHandle(newMaterial) {
-    setShowAddMaterialModal(false);
-    setMaterialOptions((pre) => {
-      return [
-        {
-          value: newMaterial.id,
-          label: newMaterial.name,
-        },
-        ...pre,
-      ];
-    });
-    form.setFieldValue("material_id", newMaterial.id);
-  }
+  const onCreateMaterialFinish = (newMaterial) => {
+    // Update the material options state with the new material
+    setMaterialOptions((prevOptions) => [
+      { value: newMaterial.id, label: newMaterial.name },
+      ...prevOptions,
+    ]);
+  };
 
-  async function createDiscountFinishHandle(newDiscount) {
-    setShowAddDiscountModal(false);
-    setDiscountOptions((pre) => {
-      return [
-        {
-          value: newDiscount.id,
-          label: newDiscount.name,
-        },
-        ...pre,
-      ];
-    });
-    form.setFieldValue("discountId", newDiscount.id);
-  }
+  const onCreateBrandFinish = (newBrand) => {
+    // Update the material options state with the new material
+    setBrandOptions((prevOptions) => [
+      { value: newBrand.id, label: newBrand.name },
+      ...prevOptions,
+    ]);
+  };
+  const onCreateCategoryFinish = (newCategory) => {
+    // Update the material options state with the new material
+    setCategoryOptions((prevOptions) => [
+      { value: newCategory.id, label: newCategory.name },
+      ...prevOptions,
+    ]);
+  };
+  const onCreateSizeFinish = (newSize) => {
+    // Update the material options state with the new material
+    setSizeOptions((prevOptions) => [
+      { value: newSize.id, label: newSize.name },
+      ...prevOptions,
+    ]);
+  };
+
+  const onCreateColorFinish = (newColor) => {
+    // Update the material options state with the new material
+    setColorOptions((prevOptions) => [
+      { value: newColor.id, label: newColor.name },
+      ...prevOptions,
+    ]);
+  };
 
   const removeImage = async (form_id, imageIndex) => {
     const updatedImages = { ...images };
@@ -392,6 +412,45 @@ const AddProduct = () => {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
       }}
     >
+      <AddMaterial
+        open={showMaterialModal}
+        onCancel={() => setShowAddMaterialModal(false)}
+        onMaterialFinish={() => setShowAddMaterialModal(false)}
+        onCreateMaterialFinish={onCreateMaterialFinish}
+      />
+      <AddBrand
+        open={showAddBrandModal}
+        onCancel={() => setShowAddBrandModal(false)}
+        onBrandFinish={() => setShowAddBrandModal(false)}
+        onCreateBrandFinish={onCreateBrandFinish}
+      />
+      <AddCategory
+        open={showAddCategoryModal}
+        onCancel={() => setShowAddCategoryModal(false)}
+        onCategoryFinish={() => setShowAddCategoryModal(false)}
+        onCreateCategoryFinish={onCreateCategoryFinish}
+      />
+      <AddSize
+        open={showSizeModal}
+        onCancel={() => setShowAddSizeModal(false)}
+        onSizeFinish={() => setShowAddSizeModal(false)}
+        onCreateSizeFinish={onCreateSizeFinish}
+      />
+      <AddColor
+        open={showColorModal}
+        onCancel={() => setShowAddColorModal(false)}
+        onSizeFinish={() => setShowAddColorModal(false)}
+        onCreateSizeFinish={onCreateSizeFinish}
+      />
+      <AddDiscountModal
+        visible={showAddDiscountModal}
+        onOk={(data) => {
+          // Handle the data returned from the AddDiscountModal if needed
+          console.log("Discount modal data:", data);
+          setShowAddDiscountModal(false); // Close the modal
+        }}
+        onCancel={() => setShowAddDiscountModal(false)}
+      />
       <Title level={1} style={{ textAlign: "center" }}>
         {" "}
         {productId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
@@ -420,11 +479,11 @@ const AddProduct = () => {
                 width: "95%",
               }}
               name="categoryId"
-              label="Danh mục"
+              label="Loại áo"
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng chọn danh mục",
+                  message: "Vui lòng chọn loại áo",
                 },
               ]}
             >
@@ -526,27 +585,27 @@ const AddProduct = () => {
                             <strong style={{ marginLeft: "10px" }}>Size</strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-14px" }}>
+                            <strong style={{ marginLeft: "25px" }}>
                               Màu sắc
                             </strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-46px" }}>
+                            <strong style={{ marginLeft: "35px" }}>
                               Số lượng
                             </strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-80px" }}>
-                              Gía nhập
+                            <strong style={{ marginLeft: "-20px" }}>
+                              Giá nhập
                             </strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-110px" }}>
-                              Gía bán
+                            <strong style={{ marginLeft: "-75px" }}>
+                              Giá bán
                             </strong>
                           </Col>
                           <Col span={4}>
-                            <strong style={{ marginLeft: "-150px" }}>
+                            <strong style={{ marginLeft: "-130px" }}>
                               Trọng lượng
                             </strong>
                           </Col>
@@ -568,8 +627,6 @@ const AddProduct = () => {
                           <Input type="hidden" />
                         </Form.Item>
 
-                     
-
                         <Form.Item
                           {...restField}
                           name={[name, "sizeId"]}
@@ -585,6 +642,17 @@ const AddProduct = () => {
                             placeholder="size"
                           />
                         </Form.Item>
+                        <Button
+                          style={{
+                            width: "30px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          onClick={() => setShowAddSizeModal(true)}
+                        >
+                          <i className="fa-solid fa-plus"></i>
+                        </Button>
 
                         <Form.Item
                           {...restField}
@@ -601,6 +669,17 @@ const AddProduct = () => {
                             placeholder="color"
                           />
                         </Form.Item>
+                        <Button
+                          style={{
+                            width: "30px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          onClick={() => setShowAddColorModal(true)}
+                        >
+                          <i className="fa-solid fa-plus"></i>
+                        </Button>
 
                         <Form.Item
                           {...restField}
@@ -707,7 +786,6 @@ const AddProduct = () => {
                           ))}
                       </Row>
                       <Divider style={{ margin: "20px", color: "black" }} />
-                  
                     </div>
                   ))}
 
@@ -727,9 +805,12 @@ const AddProduct = () => {
           </div>
         </div>
 
-        <button className="mt-3" htmlType="submit" type="primary">
-          {productId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
-        </button>
+        <br></br>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button className="mt-3" htmlType="submit" type="primary">
+            {productId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
+          </button>
+        </div>
       </Form>
     </div>
   );

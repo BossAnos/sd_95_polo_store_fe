@@ -22,18 +22,32 @@ const AddColor = (props) => {
 
   const addColorlHandle = async (form) => {
     try {
-      colorService.createColor(form);
+      const newColor = await colorService.createColor(form);
       colorForm.resetFields();
       props.onColorFinish();
       toastService.success("Thêm màu sắc thành công");
+      createColorFinishHandle(newColor.data);
     } catch (error) {
       console.log(error);
       toastService.error(error.apiMessage);
     }
   };
 
+  const createColorFinishHandle = async (newColor) => {
+    // Call the parent component's handler to update the material options
+    props.onCreatColorFinish(newColor);
+
+    // Close the modal or perform any other necessary actions
+    props.onColorFinish();
+  };
+
   return (
-    <Modal title="Thêm màu sắc" open={props.open} footer={null} onCancel={props.onCancel}>
+    <Modal
+      title="Thêm màu sắc"
+      open={props.open}
+      footer={null}
+      onCancel={props.onCancel}
+    >
       <Form
         onFinish={addColorlHandle}
         labelCol={{ span: 4 }}

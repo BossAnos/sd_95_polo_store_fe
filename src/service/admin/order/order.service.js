@@ -5,6 +5,15 @@ export const getOrders = async (params) => {
   });
 };
 
+export const getOrdersByTimeRange = async (params) => {
+  return await adminClient.get(
+    "http://localhost:8080/admin/order/byTimeRange",
+    {
+      params,
+    }
+  );
+};
+
 export const changeStatusOrder = async (id, params) => {
   return await adminClient.put(
     `http://localhost:8080/admin/order/updateStatus/${id}`,

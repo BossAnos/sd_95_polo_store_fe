@@ -5,6 +5,11 @@ const getAllColors = async () => {
   return res;
 };
 
+const getAllColorsByStatus = async () => {
+  const res = await adminClient.get("http://localhost:8080/admin/color/getAll");
+  return res;
+};
+
 const getOne = async (id) => {
   const res = await adminClient.get(`http://localhost:8080/admin/color/${id}`);
   return res;
@@ -27,4 +32,10 @@ const changeStatus = async (id) => {
   );
 };
 
-export { getAllColors, deleteColor, getOne, changeStatus };
+export {
+  getAllColors,
+  deleteColor,
+  getOne,
+  changeStatus,
+  getAllColorsByStatus,
+};

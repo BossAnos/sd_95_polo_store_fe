@@ -18,6 +18,12 @@ export const changeQuantity = async (cartDetailId, params) => {
   );
 };
 
+export const deleteCart = async (cartDetailId) => {
+  return await userClient.put(
+    `http://localhost:8080/cart/delete/${cartDetailId}`
+  );
+};
+
 export const changeStatus = async (cartDetailId, status) => {
   return await userClient.put(
     `http://localhost:8080/cart/updateStatus/${cartDetailId}`,

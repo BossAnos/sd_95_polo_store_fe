@@ -32,10 +32,10 @@ const DiscountManagement = () => {
 
   const handleSwitchChange = async (discountId, isChecked) => {
     try {
-      // Gọi API hoặc thực hiện các hành động cần thiết để cập nhật status trên server
-      // await discountService.updateDiscountStatus(discountId, isChecked ? 1 : 0);
+      // Gọi API để cập nhật trạng thái trên server
+      await discountService.changeStatus(discountId, isChecked ? 1 : 0);
 
-      // Cập nhật trạng thái ngay trong local state (giả sử API thành công)
+      // Cập nhật trạng thái ngay trong local state
       const updatedDiscounts = discounts.map((discount) =>
         discount.id === discountId
           ? { ...discount, status: isChecked ? 1 : 0 }

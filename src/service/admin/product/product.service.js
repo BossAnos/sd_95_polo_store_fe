@@ -30,6 +30,18 @@ export const getProductDetailById = async (productId) => {
   );
 };
 
+export const changeStatus = async (productId) => {
+  return await adminClient.put(
+    `http://localhost:8080/admin/product/changeStatus/${productId}`
+  );
+};
+
+export const changeStautsDiscount = async (productId) => {
+  return await adminClient.put(
+    `http://localhost:8080/admin/product/changeStautsDiscount/${productId}`
+  );
+};
+
 export const createProduct = async (createProductForm) => {
   return await adminClient.post(
     "http://localhost:8080/admin/product/add",

@@ -63,7 +63,7 @@ const AddAddress = ({ onAddress, open, onCancel, onAddSuccess }) => {
           label="Phường/xã"
           name="ward"
           style={{ width: "600px" }}
-          rules={[{ required: true, message: "Vui lòng nhập quận huyện" }]}
+          rules={[{ required: true, message: "Vui lòng nhập phường xã" }]}
         >
           <Input style={{ width: "300px", marginLeft: "30px" }} />
         </Form.Item>
@@ -72,7 +72,7 @@ const AddAddress = ({ onAddress, open, onCancel, onAddSuccess }) => {
           label="Địa chỉ đầy đủ"
           name="fullAddress"
           style={{ width: "600px" }}
-          rules={[{ required: true, message: "Vui lòng nhập quận huyện" }]}
+          rules={[{ required: true, message: "Vui lòng nhập địa chỉ đầy đủ" }]}
         >
           <Input style={{ width: "300px", marginLeft: "30px" }} />
         </Form.Item>

@@ -1,23 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
-const dataPieChart = [
-  { name: "Đơn hoàn thành", value: 500, fill: "#00C49F", amount: 100000000 },
-  { name: "Đơn đang giao", value: 200, fill: "#FFBB28", amount: 50000000 },
-  { name: "Đơn hủy", value: 100, fill: "#FF8042", amount: 20000000 },
-  { name: "Đơn giao lại", value: 300, fill: "#0088FE", amount: 80000000 },
+const STATUS_LABELS = {
+  1: "Chờ xác nhận",
+  2: "Xác nhận",
+  3: "Đang chuẩn bị hàng",
+  4: "Đang giao hàng",
+  5: "Hoàn thành",
+  6: "Hàng bị hoàn",
+  7: "Huỷ",
+  8: "Giao lại",
+};
+
+const COLORS = [
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#0088FE",
+  "#FF6666",
+  "#7CFC00",
+  "#DA70D6",
+  "#FF4500",
 ];
 
-const COLORS = ["#00C49F", "#FFBB28", "#FF8042", "#0088FE"];
-
-const OrderStatusChart = () => {
+const OrderStatusChart = ({ orderData }) => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [totalValue, setTotalValue] = useState(0);
+  const [totalValue, setTotalValue] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    // Calculate total values based on order statuses
+    const totalValues = orderData.reduce((acc, order) => {
+      const status = order.status || "Không xác định"; // Use 'status' instead of 'transactions.value'
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Set the total values
+    setTotalValue(totalValues);
+    setTotalAmount(orderData.length);
+  }, [orderData]);
+
+  const dataPieChart = Object.keys(totalValue).map((status) => ({
+    name: STATUS_LABELS[status] || "Không xác định",
+    value: totalValue[status],
+    fill: COLORS[status - 1] || "#CCCCCC", // Use the corresponding color from the COLORS array
+    amount: totalValue[status],
+  }));
 
   const handlePieClick = (_, index) => {
     setActiveIndex(index);
-    setTotalValue(dataPieChart[index].value);
     setTotalAmount(dataPieChart[index].amount);
   };
 
@@ -50,7 +82,10 @@ const OrderStatusChart = () => {
         </Pie>
 
         <Tooltip
-          formatter={(value) => [`Số đơn: ${value}`, `Giá trị: ${totalAmount}`]}
+          formatter={(value) => [
+            `Số đơn: ${value}`,
+            `Tổng đơn hàng: ${totalAmount}`,
+          ]}
         />
         <Legend
           formatter={(value, entry) =>

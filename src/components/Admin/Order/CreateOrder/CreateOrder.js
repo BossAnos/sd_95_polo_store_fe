@@ -213,6 +213,14 @@ const CreateOrder = () => {
       const selectedTab = sales[tabIndex];
       console.log(selectedTab.products);
 
+      if (selectedTab.products.length === 0) {
+        notification.error({
+          message: "Lỗi",
+          description: "Chưa có sản phẩm nào được chọn trong đơn hàng này.",
+        });
+        return;
+      }
+
       const deliveryOption = selectedTab.deliveryOption;
       const transaction = selectedTab.transaction;
       let transactionValue;
@@ -398,7 +406,7 @@ const CreateOrder = () => {
                           },
                         ]}
                       >
-                              <Input type="text" style={{ width: "250px" }} />
+                        <Input type="text" style={{ width: "250px" }} />
                       </Form.Item>
                       <Form.Item
                         style={{ fontWeight: "bolder" }}
@@ -411,7 +419,7 @@ const CreateOrder = () => {
                           },
                         ]}
                       >
-                      <Input type="text" style={{ width: "250px" }} />
+                        <Input type="text" style={{ width: "250px" }} />
                       </Form.Item>
 
                       <Form.Item
@@ -520,7 +528,10 @@ const CreateOrder = () => {
                               />
                             </td>
                             <td style={{ color: "red" }}>
-                            {(product.price * product.quantity).toLocaleString()}VNĐ
+                              {(
+                                product.price * product.quantity
+                              ).toLocaleString()}
+                              VNĐ
                             </td>
                             <td>
                               <button
@@ -543,11 +554,13 @@ const CreateOrder = () => {
                     </tbody>
                   </table>
                   {sale.products.length > 0 && (
-                    <div style={{fontSize : "18px"}}>
+                    <div style={{ fontSize: "18px" }}>
                       <h4 className="text-tonggia">
                         <h4 style={{ display: "flex" }}>
                           Tổng giá:
-                          <p style={{ color: "red" }}> {""}
+                          <p style={{ color: "red" }}>
+                            {" "}
+                            {""}
                             {calculateTotalPrice(sale).toLocaleString()} VNĐ
                           </p>
                         </h4>

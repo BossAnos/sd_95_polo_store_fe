@@ -379,10 +379,18 @@ const OrderList = () => {
                       <div>
                         {order.transactions.description}
                         <br></br>
-                        Tổng thu:
-                        <span style={{ color: "red" }}>
-                          {totalRevenue.toLocaleString()} đ
-                        </span>
+                        {totalRevenue !== 0 && (
+                          <div>
+                            Tổng thu:{" "}
+                            <span style={{ color: "red" }}>
+                              {totalRevenue.toLocaleString()} đ
+                            </span>
+                          </div>
+                        )}
+                        <br></br>
+                        {order.admins && order.admins.name && (
+                          <div>Người tạo: {order.admins.name}</div>
+                        )}
                       </div>
                     </td>
                     <td>
@@ -401,6 +409,7 @@ const OrderList = () => {
                         </>
                       )}
                       <br />
+                      <br></br>
                     </td>
 
                     <td
@@ -572,12 +581,14 @@ const OrderList = () => {
         />
       )}
 
-      <Pagination
-        defaultCurrent={1}
-        total={filteredOrders.length}
-        pageSize={LIMIT}
-        onChange={onPageChange}
-      />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Pagination
+          defaultCurrent={1}
+          total={filteredOrders.length}
+          pageSize={LIMIT}
+          onChange={onPageChange}
+        />
+      </div>
     </div>
   );
 };
