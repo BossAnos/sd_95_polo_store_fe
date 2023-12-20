@@ -23,9 +23,9 @@ const AdminList = () => {
     >
       <br></br>
       <Link to={"/admin/customer/add"}>
-        <Button type="primary" className="btn-customer__add">
+        <button type="primary" className="btn-customer__add">
           Thêm nhân viên
-        </Button>
+        </button>
       </Link>
       <br></br>
       <br></br>
@@ -77,9 +77,9 @@ const AdminList = () => {
                     >
                       <div className="action">
                         <Link to={`/admin/customer/update/${admin.id}`}>
-                          <Button type="primary" className="btn">
+                          <button type="primary" className="btn">
                             <i className="fa-regular fa-pen-to-square"></i>
-                          </Button>
+                          </button>
                         </Link>
                       </div>
                       <div className="action">
