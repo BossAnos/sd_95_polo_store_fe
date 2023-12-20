@@ -3,6 +3,7 @@ import { discountService, productService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
 import { Tabs, Input, Checkbox, Switch, notification } from "antd";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
+import "../../admin-product.css"
 const { TabPane } = Tabs;
 
 const ProductPage = () => {
@@ -347,15 +348,16 @@ const ProductPage = () => {
               </h1>
             
               <br></br>
+              <div style={{ maxHeight: "400px", overflowY: "auto" }}>
               {filteredProducts.length === 0 ? (
                 <p>Không tìm thấy sản phẩm nào.</p>
               ) : (
+              
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ width: "10px" }}>
-                        <Checkbox
-                     
+                      <th >
+                        <Checkbox       
                           checked={filteredProducts.every(
                             (product) => product.discount === selectedDiscount
                           )}
@@ -402,7 +404,8 @@ const ProductPage = () => {
                     ))}
                   </tbody>
                 </table>
-              )}
+                
+              )}</div>
               {filteredProducts.length > 0 && (
                 <div style={{}}>
                   <button onClick={handleAddDiscountToSelectedProducts}   style={{ marginLeft: "50px", marginTop: "20px" }}>

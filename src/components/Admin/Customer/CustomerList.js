@@ -32,6 +32,7 @@ const CustomerList = () => {
       <br></br>
       <br></br>
       <div className="table__main--customer">
+      <div style={{ maxHeight: "600px", overflowY: "auto" }}>
         <table>
           <thead>
             <tr>
@@ -101,6 +102,7 @@ const CustomerList = () => {
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

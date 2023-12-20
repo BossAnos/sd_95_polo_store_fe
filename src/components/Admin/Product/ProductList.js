@@ -298,6 +298,7 @@ const ProductList = () => {
           <LoadingBox />
         </div>
       )}
+      <div style={{ maxHeight: "500px", overflowY: "auto" }}>
       {!loading && (
         <table className="table__main">
           <thead>
@@ -364,7 +365,7 @@ const ProductList = () => {
               })}
           </tbody>
         </table>
-      )}
+      )}</div>
       <Pagination
         current={page}
         total={filteredProducts.length}

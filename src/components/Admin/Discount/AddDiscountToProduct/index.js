@@ -73,6 +73,7 @@ const DiscountManagement = () => {
         Thêm khuyến mại
       </button>
       <h1 style={{fontWeight:"bolder",marginTop:"20px"}}>Quản lý khuyến mại</h1>
+      <div style={{ maxHeight: "600px", overflowY: "auto" }}>
       <table>
         <thead>
           <tr>
@@ -118,6 +119,7 @@ const DiscountManagement = () => {
           })}
         </tbody>
       </table>
+      </div>
       <AddDiscountModal
     
         visible={isModalVisible}
