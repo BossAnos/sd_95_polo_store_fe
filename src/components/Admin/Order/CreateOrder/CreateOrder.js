@@ -384,7 +384,7 @@ const CreateOrder = () => {
                           },
                         ]}
                       >
-                        <Input type="text" style={{ width: "180px" }} />
+                        <Input type="text" style={{ width: "250px" }} />
                       </Form.Item>
                       <Form.Item
                         style={{ fontWeight: "bolder" }}
@@ -398,7 +398,7 @@ const CreateOrder = () => {
                           },
                         ]}
                       >
-                        <Input type="text" style={{ width: "180px" }} />
+                              <Input type="text" style={{ width: "250px" }} />
                       </Form.Item>
                       <Form.Item
                         style={{ fontWeight: "bolder" }}
@@ -411,7 +411,7 @@ const CreateOrder = () => {
                           },
                         ]}
                       >
-                        <Input type="text" style={{ width: "180px" }} />
+                      <Input type="text" style={{ width: "250px" }} />
                       </Form.Item>
 
                       <Form.Item
@@ -419,7 +419,7 @@ const CreateOrder = () => {
                         label="Phương thức thanh toán"
                       >
                         <Select
-                          style={{ width: "180px" }}
+                          style={{ width: "250px" }}
                           defaultValue={sale.transaction}
                           onChange={(value) =>
                             handlePaymentMethodChange(index, value)
@@ -439,7 +439,7 @@ const CreateOrder = () => {
                         label="Phương thức mua hàng"
                       >
                         <Select
-                          style={{ width: "180px" }}
+                          style={{ width: "250px" }}
                           defaultValue={sale.deliveryOption}
                           onChange={(value) =>
                             handleDeliveryOptionChange(index, value)
@@ -520,7 +520,7 @@ const CreateOrder = () => {
                               />
                             </td>
                             <td style={{ color: "red" }}>
-                              {product.price * product.quantity}VNĐ
+                            {(product.price * product.quantity).toLocaleString()}VNĐ
                             </td>
                             <td>
                               <button
@@ -543,12 +543,12 @@ const CreateOrder = () => {
                     </tbody>
                   </table>
                   {sale.products.length > 0 && (
-                    <div>
+                    <div style={{fontSize : "18px"}}>
                       <h4 className="text-tonggia">
                         <h4 style={{ display: "flex" }}>
                           Tổng giá:
-                          <p style={{ color: "red" }}>
-                            {calculateTotalPrice(sale)} VNĐ
+                          <p style={{ color: "red" }}> {""}
+                            {calculateTotalPrice(sale).toLocaleString()} VNĐ
                           </p>
                         </h4>
                         <h4
