@@ -321,7 +321,7 @@ const ProductList = () => {
                   <tr key={p.id}>
                     <td>{startIndex + index + 1}</td>
 
-                    <td style={{ whiteSpace: "nowrap" }}>{p.name}</td>
+                    <td style={{ wordWrap:"break-word" }}>{p.name}</td>
                     <td
                       style={{
                         display: "flex",
