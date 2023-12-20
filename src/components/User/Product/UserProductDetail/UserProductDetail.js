@@ -388,9 +388,12 @@ const UserProductDetail = () => {
             <br></br>
             <h2>Thông tin sản phẩm</h2>
             <Divider />
-            <div
-              dangerouslySetInnerHTML={{ __html: product.description }}
-            ></div>
+            <div>
+              {" "}
+              Mô tả : {product.description},Thương hiệu : {product.nameBrand},
+              Chất Liệu : {product.nameMaterial}, Loại áo :{" "}
+              {product.nameCategory}
+            </div>
           </div>
         </div>
       </div>

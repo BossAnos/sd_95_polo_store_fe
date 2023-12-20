@@ -129,7 +129,7 @@ const ColorList = () => {
     >
       <AddColor
         open={showColorModal}
-        onColorFinish={createColor}
+        onCreatColorFinish={createColor}
         onCancel={() => setShowColorModal(false)}
       />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
@@ -145,9 +145,7 @@ const ColorList = () => {
           className="btn-customer__add "
         >
           Thêm màu sắc
-         
-            <i className="fas fa-plus" style={{paddingLeft:"10px"}}></i>
-        
+          <i className="fas fa-plus" style={{ paddingLeft: "10px" }}></i>
         </button>
         <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input

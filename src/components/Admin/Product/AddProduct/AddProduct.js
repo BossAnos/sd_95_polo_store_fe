@@ -440,7 +440,7 @@ const AddProduct = () => {
         open={showColorModal}
         onCancel={() => setShowAddColorModal(false)}
         onSizeFinish={() => setShowAddColorModal(false)}
-        onCreateSizeFinish={onCreateSizeFinish}
+        onCreateSizeFinish={onCreateColorFinish}
       />
       <AddDiscountModal
         visible={showAddDiscountModal}

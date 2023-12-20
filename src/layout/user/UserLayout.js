@@ -1,17 +1,25 @@
-import { Header } from "./Header"
-import { Footer } from "./Footer"
-import { UserContextProvider } from "../store"
-const UserLayout = ({children}) => {
-    return <UserContextProvider>
-        <Header>
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { UserContextProvider } from "../store";
+import { UserBreadCrumb } from "./UserBreadCrumb";
 
-        </Header>
-
-        <div>{children}</div>
-       <Footer></Footer>
+const UserLayout = ({ children }) => {
+  return (
+    <UserContextProvider>
+      <Header></Header>
+      <div
+        style={{
+          padding: "1.5rem",
+        }}
+      >
+        <div className="mb-3">
+          <UserBreadCrumb />
+        </div>
+        {children}
+      </div>
+      <Footer></Footer>
     </UserContextProvider>
-}
+  );
+};
 
-export {
-    UserLayout
-}
+export { UserLayout };

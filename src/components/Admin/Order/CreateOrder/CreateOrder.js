@@ -37,6 +37,7 @@ const CreateOrder = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [urlPdf, setUrlPdf] = useState("");
   const [form] = Form.useForm();
+
   useEffect(() => {
     (async () => {
       const body = await productDetailService.getAllProductDetail();

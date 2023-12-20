@@ -124,7 +124,7 @@ const MaterialList = () => {
     >
       <AddMaterial
         open={showMaterialModal}
-        onMaterialFinish={handleList}
+        onCreateMaterialFinish={handleList}
         onCancel={() => setShowMaterialModal(false)}
       />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
