@@ -1,7 +1,6 @@
-// DiscountManagement.js
 import React, { useEffect, useState } from "react";
 import { discountService } from "../../../../service/admin";
-import { Switch, notification } from "antd";
+import { Switch, notification, Pagination } from "antd";
 import moment from "moment";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
 import "../../admin-product.css";
@@ -10,13 +9,23 @@ const DiscountManagement = () => {
   const [discounts, setDiscounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(3);
+  const [totalCustomers, setTotalCustomers] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await discountService.getDiscount({});
-        setDiscounts(response.data);
+        const discount = response.data;
+        setTotalCustomers(discount.length);
+        const startIndex = (currentPage - 1) * pageSize;
+        const slicedCustomers = discount.slice(
+          startIndex,
+          startIndex + pageSize
+        );
+        setDiscounts(slicedCustomers);
+        // setDiscounts(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching discounts:", error);
@@ -24,7 +33,11 @@ const DiscountManagement = () => {
     };
 
     fetchData();
-  }, []);
+  }, [currentPage, pageSize]);
+
+  const handleChangePage = (page) => {
+    setCurrentPage(page);
+  };
 
   const formatDateTime = (dateTime) => {
     return moment(dateTime).format("DD/MM/YYYY HH:mm:ss");
@@ -32,10 +45,7 @@ const DiscountManagement = () => {
 
   const handleSwitchChange = async (discountId, isChecked) => {
     try {
-      // Gọi API để cập nhật trạng thái trên server
       await discountService.changeStatus(discountId, isChecked ? 1 : 0);
-
-      // Cập nhật trạng thái ngay trong local state
       const updatedDiscounts = discounts.map((discount) =>
         discount.id === discountId
           ? { ...discount, status: isChecked ? 1 : 0 }
@@ -52,10 +62,7 @@ const DiscountManagement = () => {
   };
 
   const handleAddDiscount = async (formData) => {
-    // Gọi API hoặc thực hiện các hành động cần thiết để thêm khuyến mại
-    // Sau đó cập nhật local state và đóng modal
     try {
-      // const result = await discountService.addDiscount(formData);
       setDiscounts([...discounts, formData]);
       setIsModalVisible(false);
       notification.success({
@@ -91,11 +98,10 @@ const DiscountManagement = () => {
           <tbody>
             {discounts.map((discount, index) => {
               const isChecked = discount.status === 1;
-
               return (
                 discount.id !== 1 && (
                   <tr key={discount.id}>
-                    <td>{index + 1}</td>
+                    <td>{(currentPage - 1) * pageSize + index + 1}</td>
                     <td>{discount.name}</td>
                     <td>{(discount.discount * 100).toFixed(2)}%</td>
                     <td>{discount.description}</td>
@@ -121,6 +127,14 @@ const DiscountManagement = () => {
             })}
           </tbody>
         </table>
+      </div>
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={totalCustomers}
+          onChange={handleChangePage}
+        />
       </div>
       <AddDiscountModal
         visible={isModalVisible}
