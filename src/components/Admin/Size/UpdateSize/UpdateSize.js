@@ -12,13 +12,20 @@ const UpdateSize = () => {
   const [size, setSize] = useState({});
   const [form] = Form.useForm();
   const validateInput = (rule, value, callback) => {
-    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const regex = XRegExp("^[\\p{L}0-9\\s^%/().,]+$");
     const maxLength = 200;
 
     if (value && value.length > maxLength) {
       callback(`Không vượt quá ${maxLength} kí tự`);
     } else if (value && !regex.test(value)) {
       callback("Không chứa ký tự đặc biệt");
+    } else {
+      callback();
+    }
+  };
+  const validateNumber = (rule, value, callback) => {
+    if (isNaN(value)) {
+      callback("Vui lòng nhập số");
     } else {
       callback();
     }
@@ -82,28 +89,28 @@ const UpdateSize = () => {
       <Form.Item
         label="shirtlength"
         name="shirtlength"
-        rules={[{ required: true, message: "shirtlength không được trống" }]}
+        rules={[{ required: true, message: "shirtlength không được trống" },  { validator: validateNumber }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         label="shirtwidth"
         name="shirtwidth"
-        rules={[{ required: true, message: "shirtwidth không được trống" }]}
+        rules={[{ required: true, message: "shirtwidth không được trống" },   { validator: validateNumber }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         label="sleevelenght"
         name="sleevelenght"
-        rules={[{ required: true, message: "sleevelenght không được trống" }]}
+        rules={[{ required: true, message: "sleevelenght không được trống" },   { validator: validateNumber }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
         label="shoulderlength"
         name="shoulderlength"
-        rules={[{ required: true, message: "shoulderlength không được trống" }]}
+        rules={[{ required: true, message: "shoulderlength không được trống" },  { validator: validateNumber }]}
       >
         <Input />
       </Form.Item>

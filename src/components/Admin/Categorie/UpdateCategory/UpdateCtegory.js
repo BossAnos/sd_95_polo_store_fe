@@ -12,7 +12,7 @@ const UpdateCategory= () => {
   const [category, setCategory] = useState({});
   const [form] = Form.useForm();
   const validateInput = (rule, value, callback) => {
-    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const regex = XRegExp("^[\\p{L}0-9\\s^%/().,]+$");
     const maxLength = 200;
 
     if (value && value.length > maxLength) {

@@ -8,7 +8,7 @@ const AddSize = (props) => {
   const [sizeForm] = Form.useForm();
 
   const validateInput = (rule, value, callback) => {
-    const regex = XRegExp("^[\\p{L}0-9\\s]+$");
+    const regex = XRegExp("^[\\p{L}0-9\\s^%/().,]+$");
     const maxLength = 200;
 
     if (value && value.length > maxLength) {
@@ -49,6 +49,7 @@ const AddSize = (props) => {
         wrapperCol={{ span: 8 }}
       >
         <Form.Item
+       style={{width:"700px"}}
           label="Tên"
           name="name"
           rules={[
@@ -56,9 +57,10 @@ const AddSize = (props) => {
             { validator: validateInput },
           ]}
         >
-          <Input />
+          <Input/>
         </Form.Item>
         <Form.Item
+         style={{width:"700px"}}
           label="Mô tả"
           name="description"
           rules={[
@@ -69,6 +71,7 @@ const AddSize = (props) => {
           <Input />
         </Form.Item>
         <Form.Item
+        style={{width:"700px"}}
           label="Chiều dài áo"
           name="shirtlength"
           rules={[
@@ -76,9 +79,10 @@ const AddSize = (props) => {
             { validator: validateNumber },
           ]}
         >
-          <Input />
+          <Input  />
         </Form.Item>
         <Form.Item
+         style={{width:"700px"}}
           label="Độ rộng áo"
           name="shirtwidth"
           rules={[
@@ -89,6 +93,7 @@ const AddSize = (props) => {
           <Input />
         </Form.Item>
         <Form.Item
+         style={{width:"700px"}}
           label="Chiều dài tay áo"
           name="sleevelenght"
           rules={[
@@ -99,6 +104,7 @@ const AddSize = (props) => {
           <Input />
         </Form.Item>
         <Form.Item
+         style={{width:"700px"}}
           label="Chiều dài vai"
           name="shoulderlength"
           rules={[
