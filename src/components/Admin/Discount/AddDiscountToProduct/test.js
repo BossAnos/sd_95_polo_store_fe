@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { discountService, productService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
-import { Tabs, Input, Checkbox, Switch, notification } from "antd";
+import { Tabs, Input, Checkbox, Switch, notification, Pagination } from "antd";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
 import "../../admin-product.css";
 const { TabPane } = Tabs;
@@ -15,8 +15,11 @@ const ProductPage = () => {
   const [searchBrand, setSearchBrand] = useState("");
   const [searchMaterial, setSearchMaterial] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(1);
-  const [isProductsSelected, setIsProductsSelected] = useState(false); // Thêm state mới
+  const [isProductsSelected, setIsProductsSelected] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   const tabs = [
     {
       key: "1",
@@ -76,12 +79,10 @@ const ProductPage = () => {
     const allSelected = products.every(
       (product) => product.discount === selectedDiscount
     );
-
     const updatedProducts = products.map((product) => ({
       ...product,
       discount: allSelected ? null : selectedDiscount,
     }));
-
     setProducts(updatedProducts);
   };
 
@@ -114,7 +115,6 @@ const ProductPage = () => {
 
   const handleStatusButton = async (productId) => {
     try {
-      // Map through products to update the status locally
       const updatedProducts = products.map((product) =>
         product.id === productId
           ? {
@@ -125,21 +125,19 @@ const ProductPage = () => {
       );
       setProducts(updatedProducts);
 
-      // Find the updated status for the specific product
       const updatedStatus = updatedProducts.find(
         (product) => product.id === productId
       )?.status;
 
-      // Uncomment the following line to make an API call to update the status on the server
-      await productService.changeStautsDiscount(productId); // Assuming changeStautsDiscount makes the API call
+      await productService.changeStautsDiscount(productId);
 
       toastService.success("Cập nhật trạng thái thành công");
     } catch (error) {
-      // Handle API error
       console.error("Error updating product status:", error);
       toastService.error("Cập nhật trạng thái không thành công");
     }
   };
+
   const filteredProducts = filterProducts().filter(
     (product) => product.status === selectedStatus
   );
@@ -166,7 +164,6 @@ const ProductPage = () => {
 
       console.log(response);
 
-      // Step 3: Update the products and selected status based on the new status (3)
       const updatedProducts = products.map((product) =>
         selectedProductIds.includes(product.id)
           ? { ...product, discount: selectedDiscount, status: 3 }
@@ -174,7 +171,7 @@ const ProductPage = () => {
       );
 
       setProducts(updatedProducts);
-      setSelectedStatus(3); // Update the selected status to the new status (3)
+      setSelectedStatus(3);
 
       toastService.success("Áp dụng khuyến mại thành công");
     } catch (error) {
@@ -183,10 +180,7 @@ const ProductPage = () => {
   };
 
   const handleAddDiscount = async (formData) => {
-    // Gọi API hoặc thực hiện các hành động cần thiết để thêm khuyến mại
-    // Sau đó cập nhật local state và đóng modal
     try {
-      // const result = await discountService.addDiscount(formData);
       setDiscounts([...discounts, formData]);
       setIsModalVisible(false);
       notification.success({
@@ -197,6 +191,11 @@ const ProductPage = () => {
       console.error("Error adding discount:", error);
     }
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div
       style={{
@@ -419,11 +418,24 @@ const ProductPage = () => {
                 )}
               </div>
               {filteredProducts.length > 0 && (
-                <div style={{}}>
-                  <button
-                    onClick={handleAddDiscountToSelectedProducts}
-                    style={{ marginLeft: "50px", marginTop: "20px" }}
-                  >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <Pagination
+                    current={currentPage}
+                    total={filteredProducts.length}
+                    pageSize={itemsPerPage}
+                    onChange={handlePageChange}
+                  />
+                </div>
+              )}
+              {filteredProducts.length > 0 && (
+                <div style={{ marginTop: "20px", textAlign: "center" }}>
+                  <button onClick={handleAddDiscountToSelectedProducts}>
                     Áp dụng khuyến mại
                   </button>
                 </div>
