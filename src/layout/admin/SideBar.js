@@ -35,7 +35,7 @@ const menus = [
         name: "Phần Quyền",
         submenu: [
           {
-            path: "/admin/Employment",
+            path: "/admin/manger",
             icon: <Icons.UserIcon className={submenuIconClasses} />,
             name: "Nhân Viên",
           },
