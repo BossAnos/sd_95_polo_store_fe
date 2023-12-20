@@ -568,13 +568,7 @@ const AddProduct = () => {
                           <Input type="hidden" />
                         </Form.Item>
 
-                        <Form.Item
-                          {...restField}
-                          name={[name, "productDetailId"]}
-                          initialValue={key}
-                        >
-                          <Input />
-                        </Form.Item>
+                     
 
                         <Form.Item
                           {...restField}
@@ -713,15 +707,7 @@ const AddProduct = () => {
                           ))}
                       </Row>
                       <Divider style={{ margin: "20px", color: "black" }} />
-                      <Form.Item>
-                        <QRCode
-                          value={`ProductDetailId: ${form.getFieldValue([
-                            "productDetailRepuests",
-                            index,
-                            "productDetailId",
-                          ])}`}
-                        />
-                      </Form.Item>
+                  
                     </div>
                   ))}
 
