@@ -13,7 +13,7 @@ const UpdateSize = () => {
   const [form] = Form.useForm();
   const validateInput = (rule, value, callback) => {
     const regex = XRegExp("^[\\p{L}0-9\\s]+$");
-    const maxLength = 50;
+    const maxLength = 200;
 
     if (value && value.length > maxLength) {
       callback(`Không vượt quá ${maxLength} kí tự`);
