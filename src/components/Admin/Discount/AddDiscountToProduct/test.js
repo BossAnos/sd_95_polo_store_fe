@@ -3,7 +3,7 @@ import { discountService, productService } from "../../../../service/admin";
 import { toastService } from "../../../../service/common";
 import { Tabs, Input, Checkbox, Switch, notification } from "antd";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
-import "../../admin-product.css"
+import "../../admin-product.css";
 const { TabPane } = Tabs;
 
 const ProductPage = () => {
@@ -209,33 +209,36 @@ const ProductPage = () => {
         {tabs.map((tab) => (
           <TabPane tab={tab.label} key={tab.status.toString()}>
             <div>
-              <div style={{display:"flex"}}>
-              <h1  style={{ fontWeight: "bolder", marginLeft: "50px" }}>Chọn khuyến mại để áp dụng: </h1>{" "}
-             
-              <select
-                style={{ fontWeight: "bolder", marginLeft: "50px" ,marginTop:"-10px"}}
-                onChange={(e) => handleDiscountChange(e.target.value)}
-                value={selectedDiscount ? selectedDiscount.id.toString() : ""}
-              >
-                {discounts.map((discount) => (
-                  <option key={discount.id} value={discount.id}>
-                    {discount.name}
-                  </option>
-                ))}
-              </select>
-
-              <button
-                style={{ width: "50px" }}
-                type="primary"
-                onClick={() => setIsModalVisible(true)}
-              >
-                <a>
-                  <i className="fas fa-plus"></i>
-                </a>
-              </button>
+              <div style={{ display: "flex" }}>
+                <h1 style={{ fontWeight: "bolder", marginLeft: "50px" }}>
+                  Chọn khuyến mại để áp dụng:{" "}
+                </h1>{" "}
+                <select
+                  style={{
+                    fontWeight: "bolder",
+                    marginLeft: "50px",
+                    marginTop: "-10px",
+                  }}
+                  onChange={(e) => handleDiscountChange(e.target.value)}
+                  value={selectedDiscount ? selectedDiscount.id.toString() : ""}
+                >
+                  {discounts.map((discount) => (
+                    <option key={discount.id} value={discount.id}>
+                      {discount.name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  style={{ width: "50px" }}
+                  type="primary"
+                  onClick={() => setIsModalVisible(true)}
+                >
+                  <a>
+                    <i className="fas fa-plus"></i>
+                  </a>
+                </button>
               </div>
-             
-             
+
               {selectedDiscount && selectedDiscount.id !== discounts[0]?.id && (
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <div style={{ display: "flex", marginBottom: "8px" }}>
@@ -346,69 +349,71 @@ const ProductPage = () => {
               >
                 Danh sách sản phẩm
               </h1>
-            
+
               <br></br>
               <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-              {filteredProducts.length === 0 ? (
-                <p>Không tìm thấy sản phẩm nào.</p>
-              ) : (
-              
-                <table>
-                  <thead>
-                    <tr>
-                      <th >
-                        <Checkbox       
-                          checked={filteredProducts.every(
-                            (product) => product.discount === selectedDiscount
-                          )}
-                          onChange={handleSelectAllProducts}
-                        />
-                      </th>
-                      <th >Tên sản phẩm</th>
-                      <th>Chất liệu</th>
-                      <th>Thương hiệu</th>
-                      <th>Loại áo</th>
-
-                      {selectedStatus === 3 && <th>On/Off</th>}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredProducts.map((product) => (
-                      <tr key={product.id}>
-                        <td>
+                {filteredProducts.length === 0 ? (
+                  <p>Không tìm thấy sản phẩm nào.</p>
+                ) : (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>
                           <Checkbox
-                            checked={product.discount === selectedDiscount}
-                            onChange={() =>
-                              handleProductCheckboxChange(product.id)
-                            }
+                            checked={filteredProducts.every(
+                              (product) => product.discount === selectedDiscount
+                            )}
+                            onChange={handleSelectAllProducts}
                           />
-                        </td>
-                        <td>{product.name}</td>
-                        <td>{product.nameMaterial}</td>
-                        <td>{product.nameBrand}</td>
-                        <td>{product.nameCategory}</td>
+                        </th>
+                        <th>Tên sản phẩm</th>
+                        <th>Chất liệu</th>
+                        <th>Thương hiệu</th>
+                        <th>Loại áo</th>
 
-                        {selectedStatus === 3 && (
+                        {selectedStatus === 3 && <th>On/Off</th>}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredProducts.map((product) => (
+                        <tr key={product.id}>
                           <td>
-                            <Switch
-                              style={{
-                                backgroundColor: "#52c41a",
-                                width: "30px",
-                              }}
-                              checked={product.status === 3}
-                              onChange={() => handleStatusButton(product.id)}
+                            <Checkbox
+                              checked={product.discount === selectedDiscount}
+                              onChange={() =>
+                                handleProductCheckboxChange(product.id)
+                              }
                             />
                           </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                
-              )}</div>
+                          <td>{product.name}</td>
+                          <td>{product.nameMaterial}</td>
+                          <td>{product.nameBrand}</td>
+                          <td>{product.nameCategory}</td>
+
+                          {selectedStatus === 3 && (
+                            <td>
+                              <Switch
+                                style={{
+                                  backgroundColor: "#52c41a",
+                                  width: "30px",
+                                }}
+                                checked={product.status === 3}
+                                onChange={() => handleStatusButton(product.id)}
+                              />
+                            </td>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
               {filteredProducts.length > 0 && (
                 <div style={{}}>
-                  <button onClick={handleAddDiscountToSelectedProducts}   style={{ marginLeft: "50px", marginTop: "20px" }}>
+                  <button
+                    onClick={handleAddDiscountToSelectedProducts}
+                    style={{ marginLeft: "50px", marginTop: "20px" }}
+                  >
                     Áp dụng khuyến mại
                   </button>
                 </div>

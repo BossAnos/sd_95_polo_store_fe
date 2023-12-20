@@ -4,7 +4,7 @@ import { discountService } from "../../../../service/admin";
 import { Switch, notification } from "antd";
 import moment from "moment";
 import AddDiscountModal from "../AddDiscount/AddDiscountModal";
-import "../../admin-product.css"
+import "../../admin-product.css";
 
 const DiscountManagement = () => {
   const [discounts, setDiscounts] = useState([]);
@@ -72,56 +72,57 @@ const DiscountManagement = () => {
       <button type="primary" onClick={() => setIsModalVisible(true)}>
         Thêm khuyến mại
       </button>
-      <h1 style={{fontWeight:"bolder",marginTop:"20px"}}>Quản lý khuyến mại</h1>
+      <h1 style={{ fontWeight: "bolder", marginTop: "20px" }}>
+        Quản lý khuyến mại
+      </h1>
       <div style={{ maxHeight: "600px", overflowY: "auto" }}>
-      <table>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Tên khuyến mại</th>
-            <th>Giảm giá</th>
-            <th>Mô tả</th>
-            <th>Bắt đầu</th>
-            <th>Kết thúc</th>
-            <th>Trạng thái</th>
-          </tr>
-        </thead>
-        <tbody>
-          {discounts.map((discount, index) => {
-            const isChecked = discount.status === 1;
+        <table>
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Tên khuyến mại</th>
+              <th>Giảm giá</th>
+              <th>Mô tả</th>
+              <th>Bắt đầu</th>
+              <th>Kết thúc</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            {discounts.map((discount, index) => {
+              const isChecked = discount.status === 1;
 
-            return (
-              discount.id !== 1 && (
-                <tr key={discount.id}>
-                  <td>{index + 1}</td>
-                  <td>{discount.name}</td>
-                  <td>{(discount.discount * 100).toFixed(2)}%</td>
-                  <td>{discount.description}</td>
-                  <td>{formatDateTime(discount.startDate)}</td>
-                  <td>{formatDateTime(discount.endDate)}</td>
-                  <td>
-                    <Switch
-                      checked={isChecked}
-                      onChange={(checked) =>
-                        handleSwitchChange(discount.id, checked)
-                      }
-                      style={{
-                        backgroundColor: isChecked ? "green" : "red", // Màu nền
-                        borderColor: isChecked ? "green" : "red", // Màu viền
-                        color: isChecked ? "white" : "black",
-                        width: "30px",
-                      }}
-                    />
-                  </td>
-                </tr>
-              )
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                discount.id !== 1 && (
+                  <tr key={discount.id}>
+                    <td>{index + 1}</td>
+                    <td>{discount.name}</td>
+                    <td>{(discount.discount * 100).toFixed(2)}%</td>
+                    <td>{discount.description}</td>
+                    <td>{formatDateTime(discount.startDate)}</td>
+                    <td>{formatDateTime(discount.endDate)}</td>
+                    <td>
+                      <Switch
+                        checked={isChecked}
+                        onChange={(checked) =>
+                          handleSwitchChange(discount.id, checked)
+                        }
+                        style={{
+                          backgroundColor: isChecked ? "green" : "red", // Màu nền
+                          borderColor: isChecked ? "green" : "red", // Màu viền
+                          color: isChecked ? "white" : "black",
+                          width: "30px",
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )
+              );
+            })}
+          </tbody>
+        </table>
       </div>
       <AddDiscountModal
-    
         visible={isModalVisible}
         onOk={handleAddDiscount}
         onCancel={() => {

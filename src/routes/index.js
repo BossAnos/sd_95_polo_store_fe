@@ -50,6 +50,7 @@ import { OrderDetailGetOne } from "../components/Admin/Order/OrderDetail/OrderDe
 import { SignUp } from "../components/User/Register/Register";
 import { ProductPage } from "../components/Admin/Discount/AddDiscountToProduct/test";
 import { RoleList } from "../components/Admin/AdminList/Role";
+import { UpdateRole } from "../components/Admin/AdminList/UpdateRole/UpdateRole";
 
 const NoGuard = ({ children }) => {
   return <>{children}</>;
@@ -138,6 +139,10 @@ const adminRoutes = [
   getAdminRoute({
     path: "/admin/role",
     component: RoleList,
+  }),
+  getAdminRoute({
+    path: "/admin/role/update/:id",
+    component: UpdateRole,
   }),
   getAdminRoute({
     path: "/admin/size/update/:id",
