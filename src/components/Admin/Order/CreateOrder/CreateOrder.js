@@ -204,12 +204,15 @@ const CreateOrder = () => {
     } catch (error) {
       return;
     }
+
     try {
-      const formValue = form.getFieldsValue(); // Get the entire form value
-      const tabFormValue = formValue.sales[tabIndex]; // Access the specific s
+      const formValue = form.getFieldsValue();
+      const tabFormValue = formValue.sales[tabIndex];
       console.log(tabFormValue);
 
       const selectedTab = sales[tabIndex];
+      console.log(selectedTab.products);
+
       const deliveryOption = selectedTab.deliveryOption;
       const transaction = selectedTab.transaction;
       let transactionValue;
@@ -253,23 +256,23 @@ const CreateOrder = () => {
       console.log(request);
       try {
         const newOrder = await orderService.addOrder(adminInfo.id, request);
-        toastService.success("Add order success");
+        toastService.success("Tạo hóa đơn thành công");
         setUrlPdf(
           "http://localhost:8080/admin/order/export/" + newOrder.data.id
         );
         console.log(urlPdf);
         setModalOpen(true);
         const updatedSales = [...sales];
-        updatedSales[0].username = "";
-        updatedSales[0].phone = "";
-        updatedSales[0].address = "";
-        updatedSales[0].products = [];
-        updatedSales[0].shippingFee = 0;
-        updatedSales[0].deliveryOption = "Tại quầy";
-        updatedSales[0].transaction = 3;
+        updatedSales[tabIndex].username = "";
+        updatedSales[tabIndex].phone = "";
+        updatedSales[tabIndex].address = "";
+        updatedSales[tabIndex].products = [];
+        updatedSales[tabIndex].shippingFee = 0;
+        updatedSales[tabIndex].deliveryOption = "Tại quầy";
+        updatedSales[tabIndex].transaction = 3;
 
         setSales(updatedSales);
-        setActiveTab(0);
+        setActiveTab(tabIndex);
 
         // Reset form fields
         form.resetFields();
@@ -374,6 +377,12 @@ const CreateOrder = () => {
                         style={{ fontWeight: "bolder", marginTop: "20px" }}
                         label="Tên người nhận"
                         name={["sales", index, "username"]}
+                        rules={[
+                          {
+                            max: 200,
+                            message: "Tên người nhận không được quá 200 ký tự!",
+                          },
+                        ]}
                       >
                         <Input type="text" style={{ width: "180px" }} />
                       </Form.Item>
@@ -381,6 +390,13 @@ const CreateOrder = () => {
                         style={{ fontWeight: "bolder" }}
                         label="Số điện thoại"
                         name={["sales", index, "phone"]}
+                        rules={[
+                          {
+                            pattern: /^[0-9]{1,10}$/,
+                            message:
+                              "Số điện thoại chỉ được nhập số và không quá 10 số!",
+                          },
+                        ]}
                       >
                         <Input type="text" style={{ width: "180px" }} />
                       </Form.Item>
@@ -388,6 +404,12 @@ const CreateOrder = () => {
                         style={{ fontWeight: "bolder" }}
                         label="Địa chỉ"
                         name={["sales", index, "address"]}
+                        rules={[
+                          {
+                            max: 300,
+                            message: "Địa chỉ không được quá 300 ký tự!",
+                          },
+                        ]}
                       >
                         <Input type="text" style={{ width: "180px" }} />
                       </Form.Item>
@@ -445,7 +467,10 @@ const CreateOrder = () => {
                   </div>
                 </Form>
 
-                <div className="price-table-container">
+                <div
+                  className="price-table-container"
+                  style={{ width: "100px" }}
+                >
                   <button
                     className="btn-tonggia"
                     onClick={() => handleAddProduct(index)}
@@ -457,10 +482,10 @@ const CreateOrder = () => {
                   <h3 style={{ fontWeight: "bolder" }}>Hóa đơn </h3>
                   <br />
                   <br />
-                  <table>
+                  <table className="table">
                     <thead>
                       <tr className="tr-banggia">
-                        <th>STT</th>
+                        <th style={{}}>STT</th>
                         <th>Sản phẩm</th>
                         <th>Hình ảnh</th>
                         <th>Số lượng</th>
@@ -541,7 +566,7 @@ const CreateOrder = () => {
 
               <button
                 className="btn-guidonhang"
-                onClick={() => addOrderSubmitHandle(activeTab)}
+                onClick={() => addOrderSubmitHandle(index)}
               >
                 Gửi đơn hàng
               </button>

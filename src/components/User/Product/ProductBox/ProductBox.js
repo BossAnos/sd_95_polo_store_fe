@@ -28,7 +28,7 @@ const ProductBox = ({ product }) => {
                 )}
               </>
             ) : (
-              <span className="original-price">
+              <span className="original-price-2">
                 {product.price.toLocaleString()} VNĐ
               </span>
             )}

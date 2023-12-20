@@ -172,8 +172,6 @@ const OrderList = () => {
           const transactions = order.transactions;
           console.log(transactions);
         });
-
-        setPage(1);
       } catch (error) {
         toastService.error(error.apiMessage);
       }

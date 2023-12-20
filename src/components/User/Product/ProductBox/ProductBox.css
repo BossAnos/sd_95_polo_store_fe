@@ -52,6 +52,14 @@
   margin-right: 5px;
 }
 
+.product-box .original-price-2 {
+  color: gray;
+  font-size: 18px;
+  font-weight: bold;
+
+  margin-right: 5px;
+}
+
 .product-box .discounted-price {
   font-size: 16px;
   font-weight: normal;

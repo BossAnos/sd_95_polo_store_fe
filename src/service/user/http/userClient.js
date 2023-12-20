@@ -64,9 +64,4 @@ const deleteCall = async (url, config) => {
   }
 };
 
-socket.on("dataUpdate", (updatedData) => {
-  // You can update the local state or trigger any other actions here
-  console.log("Real-time update received:", updatedData);
-});
-
-export { post, get, put, patch, deleteCall, socket };
+export { post, get, put, patch, deleteCall };

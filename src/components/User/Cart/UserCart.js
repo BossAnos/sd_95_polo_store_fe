@@ -16,34 +16,6 @@ const UserCart = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const socket = new WebSocket("ws://localhost:3001");
-
-      socket.onopen = () => {
-        console.log("WebSocket connection opened");
-      };
-
-      socket.onmessage = (event) => {
-        const updatedData = JSON.parse(event.data);
-        console.log("Received data:", updatedData);
-        setProducts(updatedData.products);
-        setDetail(updatedData.detail);
-      };
-
-      socket.onclose = () => {
-        console.log("WebSocket connection closed");
-      };
-
-      return () => {
-        // Cleanup: close WebSocket connection when the component unmounts
-        socket.close();
-      };
-    } catch (error) {
-      console.error("WebSocket connection error:", error);
-    }
-  }, []);
-
-  useEffect(() => {
     // Fetch initial data from the server
     const fetchData = async () => {
       try {
