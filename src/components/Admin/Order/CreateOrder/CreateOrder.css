@@ -14,32 +14,26 @@
 }
 
 .price-table-container {
-  flex: 1;
-  border: 1px solid black;
-  padding: 20px;
+  flex: 0.75;
 }
-.tr-banggia  {
+.tr-banggia {
   font-size: 14px;
   height: 1rem;
 }
-.price-table-container {
-  border: 1px solid #98999a;
-  border-radius: 3px;
-}
-.img-a{
-  width: 100px;
-  height: 100px;
-}
-.btn-taohoadon{
-margin-left: 1050px;
 
+.img-a {
+  width: 50px;
+  height: 50px;
 }
-.text-tonggia{
+.btn-taohoadon {
+  margin-left: 1050px;
+}
+.text-tonggia {
   margin-top: 20px;
 }
-.text-tonggia2{
+.text-tonggia2 {
   margin-top: 10px;
 }
-.btn-tonggia{
+.btn-tonggia {
   margin-top: 10px;
 }

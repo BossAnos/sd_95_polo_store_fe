@@ -35,6 +35,7 @@ import {
   DeleteOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import QRCode from "qrcode.react";
 import { fileService, toastService } from "../../../../service/common";
 import { v4 as uuid } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
@@ -49,7 +50,7 @@ const AddProduct = () => {
   const [sizeOptions, setSizeOptions] = useState([]);
   const [colorOptions, setColorOptions] = useState([]);
   const [discountOptions, setDiscountOptions] = useState([]);
-
+  const [qrCodeValues, setQRCodeValues] = useState({});
   const [detailImages, setDetailImages] = useState({});
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showAddBrandModal, setShowAddBrandModal] = useState(false);
@@ -569,6 +570,14 @@ const AddProduct = () => {
 
                         <Form.Item
                           {...restField}
+                          name={[name, "productDetailId"]}
+                          initialValue={key}
+                        >
+                          <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...restField}
                           name={[name, "sizeId"]}
                           rules={[
                             {
@@ -704,6 +713,15 @@ const AddProduct = () => {
                           ))}
                       </Row>
                       <Divider style={{ margin: "20px", color: "black" }} />
+                      <Form.Item>
+                        <QRCode
+                          value={`ProductDetailId: ${form.getFieldValue([
+                            "productDetailRepuests",
+                            index,
+                            "productDetailId",
+                          ])}`}
+                        />
+                      </Form.Item>
                     </div>
                   ))}
 
@@ -723,7 +741,7 @@ const AddProduct = () => {
           </div>
         </div>
 
-        <button  className="mt-3" htmlType="submit" type="primary">
+        <button className="mt-3" htmlType="submit" type="primary">
           {productId ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
         </button>
       </Form>
