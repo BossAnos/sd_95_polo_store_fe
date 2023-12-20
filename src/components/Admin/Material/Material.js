@@ -47,23 +47,23 @@ const MaterialList = () => {
   }, [refreshList]);
 
   const filteredProducts =
-  activeTab === "all"
-    ? material
-    : material.filter((item) => {
-        if (activeTab === "1") {
-          // Hiển thị sản phẩm có status là 1 hoặc 3
-          return [1, 3].includes(item.status);
-        } else {
-          // Hiển thị sản phẩm có status bằng giá trị của activeTab
-          return item.status === parseInt(activeTab, 10);
-        }
-      });
+    activeTab === "all"
+      ? material
+      : material.filter((item) => {
+          if (activeTab === "1") {
+            // Hiển thị sản phẩm có status là 1 hoặc 3
+            return [1, 3].includes(item.status);
+          } else {
+            // Hiển thị sản phẩm có status bằng giá trị của activeTab
+            return item.status === parseInt(activeTab, 10);
+          }
+        });
 
-const onPageChange = async (page) => {
-  setPage(page);
-  const newStartIndex = (page - 1) * LIMIT;
-  setStartIndex(newStartIndex);
-};
+  const onPageChange = async (page) => {
+    setPage(page);
+    const newStartIndex = (page - 1) * LIMIT;
+    setStartIndex(newStartIndex);
+  };
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -106,13 +106,13 @@ const onPageChange = async (page) => {
         material.id === id ? { ...material, status: newStatus } : material
       )
     );
-  }
+  };
 
   const handleList = () => {
     setShowMaterialModal(false);
-    setRefreshList(prevState => !prevState);
+    setRefreshList((prevState) => !prevState);
     fetchData();
-  }
+  };
 
   return (
     <div
@@ -140,7 +140,7 @@ const onPageChange = async (page) => {
           className="btn-customer__add "
         >
           Thêm chất liệu
-          <i className="fas fa-plus" style={{paddingLeft:"10px"}}></i>
+          <i className="fas fa-plus" style={{ paddingLeft: "10px" }}></i>
         </button>
         <p style={{ fontWeight: "bolder", fontSize: "20px" }}>Tìm kiếm:</p>
         <Input
@@ -170,38 +170,43 @@ const onPageChange = async (page) => {
               </tr>
             ) : (
               filteredMaterials
-              .slice((page - 1) * LIMIT, page * LIMIT)
-              .map((material, index) => (
-                <tr key={material.id}>
-                  <td style={{ paddingLeft: "60px" }}>{startIndex+index + 1}</td>
-                  <td>{material.name}</td>
-                  <td>{material.description}</td>
-                  <td>
-                    <Switch
-                      checked={material.status === 1}
-                      onChange={() => toggleStatus(material.id, material.status)}
-                      style={{
-                        backgroundColor: material.status === 1 ? "green" : "red",
-                        width: "30px",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <div
-                      className="actions"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <div className="action">
-                        <Link to={`/admin/material/update/${material.id}`}>
-                          <button type="primary" className="btn">
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </button>
-                        </Link>
+                .slice((page - 1) * LIMIT, page * LIMIT)
+                .map((material, index) => (
+                  <tr key={material.id}>
+                    <td style={{ paddingLeft: "60px" }}>
+                      {startIndex + index + 1}
+                    </td>
+                    <td>{material.name}</td>
+                    <td>{material.description}</td>
+                    <td>
+                      <Switch
+                        checked={material.status === 1}
+                        onChange={() =>
+                          toggleStatus(material.id, material.status)
+                        }
+                        style={{
+                          backgroundColor:
+                            material.status === 1 ? "green" : "red",
+                          width: "30px",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <div
+                        className="actions"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <div className="action">
+                          <Link to={`/admin/material/update/${material.id}`}>
+                            <button type="primary" className="btn">
+                              <i className="fa-regular fa-pen-to-square"></i>
+                            </button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                  </tr>
+                ))
             )}
           </tbody>
         </table>
@@ -218,4 +223,3 @@ const onPageChange = async (page) => {
 };
 
 export { MaterialList };
- 

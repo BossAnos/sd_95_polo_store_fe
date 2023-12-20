@@ -35,6 +35,7 @@ const SizeList = () => {
   const [page, setPage] = useState(1);
   const LIMIT = 5;
   const [startIndex, setStartIndex] = useState(0);
+  const [refreshList, setRefreshList] = useState(false);
 
   const fetchData = async () => {
     const body = await sizeService.getAllSizes();
@@ -43,7 +44,7 @@ const SizeList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshList]);
 
   const filteredProducts =
     activeTab === "all"
@@ -112,10 +113,11 @@ const SizeList = () => {
     }
   }
 
-  async function createSize(newSize) {
+  const handleList = () => {
     setShowSizeModal(false);
+    setRefreshList((prevState) => !prevState);
     fetchData();
-  }
+  };
 
   return (
     <div
@@ -127,7 +129,7 @@ const SizeList = () => {
     >
       <AddSize
         open={showSizeModal}
-        onSizeFinish={createSize}
+        onSizeFinish={handleList}
         onCancel={() => setShowSizeModal(false)}
       />
       <Tabs activeKey={activeTab} onChange={handleTabChange}>
